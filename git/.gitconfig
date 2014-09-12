@@ -1,0 +1,55 @@
+# Sample gitconfig
+#
+
+[hub]
+        protocol = https
+[user]
+        name = Chris Seto
+        email = chriskseto@gmail.com
+[credential]
+        helper = osxkeychain
+[alias]
+        st = status
+        co = checkout
+        ci = commit
+        br = branch
+        df = diff
+        dfs = diff --staged
+        logg = log --graph --decorate --oneline --abbrev-commit --all
+        pup = pull upstream
+        shorg = push -u origin
+        switch = !legit switch \"$@\"
+        branches = !legit branches
+        sprout = !legit sprout \"$@\"
+        unpublish = !legit unpublish \"$@\"
+        harvest = !legit harvest \"$@\"
+        sync = !legit sync \"$@\"
+        publish = !legit publish \"$@\"
+        graft = !legit graft \"$@\"
+        f = flow
+        pl = pull
+        nuke = delete-branch
+        fublish = flow feature publish
+        fart = flow feature start
+        fix = flow hotfix start
+        unstage = reset HEAD --
+[color]
+        diff = auto
+        status = auto
+        branch = auto
+        ui = true
+[core]
+        excludesfile = ~/.gitignore_global
+	editor = vim
+[apply]
+        whitespace = nowarn
+[mergetool]
+        keepBackup = false
+[difftool]
+        prompt = false
+[push]
+        # See `git help config` (search for push.default)
+        # for more information on different options of the below setting.
+        #
+        # Setting to git 2.0 default to surpress warning message
+        default = simple
