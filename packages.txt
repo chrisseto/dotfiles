@@ -1,0 +1,4 @@
+stow
+zsh
+tmux
+vim
