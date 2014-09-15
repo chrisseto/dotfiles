@@ -2,7 +2,7 @@ dotfiles
 ========
 
 ##Installing
-```
-YOUR_INSTAL_COMMAND $(< packages.txt)
-./setup.sh
+```bash
+$ YOUR_INSTALL_COMMAND $(< packages.txt)
+$ ./setup.sh
 ```
