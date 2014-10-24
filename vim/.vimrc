@@ -1,13 +1,4 @@
-" Adapted from:
-"   https://github.com/square/maximum-awesome/blob/master/vimrc
-"   http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
-"   https://github.com/sheerun/vimrc
-"   https://bitbucket.org/sjl/dotfiles/src/tip/vim/vimrc
-"   vim-bootstrap (http://vim-bootstrap.appspot.com/)
-"   and various StackOverflow answers
-set nocompatible              " be iMproved, required for Vundle
-filetype off                  " required for Vundle
-
+set nocompatible              " be iMproved
 " Spacebar is a much better leader than \ or ,
 let mapleader = "\<Space>"
 
@@ -17,39 +8,34 @@ if has("autocmd")
 endif
 
 """"" PLUGINS """""
+call plug#begin()
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-Plugin 'jdonaldson/vaxe'
-Plugin 'alfredodeza/pytest.vim'
-nmap <silent><Leader>F <Esc>:Pytest file verbose<CR>
-nmap <silent><Leader>c <Esc>:Pytest class verbose<CR>
-nmap <silent><Leader>m <Esc>:Pytest method verbose<CR>
-nmap <silent><Leader>tf <Esc>:Pytest function verbose<CR>
+Plug 'alfredodeza/pytest.vim'
+nmap <silent><Leader>F :Pytest file verbose<CR>
+nmap <silent><Leader>c :Pytest class verbose<CR>
+nmap <silent><Leader>m :Pytest method verbose<CR>
+nmap <silent><Leader>tf :Pytest function verbose<CR>
 
-Plugin 'bling/vim-airline'
-Plugin 'christoomey/vim-tmux-navigator'
+Plug 'bling/vim-airline'
+let g:airline#extensions#hunks#enabled = 0
+Plug 'christoomey/vim-tmux-navigator'
 
-Plugin 'ervandew/supertab'
-Plugin 'SirVer/ultisnips'
+Plug 'ervandew/supertab'
+Plug 'SirVer/ultisnips'
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-Plugin 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
 
-Plugin 'rking/ag.vim'
-Plugin 'kien/ctrlp.vim'
+Plug 'rking/ag.vim'
+Plug 'kien/ctrlp.vim'
 " Go to symbol
 map <leader>s :CtrlPBufTag<CR>
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
 " Use Ag over Grep
   set grepprg=ag\ --nogroup\ --nocolor
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
+  " Use ag in CtrlP for listing files.
+  let g:ctrlp_user_command = 'ag %s -i -l --nocolor --nogroup --ignore ''.git'' --ignore ''.DS_Store'' --ignore ''.ropeproject'' --ignore ''node_modules'' --hidden -g ""'
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
   nnoremap <leader>f :Ag<space>
@@ -57,82 +43,85 @@ else
   noremap <leader>f :Ack<space>
 endif
 
-Plugin 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar'
 " Open tagbar
 map <leader>\ :Tagbar<CR>
 let g:tagbar_autofocus = 1
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'mattn/emmet-vim'
-Plugin 'ntpeters/vim-better-whitespace'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'mattn/emmet-vim'
+imap <C-a> <C-y>,
+Plug 'ntpeters/vim-better-whitespace'
 " Strip whitespace with space-space-w
 nmap <leader><leader>w :StripWhitespace<CR>
-Plugin 'Raimondi/delimitMate'
+Plug 'Raimondi/delimitMate'  " autoclose parens, quotes, etc.
 
-Plugin 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 nnoremap <leader>d :NERDTreeToggle<CR>
 " Single clicks open directories and files
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeRespectWildIgnore = 1
-
-Plugin 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 let g:syntastic_mode_map = { 'mode': 'active',
  \ 'active_filetypes': [],
- \ 'passive_filetypes': ['html', 'rst'] }
+ \ 'passive_filetypes': [ 'html', 'rst', 'md'] }
 let g:syntastic_python_checkers = ['flake8', 'python']
-let g:syntastic_enable_signs = 0
-let g:syntastic_python_checker_args='--ignore=E501'
 let g:syntastic_javascript_checkers = ['jshint']
-
-Plugin 'terryma/vim-expand-region'
-" Press v to select one char, v again to expand selection, v again to expand
-" on a paragraph
-vmap v <Plug>(expand_region_expand)
-" Use Ctrl-v to shrink region if you go to far
-vmap <C-v> <Plug>(expand_region_shrink)
-
-Plugin 'tomtom/tlib_vim'
-Plugin 'tpope/vim-commentary'
+" Disable some features to make syntastic faster
+let g:syntastic_enable_signs = 0
+let g:syntastic_enable_balloons = 0
+Plug 'tomtom/tlib_vim'
+Plug 'tpope/vim-rsi'  " unix keybindings in insert mode
+Plug 'tpope/vim-commentary'
 " Toggle comment with space-/
 nmap <leader>/ gcc
 vmap <leader>/ gc
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'mattn/webapi-vim' " needed by gist-vim and github-comment
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'mattn/webapi-vim' " needed by gist-vim
 " Github/Gist
-Plugin 'mattn/gist-vim'
+Plug 'mattn/gist-vim'
 " Make gists private by default
 let g:gist_post_private = 1
-
-Plugin 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+" Disable gitgutter's bindings to avoid clashes
+let g:gitgutter_map_keys = 0
+nmap <leader>gh <Plug>GitGutterStageHunk
+nmap <leader>gH <Plug>GitGutterRevertHunk
+nmap [h <Plug>GitGutterPrevHunk
+nmap ]h <Plug>GitGutterNextHunk
+Plug 'tpope/vim-fugitive'
 map <leader>gs :Gstatus<CR>
+" <leader>gs mapping has a lag, so I use this one instead
+map <leader>S :Gstatus<CR>
 map <leader>gb :Gblame<CR>
 " Open current file on Github
-map <leader>gB :Gbrowse<CR>
+map <leader>gB :Gbrowse -<CR>
 " Open currently selected lines on Github
-vmap <leader>gB :Gbrowse<CR>
+vmap <leader>gB :Gbrowse -<CR>
 map <leader>gr :Gread<CR>
 map <leader>gw :Gwrite<CR>
-noremap <Leader>gsh :!git push<CR>
-cabbrev git Git
+noremap <Leader>gsh :Git push<CR>
 
 " Colors
-Plugin 'flazz/vim-colorschemes'
-Plugin 'fatih/vim-go'
+Plug 'flazz/vim-colorschemes'
+
 " Syntax and languages
-Plugin 'mitsuhiko/vim-jinja'
-Plugin 'stephpy/vim-yaml'
-Plugin 'chase/vim-ansible-yaml'
-Plugin 'klen/python-mode'
-" Use 'python' for Python 2; 'python3' for Python 3
-let g:pymode_python = 'python'
-" Turn off run mode
+Plug 'mitsuhiko/vim-jinja'
+Plug 'stephpy/vim-yaml'
+Plug 'chase/vim-ansible-yaml'
+Plug 'klen/python-mode'
+Plug 'elzr/vim-json'
+" Turn off stuff I don't use
+let g:pymode_doc = 0
 let g:pymode_run = 0
-" Turn off automatic folding in python-mode
 let g:pymode_folding = 0
+let g:pymode_virtualenv = 0
+let g:pymode_breakpoint = 0
 " don't use linter, we use syntastic for that
 let g:pymode_lint = 0
+let g:pymode_lint_on_write = 0
 let g:pymode_indent = 0
 " Don't look for .ropeproject directories in parent directories
 let g:pymode_rope_lookup_project = 0
@@ -141,17 +130,25 @@ set completeopt=menu " prevent pymode from showing documentation on autocomplete
 " When using goto_definition, open in the current window instead of creating a
 " new window
 let g:pymode_rope_goto_definition_cmd = 'e'
-Plugin 'pangloss/vim-javascript'
-Plugin 'sophacles/vim-bundle-mako'
-Plugin 'plasticboy/vim-markdown'
+Plug 'pangloss/vim-javascript'
+if executable('npm')
+  " Use tern for goto_definition and refactoring
+  Plug 'marijnh/tern_for_vim', {'do': 'npm install'}
+  " Go to definition with <C-c>g (just like in python-mode)
+  autocmd Filetype javascript noremap <buffer> <C-c>g :TernDef<CR>
+  " Rename with <C-c>rr (also like in python-mode)
+  autocmd Filetype javascript noremap <buffer> <C-c>rr :TernRename<CR>
+endif
+Plug 'sophacles/vim-bundle-mako'
+Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled=1
 
-Plugin 'ZoomWin'
-Plugin 'terryma/vim-multiple-cursors'
+Plug 'ZoomWin'
+Plug 'terryma/vim-multiple-cursors'
 " For previewing markdown, rst ,etc
-Plugin 'greyblake/vim-preview'
-Plugin 'matchit.zip'
-Plugin 'duff/vim-scratch'
+Plug 'greyblake/vim-preview'
+Plug 'matchit.zip'
+Plug 'duff/vim-scratch'
 " Open scratch buffer with space-tab
 command! ScratchToggle call ScratchToggle()
 
@@ -168,23 +165,18 @@ endfunction
 nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 " Load plugins
-call vundle#end()            " required
+call plug#end()            " required
 filetype plugin indent on    " required
 
 """ end plugins """
 
-
 """ BASE CUSTOMIZATIONS """
-
 set encoding=utf-8
 syntax enable
-
 set autoindent
 set autoread " reload files when changed on disk, i.e. via `git checkout`
-
 set backupcopy=yes
-" Make "yanks" work with system clipboard
-set clipboard=unnamed
+set clipboard=unnamed " Make "yanks" work with system clipboard
 set ignorecase " case-insensitive search
 set incsearch " search as you type
 set wildmenu " show a navigable menu for tab completion
@@ -205,20 +197,23 @@ set visualbell
 set t_vb=
 """ VISUAL SETTINGS """
 
-set t_Co=256 " Must be 256 for Tomorrow theme to display correctly
-" let g:solarized_termcolors=256
-set background=light  " this only applies to the solarized theme, not tomorrow
+set t_Co=256 " Must be 256 for many themes to display correctly
 " May want to have different schemes for termvim vs gvim
 if has('gui_running')
-    silent! colorscheme Tomorrow-Night
+    silent! colorscheme hybrid
 else
-    " termvim looks best with Tomorrow themes
-    silent! colorscheme Tomorrow-Night
+    silent! colorscheme hybrid
 endif
 
 " Show trailing whitespace
 set list
 set listchars=tab:▸\ ,trail:▫
+
+" This check is needed because breakindent isn't yet available on Macvim =(
+if v:version > 704 || v:version == 704 && has("patch338")
+  set breakindent " indent on linebreak
+  set showbreak=..
+endif
 
 if &term =~ '256color'
   set t_ut=
@@ -228,9 +223,7 @@ set cursorline  " have a line indicate cursor location
 set foldmethod=manual
 set previewheight=25  " Larger preview height
 set number " Show line numbers on the sidebar.
-" Do not fold by default. But if you do, do it up to 3 levels.
-set foldmethod=indent
-set foldnestmax=3
+" Do not fold by default.
 set nofoldenable
 
 " Set minimum window size to 79x5.
@@ -258,7 +251,6 @@ if exists("+undofile")
 " undofile - This allows you to use undos after exiting and restarting
 " This, like swap and backups, uses .vim-undo first, then ~/.vim/undo
 " :help undo-persistence
-" This is only present in 7.3+
   if isdirectory($HOME . '/.vim/undo') == 0
     :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
   endif
@@ -294,12 +286,9 @@ nnoremap <C-w>s <C-w>s<C-w>w
 nnoremap <C-w>v <C-w>v<C-w>w
 
 """ Search
-" Highlight search results
-set hlsearch
-" Ignore case when searching.
-set ignorecase
-" Don't ignore case when search has capital letter
-set smartcase
+set hlsearch " Highlight search results
+set ignorecase " Ignore case when searching.
+set smartcase " Don't ignore case when search has capital letter
 
 " Quicker window movement
 nnoremap <C-j> <C-w>j
@@ -308,15 +297,24 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 """ SHORTCUTS """
+inoremap jk <Esc>
+inoremap kj <Esc>
+
+set pastetoggle=<leader>z  " toggle paste mode
 
 " in case you forgot to sudo
 cnoremap w!! %!sudo tee > /dev/null %
 
-" selected last pasted text
+" select last pasted text
 nnoremap gp `[v`]
 
 " Open help in a new tab
 cabbrev h tab h
+
+" Easy syntax switching
+nnoremap <leader>Tp :set ft=python<CR>
+nnoremap <leader>Tj :set ft=javascript<CR>
+nnoremap <leader>Tr :set ft=rst<CR>
 
 " Quickly edit vimrc
 nmap <leader>, :tabedit $MYVIMRC<CR>
@@ -325,6 +323,9 @@ nmap <leader>, :tabedit $MYVIMRC<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>Q :wq<CR>
+
+" Quickly open netrw
+nnoremap <leader>e :e.<CR>
 
 " Unhighlight search
 nnoremap <Leader>n :nohlsearch<CR><C-L>
@@ -345,8 +346,8 @@ nnoremap Y y$
 noremap <leader>h ^
 noremap <leader>l $
 
+
 " Split line (sister to [J]oin lines)
-" The normal use of S is covered by cc, so don't worry about shadowing it.
 nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
 
 " Move vertically over wrapped lines
@@ -354,8 +355,6 @@ nmap j gj
 nmap k gk
 
 "" Tabs
-nmap <Tab> gt
-nmap <S-Tab> gT
 nnoremap <silent> <S-t> :tabnew<CR>
 
 """ Syntax
@@ -375,16 +374,17 @@ autocmd FileType markdown setlocal nolist expandtab lbr shiftwidth=4 tabstop=4 s
 " yaml
 autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2
 
+" vim
+autocmd FileType vim setlocal shiftwidth=2 tabstop=2 softtabstop=2
+
 " commit messages
 autocmd Filetype gitcommit setlocal nolist textwidth=72
-
-let g:airline_powerline_fonts = 1
 
 " GUI settings, e.g. MacVim
 set guifont=Sauce\ Code\ Powerline:h12
 if has('gui_running')
     if has('mac')
-        set transparency=7
+        set transparency=0
         " Hide scrollbars in MacVim
         set guioptions-=T
         set guioptions-=r
