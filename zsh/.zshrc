@@ -1,10 +1,9 @@
 #!/usr/bin/env zsh
 # shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/.dotfiles
-
-# your project folder that we can `c [tab]` to
-export PROJECTS=~/projects
-
+export ANDROID_HOME=/usr/local/opt/android-sdk
+export ANSIBLE_NOCOWS=1
+#
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
 if [[ -a ~/.localrc ]]
@@ -12,43 +11,15 @@ then
   source ~/.localrc
 fi
 
-
-# all of our zsh files
-typeset -U config_files
-config_files=($ZSH/**/*.zsh)
-
-# load the path files
-for file in ${(M)config_files:#*/path.zsh}
-do
-  source $file
-done
-
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# load everything but the path and completion files
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-do
-  source $file
-done
-
-
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
 compinit
 
-# load every completion after autocomplete loads
-for file in ${(M)config_files:#*/completion.zsh}
-do
-  source $file
-done
-
-unset config_files
 # Make autoenv always work
-fortune -o -s -n 300 | cowsay -f dragon-and-cow | lolcat
 cd .
-export HAXE_STD_PATH="/usr/local/lib/haxe/std"
-export ANDROID_HOME=/usr/local/opt/android-sdk
-export ANSIBLE_NOCOWS=1
+# fortune -o -s -n 300 | cowsay -f dragon-and-cow | lolcat
