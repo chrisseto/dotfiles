@@ -3,7 +3,9 @@
 export ZSH=$HOME/.dotfiles
 export ANDROID_HOME=/usr/local/opt/android-sdk
 export ANSIBLE_NOCOWS=1
-#
+
+alias gssh='SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent.ssh && ssh'
+
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
 if [[ -a ~/.localrc ]]
