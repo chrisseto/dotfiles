@@ -3,6 +3,7 @@
 export ZSH=$HOME/.dotfiles
 export ANDROID_HOME=/usr/local/opt/android-sdk
 export ANSIBLE_NOCOWS=1
+export PATH=$PATH:~/scripts
 
 alias g='git'
 alias gssh='SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent.ssh && ssh'
