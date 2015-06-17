@@ -67,3 +67,4 @@ function pyclean() {
 
 setopt no_share_history
 unsetopt share_history
+bindkey '^R' history-incremental-search-backward
