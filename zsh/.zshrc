@@ -28,6 +28,8 @@ export PATH=$PATH:$GOPATH/bin
 export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
 export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
 
+export EDITOR=vim  # Screw nano
+
 alias g='git'
 alias c='clear'
 alias flake="flake8"
@@ -55,6 +57,9 @@ alias nt="nosetests"
 # Conda environments
 alias wo="workon"
 alias de="deactivate"
+
+alias nv="nvim"
+export TERM='xterm-256color'
 
 # Remove python compiled byte-code in either current directory or in a
 # list of specified directories
