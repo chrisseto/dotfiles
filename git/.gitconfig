@@ -33,6 +33,7 @@
         fart = flow feature start
         fix = flow hotfix start
         unstage = reset HEAD --
+        mylog = log --first-parent --no-merges
 [color]
         diff = auto
         status = auto
