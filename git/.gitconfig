@@ -33,6 +33,7 @@
         fart = flow feature start
         fix = flow hotfix start
         unstage = reset HEAD --
+        mylog = log --first-parent --no-merges
 [color]
         diff = auto
         status = auto
@@ -52,4 +53,4 @@
         # for more information on different options of the below setting.
         #
         # Setting to git 2.0 default to surpress warning message
-        default = simple
+        default = current
