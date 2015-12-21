@@ -77,7 +77,7 @@ venv_info_wrapper() {
     if [ -n "$VIRTUAL_ENV" ]; then
         local _virtualenv_path
         _virtualenv_path=(${(s:/:)VIRTUAL_ENV})
-        echo "($_virtualenv_path[-1])"
+        echo "($_virtualenv_path[-1]) "
     fi
 }
 
