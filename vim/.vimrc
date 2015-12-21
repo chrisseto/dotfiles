@@ -9,7 +9,7 @@ autocmd bufwritepost .vimrc source $MYVIMRC
 call plug#begin()
 
 " ESSENTIALS
-Plug 'alfredodeza/pytest.vim'
+Plug 'fabianvf/pytest.vim'
 nmap <silent><Leader>tF :Pytest file verbose<CR>
 nmap <silent><Leader>tc :Pytest class verbose<CR>
 nmap <silent><Leader>tm :Pytest method verbose<CR>
