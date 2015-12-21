@@ -109,7 +109,11 @@ dir_info_wrapper() {
         _path+="/$_piece"
     done
 
-    if [[ _under_home ]]; then
+    if [ "$_path" = "" ]; then
+        _path='/'
+    fi
+
+    if [ "$_under_home" = true ]; then
         _path[1]=""
     fi
 
