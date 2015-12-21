@@ -132,9 +132,12 @@ function pyclean() {
     find ${ZSH_PYCLEAN_PLACES} -type d -name "__pycache__" -delete
 }
 
-
 setopt no_share_history
 unsetopt share_history
 bindkey '^R' history-incremental-search-backward
 bindkey '^E' end-of-line
 bindkey '^A' beginning-of-line
+
+if which ruby >/dev/null && which gem >/dev/null; then
+    PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+fi
