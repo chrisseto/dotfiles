@@ -9,6 +9,19 @@ autocmd bufwritepost .vimrc source $MYVIMRC
 call plug#begin()
 
 " ESSENTIALS
+Plug 'alfredodeza/pytest.vim'
+nmap <silent><Leader>tF :Pytest file verbose<CR>
+nmap <silent><Leader>tc :Pytest class verbose<CR>
+nmap <silent><Leader>tm :Pytest method verbose<CR>
+nmap <silent><Leader>tf :Pytest function verbose<CR>
+nmap <silent><Leader>tdF :Pytest file verbose doctest<CR>
+nmap <silent><Leader>tdc :Pytest class verbose doctest<CR>
+nmap <silent><Leader>tdm :Pytest method verbose doctest<CR>
+nmap <silent><Leader>tdf :Pytest function verbose doctest<CR>
+
+Plug 'bling/vim-airline'
+let g:airline#extensions#hunks#enabled = 0
+Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'tpope/vim-sensible'
 Plug 'rstacruz/vim-opinion'
@@ -70,16 +83,16 @@ Plug 'alfredodeza/khuno.vim'
 
 " NICE TO HAVE
 
-Plug 'bling/vim-airline'
-let g:airline_theme='tomorrow'
+" Plug 'bling/vim-airline'
+" let g:airline_theme='tomorrow'
 " Show buffers in tabline
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
 " Disable stuff I don't need to see
-let g:airline#extensions#hunks#enabled = 0
-let g:airline#extensions#bufferline#enabled = 1
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline#extensions#virtualenv#enabled = 0
-let g:airline#extensions#csv#enabled = 0
+" let g:airline#extensions#hunks#enabled = 0
+" let g:airline#extensions#bufferline#enabled = 1
+" let g:airline#extensions#tagbar#enabled = 0
+" let g:airline#extensions#virtualenv#enabled = 0
+" let g:airline#extensions#csv#enabled = 0
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'SirVer/ultisnips'
@@ -177,6 +190,33 @@ if executable('npm')
   " Rename with <C-c>rr (also like in python-mode)
   autocmd Filetype javascript noremap <buffer> <C-c>r :TernRename<CR>
 endif
+Plug 'sophacles/vim-bundle-mako'
+Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_folding_disabled=1
+
+" Idris stuff
+Plug 'idris-hackers/idris-vim'
+
+Plug 'ZoomWin'
+Plug 'terryma/vim-multiple-cursors'
+" For previewing markdown, rst ,etc
+Plug 'greyblake/vim-preview'
+Plug 'matchit.zip'
+Plug 'duff/vim-scratch'
+" Open scratch buffer with space-tab
+command! ScratchToggle call ScratchToggle()
+
+function! ScratchToggle()
+    if exists("w:is_scratch_window")
+        unlet w:is_scratch_window
+        exec "q"
+    else
+        exec "normal! :Sscratch\<cr>\<C-W>L"
+        let w:is_scratch_window = 1
+    endif
+endfunction
+
+nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 call plug#end()
 filetype plugin indent on
@@ -198,6 +238,7 @@ set softtabstop=4 " when hitting <BS>, pretend like a tab is removed, even if sp
 set shiftwidth=4 " number of spaces to use for autoindenting
 set shiftround " use multiple of shiftwidth when indenting with '<' and '>'
 
+
 " No bells
 set noerrorbells visualbell t_vb=
 """ VISUAL SETTINGS """
@@ -205,6 +246,12 @@ set noerrorbells visualbell t_vb=
 set t_Co=256 " Must be 256 for many themes to display correctly
 " Favorites: hybrid iceberg Tomorrow hybrid-light
 silent! colorscheme hybrid
+" May want to have different schemes for termvim vs gvim
+" if has('gui_running')
+"     silent! colorscheme emacs
+" else
+"     silent! colorscheme underwater
+" endif
 
 " Show trailing whitespace
 set list listchars=tab:▸\ ,trail:▫
@@ -352,3 +399,15 @@ if has('gui_running')
         set go-=L
     endif
 endif
+
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set norelativenumber
+    set number
+  else
+    set relativenumber
+    set number
+  endif
+endfunc
+
+nnoremap <C-n> :call NumberToggle()<cr>
