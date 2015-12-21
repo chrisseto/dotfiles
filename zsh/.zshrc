@@ -72,9 +72,17 @@ vcs_info_wrapper() {
     echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
   fi
 }
+
+venv_info_wrapper() {
+    if [ -n "$VIRTUAL_ENV" ]; then
+        _virtualenv_path=(${(s:/:)VIRTUAL_ENV})
+        echo "($_virtualenv_path[-1])"
+    fi
+}
+
+PROMPT='$(venv_info_wrapper)%F{6}${${(%):-%~}//\///}%f %F{9}❯%F{3}❯%F{2}❯%F{242} '
 RPROMPT=$'$(vcs_info_wrapper)'
-# cd .
-#
+
 function colours() {
   for i in {0..255} ; do
       printf "\x1b[38;5;${i}mcolour${i}\n"
