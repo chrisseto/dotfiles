@@ -401,6 +401,7 @@ if has('gui_running')
 endif
 
 set relativenumber
+set number
 function! NumberToggle()
   if(&relativenumber == 1)
     set norelativenumber
