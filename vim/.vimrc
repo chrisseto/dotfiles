@@ -400,14 +400,16 @@ if has('gui_running')
     endif
 endif
 
+set relativenumber
 function! NumberToggle()
   if(&relativenumber == 1)
     set norelativenumber
     set number
+    echo ':set number'
   else
     set relativenumber
     set number
+    echo ':set relativenumber'
   endif
 endfunc
-
-nnoremap <C-n> :call NumberToggle()<cr>
+nmap <silent><Leader>n :call NumberToggle()<CR>
