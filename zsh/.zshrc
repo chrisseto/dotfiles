@@ -75,12 +75,48 @@ vcs_info_wrapper() {
 
 venv_info_wrapper() {
     if [ -n "$VIRTUAL_ENV" ]; then
+        local _virtualenv_path
         _virtualenv_path=(${(s:/:)VIRTUAL_ENV})
         echo "($_virtualenv_path[-1])"
     fi
 }
 
-PROMPT='$(venv_info_wrapper)%F{6}${${(%):-%~}//\///}%f %F{9}❯%F{3}❯%F{2}❯%F{242} '
+dir_info_wrapper() {
+    local _cwd
+    local _dir
+    local _path
+    local _dirs
+    local _under_home
+    local _path_pieces
+    _path_pieces=()
+    _under_home=false
+    _cwd="$(pwd)"
+
+    if [[ "$_cwd" =~ ^"$HOME"(/|$) ]]; then
+        _cwd="~${$(pwd)#$HOME}"
+        _under_home=true
+    fi
+
+    _dirs=(${(s:/:)_cwd})
+
+    for _dir in $_dirs; do
+        _path_pieces+="$_dir[1]"
+    done
+
+    _path_pieces[-1]=$_dirs[-1]
+
+    for _piece in $_path_pieces; do
+        _path+="/$_piece"
+    done
+
+    if [[ _under_home ]]; then
+        _path[1]=""
+    fi
+
+    echo "$_path"
+}
+
+PROMPT='$(venv_info_wrapper)%F{6}$(dir_info_wrapper)%f %F{9}❯%F{3}❯%F{2}❯%f '
 RPROMPT=$'$(vcs_info_wrapper)'
 
 function colours() {
