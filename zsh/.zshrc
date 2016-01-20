@@ -38,12 +38,12 @@ compinit
 cd .
 # fortune -o -s -n 300 | cowsay -f dragon-and-cow | lolcat
 
-[[ -s $(brew --prefix)/etc/autojump.sh ]] && . $(brew --prefix)/etc/autojump.sh
+# [[ -s $(brew --prefix)/etc/autojump.sh ]] && . $(brew --prefix)/etc/autojump.sh
 
 
 export WORKON_HOME=~/Envs
-source /usr/local/bin/virtualenvwrapper.sh
-source /usr/local/opt/autoenv/activate.sh
+# source /usr/local/bin/virtualenvwrapper.sh
+# source /usr/local/opt/autoenv/activate.sh
 
 pyclean () {
         ZSH_PYCLEAN_PLACES=${*:-'.'}
@@ -136,8 +136,8 @@ export PATH=$PATH:~/.bin
 # Go Lang things
 export GOPATH=$HOME/Go
 export PATH=$PATH:$GOPATH/bin
-export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
-export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
+# export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
+# export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
 
 export EDITOR=vim  # Screw nano
 
