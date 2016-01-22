@@ -228,7 +228,7 @@ set encoding=utf-8
 set autoindent
 set autoread " reload files when changed on disk, i.e. via `git checkout`
 set backupcopy=yes
-set clipboard=unnamed " Make "yanks" work with system clipboard
+set clipboard=unnamedplus
 set wildmenu wildmode=longest,list,full
 
 " Indents
