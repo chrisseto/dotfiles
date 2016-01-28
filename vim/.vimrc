@@ -8,6 +8,9 @@ autocmd bufwritepost .vimrc source $MYVIMRC
 """"" PLUGINS """""
 call plug#begin()
 
+" Window swap
+Plug 'wesQ3/vim-windowswap'
+
 " ESSENTIALS
 Plug 'fabianvf/pytest.vim'
 nmap <silent><Leader>tF :Pytest file verbose<CR>
