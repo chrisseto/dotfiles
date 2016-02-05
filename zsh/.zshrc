@@ -3,6 +3,7 @@
 export ZSH=$HOME/.dotfiles
 export ANSIBLE_NOCOWS=1
 export PATH=$PATH:~/scripts:~/.cabal/bin
+export SHELL='/usr/bin/zsh'
 export EDITOR='vim'
 export OSF=~/code/cos/osf.io
 export SCRAPI=~/code/cos/scrapi
@@ -11,12 +12,17 @@ export PATH=$PATH:$GOPATH/bin
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python
 alias ansalon='telnet ansalonmud.net 8679'
 
+# Disable caps lock
+setxkbmap -option caps:none
+
 source ~/dotfiles/tmux/tmuxinator.zsh
+[[ -s /etc/profile.d/autojump.zsh ]] && source /etc/profile.d/autojump.zsh
+
 
 alias g='git'
+[[ `command -v vimx` ]] && alias vim='vimx'
 alias gssh='SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent.ssh && ssh'
 alias c='clear'
-alias query_share='curl -XPOST localhost:9200/share/_search\?pretty -d @query.json'
 alias mkpasswd='python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"'
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
@@ -189,3 +195,10 @@ bindkey '^A' beginning-of-line
 if which ruby >/dev/null && which gem >/dev/null; then
     PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
+
+export VAGRANT_DEFAULT_PROVIDER=libvirt
+unset GREP_OPTIONS
+alias npm-exec='PATH=$(npm bin):$PATH'
+alias go-exec='PATH=$GOPATH/bin:$PATH'
+
+setopt clobber
