@@ -11,6 +11,9 @@ call plug#begin()
 " Window swap
 Plug 'wesQ3/vim-windowswap'
 
+"Puppet
+Plug 'rodjek/vim-puppet'
+
 " ESSENTIALS
 Plug 'fabianvf/pytest.vim'
 nmap <silent><Leader>tF :Pytest file verbose<CR>
