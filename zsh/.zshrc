@@ -48,7 +48,9 @@ cd .
 
 
 export WORKON_HOME=~/Envs
-# source /usr/local/bin/virtualenvwrapper.sh
+if [[ -s "/usr/bin/virtualenvwrapper.sh" ]]; then
+  source /usr/bin/virtualenvwrapper.sh
+fi
 # source /usr/local/opt/autoenv/activate.sh
 
 pyclean () {
@@ -202,3 +204,7 @@ alias npm-exec='PATH=$(npm bin):$PATH'
 alias go-exec='PATH=$GOPATH/bin:$PATH'
 
 setopt clobber
+alias rhciag='ag -l --silent --ignore fusor/fusor-ember-cli --ignore fusor/ui --ignore \*.po'
+alias spotify-online='ssh -N -D localhost:1080 localhost'
+alias keep-trying='while [ $? -ne 0 ] ; do sleep 2 && $(fc -ln -1) ; done'
+alias please='sudo $(fc -ln -1)'
