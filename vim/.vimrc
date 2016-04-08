@@ -8,6 +8,13 @@ autocmd bufwritepost .vimrc source $MYVIMRC
 """"" PLUGINS """""
 call plug#begin()
 
+" Nice note taking plugin
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
+:let g:notes_directories = ['~/Documents/Notes']
+:let g:notes_suffix = '.txt'
+
+
 " Window swap
 Plug 'wesQ3/vim-windowswap'
 
@@ -75,10 +82,11 @@ let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 Plug 'scrooloose/syntastic'
 nnoremap <leader>s :SyntasticCheck<CR>
 " NOTE: Don't use syntastic with python; we use khuno for that
-let g:syntastic_mode_map = { 'mode': 'active',
- \ 'active_filetypes': [],
- \ 'passive_filetypes': [ 'html', 'rst', 'md', 'python'] }
+" let g:syntastic_mode_map = { 'mode': 'active',
+"  \ 'active_filetypes': ['ruby'],
+"  \ 'passive_filetypes': [ 'html', 'rst', 'md', 'python'] }
 let g:syntastic_python_checkers = ['flake8', 'python']
+let g:syntastic_ruby_checkers = ['rubylint', 'mri']
 " let g:syntastic_javascript_checkers = ['jsxhint', 'jshint']
 " autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['jsxhint']
 " Disable some features to make syntastic faster
@@ -251,7 +259,21 @@ set noerrorbells visualbell t_vb=
 
 set t_Co=256 " Must be 256 for many themes to display correctly
 " Favorites: hybrid iceberg Tomorrow hybrid-light
-silent! colorscheme hybrid
+silent! colorscheme iceberg
+command! TransparencyToggle call TransparencyToggle()
+
+function! TransparencyToggle()
+    if exists("w:is_transparent")
+        unlet w:is_transparent
+        " TODO: Programmatically get ctermbg
+        exec "hi Normal ctermbg=234"
+    else
+        exec "hi Normal ctermbg=none"
+        let w:is_transparent = 1
+    endif
+endfunction
+
+nnoremap <silent> <leader>t :TransparencyToggle<cr>
 " May want to have different schemes for termvim vs gvim
 " if has('gui_running')
 "     silent! colorscheme emacs
@@ -341,7 +363,7 @@ set pastetoggle=<leader>z  " toggle paste mode
 cnoremap w!! %!sudo tee > /dev/null %
 " select last pasted text
 nnoremap gp `[v`]
-" Easy syntax switching
+" Easy syntax switchin g
 nnoremap <leader>Tp :set ft=python<CR>
 nnoremap <leader>Tj :set ft=javascript<CR>
 nnoremap <leader>Tr :set ft=rst<CR>
