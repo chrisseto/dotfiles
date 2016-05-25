@@ -208,3 +208,6 @@ alias rhciag='ag -l --silent --ignore fusor/fusor-ember-cli --ignore fusor/ui --
 alias spotify-online='ssh -N -D localhost:1080 localhost'
 alias keep-trying='while [ $? -ne 0 ] ; do sleep 2 && $(fc -ln -1) ; done'
 alias please='sudo $(fc -ln -1)'
+alias yum='sudo dnf'
+alias sssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+alias sscp='scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
