@@ -265,10 +265,42 @@ command! TransparencyToggle call TransparencyToggle()
 function! TransparencyToggle()
     if exists("w:is_transparent")
         unlet w:is_transparent
-        " TODO: Programmatically get ctermbg
-        exec "hi Normal ctermbg=234"
+        exec "hi Normal ctermbg=" . w:normal_bg
+        exec "hi NonText ctermbg=" . w:nontext_bg
+        exec "hi CursorLine ctermbg=" . w:cursorline_bg
+        exec "hi CursorLineNr ctermbg=" . w:cursornr_bg
+        exec "hi LineNr ctermbg=" . w:linenr_bg
+        exec "hi GitGutterAdd ctermbg=" . w:gitgutteradd_bg
+        exec "hi GitGutterAdd ctermfg=" . w:gitgutteradd_fg
+        exec "hi GitGutterChange ctermbg=" . w:gitgutterchange_bg
+        exec "hi GitGutterChange ctermfg=" . w:gitgutterchange_fg
+        exec "hi GitGutterDelete ctermbg=" . w:gitgutterdelete_bg
+        exec "hi GitGutterDelete ctermfg=" . w:gitgutterdelete_fg
+
     else
+        let w:normal_bg = synIDattr(synIDtrans(hlID('Normal')), 'bg')
+        let w:nontext_bg = synIDattr(synIDtrans(hlID('NonText')), 'bg')
+        let w:cursorline_bg = synIDattr(synIDtrans(hlID('CursorLine')), 'bg')
+        let w:cursornr_bg = synIDattr(synIDtrans(hlID('CursorLineNr')), 'bg')
+        let w:linenr_bg = synIDattr(synIDtrans(hlID('LineNr')), 'bg')
+        let w:gitgutteradd_bg = synIDattr(synIDtrans(hlID('GitGutterAdd')), 'bg')
+        let w:gitgutteradd_fg = synIDattr(synIDtrans(hlID('GitGutterAdd')), 'fg')
+        let w:gitgutterchange_bg = synIDattr(synIDtrans(hlID('GitGutterChange')), 'bg')
+        let w:gitgutterchange_fg = synIDattr(synIDtrans(hlID('GitGutterChange')), 'fg')
+        let w:gitgutterdelete_bg = synIDattr(synIDtrans(hlID('GitGutterDelete')), 'bg')
+        let w:gitgutterdelete_fg = synIDattr(synIDtrans(hlID('GitGutterDelete')), 'fg')
+
         exec "hi Normal ctermbg=none"
+        exec "hi NonText ctermbg=none"
+        exec "hi CursorLine ctermbg=none"
+        exec "hi CursorLineNr ctermbg=none"
+        exec "hi LineNr ctermbg=none"
+        exec "hi GitGutterAdd ctermbg=none"
+        exec "hi GitGutterAdd ctermfg=" . w:gitgutteradd_fg
+        exec "hi GitGutterChange ctermbg=none"
+        exec "hi GitGutterChange ctermfg=" . w:gitgutterchange_fg
+        exec "hi GitGutterDelete ctermbg=none"
+        exec "hi GitGutterDelete ctermfg=" . w:gitgutterdelete_fg
         let w:is_transparent = 1
     endif
 endfunction
