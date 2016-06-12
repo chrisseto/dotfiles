@@ -8,7 +8,33 @@ autocmd bufwritepost .vimrc source $MYVIMRC
 """"" PLUGINS """""
 call plug#begin()
 
+" Nice note taking plugin
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
+:let g:notes_directories = ['~/Documents/Notes']
+:let g:notes_suffix = '.txt'
+
+
+" Window swap
+Plug 'wesQ3/vim-windowswap'
+
+"Puppet
+Plug 'rodjek/vim-puppet'
+
 " ESSENTIALS
+Plug 'fabianvf/pytest.vim'
+nmap <silent><Leader>tF :Pytest file verbose<CR>
+nmap <silent><Leader>tc :Pytest class verbose<CR>
+nmap <silent><Leader>tm :Pytest method verbose<CR>
+nmap <silent><Leader>tf :Pytest function verbose<CR>
+nmap <silent><Leader>tdF :Pytest file verbose doctest<CR>
+nmap <silent><Leader>tdc :Pytest class verbose doctest<CR>
+nmap <silent><Leader>tdm :Pytest method verbose doctest<CR>
+nmap <silent><Leader>tdf :Pytest function verbose doctest<CR>
+
+Plug 'bling/vim-airline'
+let g:airline#extensions#hunks#enabled = 0
+Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'tpope/vim-sensible'
 Plug 'rstacruz/vim-opinion'
@@ -56,10 +82,11 @@ let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 Plug 'scrooloose/syntastic'
 nnoremap <leader>s :SyntasticCheck<CR>
 " NOTE: Don't use syntastic with python; we use khuno for that
-let g:syntastic_mode_map = { 'mode': 'active',
- \ 'active_filetypes': [],
- \ 'passive_filetypes': [ 'html', 'rst', 'md', 'python'] }
+" let g:syntastic_mode_map = { 'mode': 'active',
+"  \ 'active_filetypes': ['ruby'],
+"  \ 'passive_filetypes': [ 'html', 'rst', 'md', 'python'] }
 let g:syntastic_python_checkers = ['flake8', 'python']
+let g:syntastic_ruby_checkers = ['rubylint', 'mri']
 " let g:syntastic_javascript_checkers = ['jsxhint', 'jshint']
 " autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['jsxhint']
 " Disable some features to make syntastic faster
@@ -70,16 +97,16 @@ Plug 'alfredodeza/khuno.vim'
 
 " NICE TO HAVE
 
-Plug 'bling/vim-airline'
-let g:airline_theme='tomorrow'
+" Plug 'bling/vim-airline'
+" let g:airline_theme='tomorrow'
 " Show buffers in tabline
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
 " Disable stuff I don't need to see
-let g:airline#extensions#hunks#enabled = 0
-let g:airline#extensions#bufferline#enabled = 1
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline#extensions#virtualenv#enabled = 0
-let g:airline#extensions#csv#enabled = 0
+" let g:airline#extensions#hunks#enabled = 0
+" let g:airline#extensions#bufferline#enabled = 1
+" let g:airline#extensions#tagbar#enabled = 0
+" let g:airline#extensions#virtualenv#enabled = 0
+" let g:airline#extensions#csv#enabled = 0
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'SirVer/ultisnips'
@@ -177,6 +204,33 @@ if executable('npm')
   " Rename with <C-c>rr (also like in python-mode)
   autocmd Filetype javascript noremap <buffer> <C-c>r :TernRename<CR>
 endif
+Plug 'sophacles/vim-bundle-mako'
+Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_folding_disabled=1
+
+" Idris stuff
+Plug 'idris-hackers/idris-vim'
+
+Plug 'ZoomWin'
+Plug 'terryma/vim-multiple-cursors'
+" For previewing markdown, rst ,etc
+Plug 'greyblake/vim-preview'
+Plug 'matchit.zip'
+Plug 'duff/vim-scratch'
+" Open scratch buffer with space-tab
+command! ScratchToggle call ScratchToggle()
+
+function! ScratchToggle()
+    if exists("w:is_scratch_window")
+        unlet w:is_scratch_window
+        exec "q"
+    else
+        exec "normal! :Sscratch\<cr>\<C-W>L"
+        let w:is_scratch_window = 1
+    endif
+endfunction
+
+nnoremap <silent> <leader><tab> :ScratchToggle<cr>
 
 call plug#end()
 filetype plugin indent on
@@ -188,7 +242,7 @@ set encoding=utf-8
 set autoindent
 set autoread " reload files when changed on disk, i.e. via `git checkout`
 set backupcopy=yes
-set clipboard=unnamed " Make "yanks" work with system clipboard
+set clipboard=unnamedplus
 set wildmenu wildmode=longest,list,full
 
 " Indents
@@ -198,13 +252,66 @@ set softtabstop=4 " when hitting <BS>, pretend like a tab is removed, even if sp
 set shiftwidth=4 " number of spaces to use for autoindenting
 set shiftround " use multiple of shiftwidth when indenting with '<' and '>'
 
+
 " No bells
 set noerrorbells visualbell t_vb=
 """ VISUAL SETTINGS """
 
 set t_Co=256 " Must be 256 for many themes to display correctly
 " Favorites: hybrid iceberg Tomorrow hybrid-light
-silent! colorscheme hybrid
+silent! colorscheme iceberg
+command! TransparencyToggle call TransparencyToggle()
+
+function! TransparencyToggle()
+    if exists("w:is_transparent")
+        unlet w:is_transparent
+        exec "hi Normal ctermbg=" . w:normal_bg
+        exec "hi NonText ctermbg=" . w:nontext_bg
+        exec "hi CursorLine ctermbg=" . w:cursorline_bg
+        exec "hi CursorLineNr ctermbg=" . w:cursornr_bg
+        exec "hi LineNr ctermbg=" . w:linenr_bg
+        exec "hi GitGutterAdd ctermbg=" . w:gitgutteradd_bg
+        exec "hi GitGutterAdd ctermfg=" . w:gitgutteradd_fg
+        exec "hi GitGutterChange ctermbg=" . w:gitgutterchange_bg
+        exec "hi GitGutterChange ctermfg=" . w:gitgutterchange_fg
+        exec "hi GitGutterDelete ctermbg=" . w:gitgutterdelete_bg
+        exec "hi GitGutterDelete ctermfg=" . w:gitgutterdelete_fg
+
+    else
+        let w:normal_bg = synIDattr(synIDtrans(hlID('Normal')), 'bg')
+        let w:nontext_bg = synIDattr(synIDtrans(hlID('NonText')), 'bg')
+        let w:cursorline_bg = synIDattr(synIDtrans(hlID('CursorLine')), 'bg')
+        let w:cursornr_bg = synIDattr(synIDtrans(hlID('CursorLineNr')), 'bg')
+        let w:linenr_bg = synIDattr(synIDtrans(hlID('LineNr')), 'bg')
+        let w:gitgutteradd_bg = synIDattr(synIDtrans(hlID('GitGutterAdd')), 'bg')
+        let w:gitgutteradd_fg = synIDattr(synIDtrans(hlID('GitGutterAdd')), 'fg')
+        let w:gitgutterchange_bg = synIDattr(synIDtrans(hlID('GitGutterChange')), 'bg')
+        let w:gitgutterchange_fg = synIDattr(synIDtrans(hlID('GitGutterChange')), 'fg')
+        let w:gitgutterdelete_bg = synIDattr(synIDtrans(hlID('GitGutterDelete')), 'bg')
+        let w:gitgutterdelete_fg = synIDattr(synIDtrans(hlID('GitGutterDelete')), 'fg')
+
+        exec "hi Normal ctermbg=none"
+        exec "hi NonText ctermbg=none"
+        exec "hi CursorLine ctermbg=none"
+        exec "hi CursorLineNr ctermbg=none"
+        exec "hi LineNr ctermbg=none"
+        exec "hi GitGutterAdd ctermbg=none"
+        exec "hi GitGutterAdd ctermfg=" . w:gitgutteradd_fg
+        exec "hi GitGutterChange ctermbg=none"
+        exec "hi GitGutterChange ctermfg=" . w:gitgutterchange_fg
+        exec "hi GitGutterDelete ctermbg=none"
+        exec "hi GitGutterDelete ctermfg=" . w:gitgutterdelete_fg
+        let w:is_transparent = 1
+    endif
+endfunction
+
+nnoremap <silent> <leader>t :TransparencyToggle<cr>
+" May want to have different schemes for termvim vs gvim
+" if has('gui_running')
+"     silent! colorscheme emacs
+" else
+"     silent! colorscheme underwater
+" endif
 
 " Show trailing whitespace
 set list listchars=tab:▸\ ,trail:▫
@@ -288,7 +395,7 @@ set pastetoggle=<leader>z  " toggle paste mode
 cnoremap w!! %!sudo tee > /dev/null %
 " select last pasted text
 nnoremap gp `[v`]
-" Easy syntax switching
+" Easy syntax switchin g
 nnoremap <leader>Tp :set ft=python<CR>
 nnoremap <leader>Tj :set ft=javascript<CR>
 nnoremap <leader>Tr :set ft=rst<CR>
@@ -352,3 +459,18 @@ if has('gui_running')
         set go-=L
     endif
 endif
+
+set relativenumber
+set number
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set norelativenumber
+    set number
+    echo ':set number'
+  else
+    set relativenumber
+    set number
+    echo ':set relativenumber'
+  endif
+endfunc
+nmap <silent><Leader>n :call NumberToggle()<CR>

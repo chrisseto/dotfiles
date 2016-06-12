@@ -4,8 +4,8 @@
 [hub]
         protocol = https
 [user]
-        name = Chris Seto
-        email = chriskseto@gmail.com
+        name = Fabian von Feilitzsch
+        email = fabian@fabianism.us
 [credential]
         helper = osxkeychain
 [alias]
