@@ -1,42 +1,13 @@
 #!/usr/bin/env zsh
 
+############ ZSH SETUP ############
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
 # initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
-compinit
-
-# Make autoenv always work
-# cd .
-#
-function colours() {
-  for i in {0..255} ; do
-      printf "\x1b[38;5;${i}mcolour${i}\n"
-  done
-}
-
-export ANSIBLE_NOCOWS=1
-export ANDROID_HOME=/usr/local/opt/android-sdk
-
-export PATH=$PATH:~/.bin
-# Go Lang things
-export GOPATH=$HOME/Go
-export PATH=$PATH:$GOPATH/bin
-export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
-export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
-
-export EDITOR=vim  # Screw nano
-
-alias g='git'
-alias c='clear'
-alias flake="flake8"
-alias nosetests="nosetests --rednose"
-alias gssh='SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent.ssh && ssh'
-alias reload!='source ~/.zshrc'
-
+autoload -U compinit && compinit
 autoload -U promptinit && promptinit
 
 # Disable autocorrect
@@ -44,23 +15,52 @@ DISABLE_CORRECTION="true"
 unsetopt correct
 unsetopt correct_all
 
-. ~/.bin/z.sh
+setopt no_share_history
+unsetopt share_history
 
-alias py="python"
-alias py3="python3"
+bindkey '^R' history-incremental-search-backward
+bindkey '^E' end-of-line
+bindkey '^A' beginning-of-line
+
+############ /ZSH SETUP ############
+
+
+
+############ ENV VARS ############
+export ANSIBLE_NOCOWS=1
+
+export PATH=$PATH:~/.bin
+
+# Go Lang things
+export GOPATH=$HOME/Go export PATH=$PATH:$GOPATH/bin
+export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
+export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
+
+export EDITOR=neovim  # Screw nano
+
+export TERM='xterm-256color'  # Make colors work right
+
+############ /ENV VARS ############
+
+
+
+############ ALIASES ############
 alias ipy="ipython"
-alias pyserv="python -m SimpleHTTPServer"
-alias pyserv3="python3 -m http.server"
 alias pt="py.test"
-alias nt="nosetests"
+alias py3="python3"
+alias py="python"
 
-# Conda environments
-alias wo="workon"
-alias de="deactivate"
-
+alias g="git"
 alias nv="nvim"
-export TERM='xterm-256color'
 
+alias c="clear"
+alias reload!="source ~/.zshrc"
+
+############ /ALIASES ############
+
+
+
+############ FUNCTIONS  ############
 # Remove python compiled byte-code in either current directory or in a
 # list of specified directories
 function pyclean() {
@@ -69,9 +69,22 @@ function pyclean() {
     find ${ZSH_PYCLEAN_PLACES} -type d -name "__pycache__" -delete
 }
 
+function colours() {
+  for i in {0..255} ; do
+      printf "\x1b[38;5;${i}mcolour${i}\n"
+  done
+}
+############ /FUNCTIONS  ############
 
-setopt no_share_history
-unsetopt share_history
-bindkey '^R' history-incremental-search-backward
-bindkey '^E' end-of-line
-bindkey '^A' beginning-of-line
+
+
+############ 3RD PARTY SETUP  ############
+# pyenv setup
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+# Make virtual env add a prefix to the prompt
+eval "$(pyenv virtualenv-init -)"
+
+# Z autocomplete
+# https://github.com/rupa/z
+. `brew --prefix`/etc/profile.d/z.sh
+############ /3RD PARTY SETUP  ############
