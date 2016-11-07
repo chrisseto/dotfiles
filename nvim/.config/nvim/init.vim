@@ -25,11 +25,15 @@ let g:neomake_javascript_enabled_makers = ['jscs']
 " Autocomplete
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup = 1
+set completeopt-=preview  " Don't open the preview window
 " deoplete tab-complete
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Python Autocomplete
 Plug 'zchee/deoplete-jedi'
+" let g:deoplete#sources#jedi#show_docstring = 0
+" let g:deoplete#sources#jedi#show_docstring_sig = 0
+" set completeopt+=noinsert
 let g:python_host_prog = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
@@ -51,6 +55,12 @@ endif
 
 " Toggle comment with space-/
 Plug 'tpope/vim-commentary'
+nmap <leader>/ gcc
+vmap <leader>/ gc
+" <3 @ tpope
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -86,6 +96,8 @@ map <leader>gw :Gwrite<CR>
 noremap <Leader>gp :Git push<CR>
 
 Plug 'flazz/vim-colorschemes'
+
+Plug 'mustache/vim-mustache-handlebars'
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -191,6 +203,8 @@ nnoremap <Leader>v <C-w>v<C-w>w
 nmap j gj
 nmap k gk
 
+" Remove trailing whitespace on <space><space>w
+nnoremap <leader><leader>w :%s/\s\+$//<cr>:let @/=''<CR>
 """"""" /REMAPS """""""""""""
 
 

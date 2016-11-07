@@ -36,7 +36,7 @@ export GOPATH=$HOME/Go export PATH=$PATH:$GOPATH/bin
 export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
 export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
 
-export EDITOR=neovim  # Screw nano
+export EDITOR=nvim
 
 export TERM='xterm-256color'  # Make colors work right
 
@@ -87,4 +87,15 @@ eval "$(pyenv virtualenv-init -)"
 # Z autocomplete
 # https://github.com/rupa/z
 . `brew --prefix`/etc/profile.d/z.sh
+
+
+# Node version manager
+export NVM_DIR="$HOME/.nvm"
+. "$(brew --prefix nvm)/nvm.sh"
+[[ -r $NVM_DIR/bash_completion ]] && . $NVM_DIR/bash_completion
+
+# Kubectl autocomplete
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
 ############ /3RD PARTY SETUP  ############

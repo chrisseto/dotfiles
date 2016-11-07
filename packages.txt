@@ -2,3 +2,4 @@ stow
 zsh
 tmux
 vim
+neovim
