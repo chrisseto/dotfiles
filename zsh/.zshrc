@@ -19,7 +19,7 @@ source ~/dotfiles/tmux/tmuxinator.zsh
 
 
 alias g='git'
-[[ `command -v vimx` ]] && alias vim='vimx'
+command -v vimx >/dev/null 2>&1 && alias vim='vimx'
 alias gssh='SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent.ssh && ssh'
 alias c='clear'
 alias mkpasswd='python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"'
