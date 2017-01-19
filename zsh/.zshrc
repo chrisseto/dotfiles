@@ -16,7 +16,6 @@ alias ansalon='telnet ansalonmud.net 8679'
 setxkbmap -option caps:none
 
 source ~/dotfiles/tmux/tmuxinator.zsh
-[[ -s /etc/profile.d/autojump.zsh ]] && source /etc/profile.d/autojump.zsh
 
 
 alias g='git'
@@ -44,14 +43,12 @@ compinit
 cd .
 # fortune -o -s -n 300 | cowsay -f dragon-and-cow | lolcat
 
-# [[ -s $(brew --prefix)/etc/autojump.sh ]] && . $(brew --prefix)/etc/autojump.sh
 
 
 export WORKON_HOME=~/Envs
 if [[ -s "/usr/bin/virtualenvwrapper.sh" ]]; then
   source /usr/bin/virtualenvwrapper.sh
 fi
-# source /usr/local/opt/autoenv/activate.sh
 
 pyclean () {
         ZSH_PYCLEAN_PLACES=${*:-'.'}
@@ -205,9 +202,51 @@ alias go-exec='PATH=$GOPATH/bin:$PATH'
 
 setopt clobber
 alias rhciag='ag -l --silent --ignore fusor/fusor-ember-cli --ignore fusor/ui --ignore \*.po'
-alias spotify-online='ssh -N -D localhost:1080 localhost'
+alias spotify-online='ssh -f -N -D localhost:1080 localhost'
 alias keep-trying='while [ $? -ne 0 ] ; do sleep 2 && $(fc -ln -1) ; done'
 alias please='sudo $(fc -ln -1)'
 alias yum='sudo dnf'
 alias sssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 alias sscp='scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
+function make_nfs_share {
+  _path="/nfs_data/$1"
+  if [ -d "$_path" ]
+  then
+    echo "$_path already exists"
+    grep -q -e "$_path \*(rw)" /etc/exports || (echo "$_path *(rw)" | sudo tee -a /etc/exports)
+    # skip
+  else
+    sudo mkdir -p $_path
+    sudo chmod -R +755 $_path
+    sudo chown -R 36:36 $_path
+    grep -q -e "$_path \*(rw)" /etc/exports || (echo "$_path *(rw)" | sudo tee -a /etc/exports)
+    echo "$_path share created"
+  fi
+  sudo exportfs -ra
+}
+
+if [[ -s "$(which activate.sh)" ]]; then
+  source $(which activate.sh)
+fi
+
+# added by travis gem
+[ -f /home/fabian/.travis/travis.sh ] && source /home/fabian/.travis/travis.sh
+
+export NVM_DIR="/home/fabian/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# FASD configuration
+eval "$(fasd --init auto)"
+# Aliases: 
+alias a='fasd -a'        # any
+alias s='fasd -si'       # show / search / select
+alias d='fasd -d'        # directory
+alias f='fasd -f'        # file
+alias sd='fasd -sid'     # interactive directory selection
+alias sf='fasd -sif'     # interactive file selection
+alias z='fasd_cd -d'     # cd, same functionality as j in autojump
+alias j='fasd_cd -d'     # cd, same functionality as j in autojump
+alias zz='fasd_cd -d -i' # cd with interactive selection
+alias v='f -t -e vim -b viminfo'  # open file most recently edited in vim
+alias vv='f -i -t -e vim'  # open file in vim

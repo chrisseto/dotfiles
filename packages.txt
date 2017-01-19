@@ -3,3 +3,4 @@ stow
 zsh
 tmux
 vim
+fasd
