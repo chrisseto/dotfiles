@@ -34,15 +34,14 @@ zstyle ':prezto:load' pmodule \
   'completion' \
   'prompt' \
   'osx' \
-  'git' \
-  'python'
+  'git'
 
 #
 # Editor
 #
 
 # Set the key mapping style to 'emacs' or 'vi'.
-zstyle ':prezto:module:editor' key-bindings 'vi'
+# zstyle ':prezto:module:editor' key-bindings 'vi'
 
 # Auto convert .... to ../..
 # zstyle ':prezto:module:editor' dot-expansion 'yes'

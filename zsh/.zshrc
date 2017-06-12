@@ -31,14 +31,14 @@ export ANSIBLE_NOCOWS=1
 
 export PATH=$PATH:~/.bin
 
-# Go Lang things
-export GOPATH=$HOME/Go export PATH=$PATH:$GOPATH/bin
-export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
-export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
+# Go-lang things
+export GOPATH=$HOME/Go
+export PATH=$PATH:$GOPATH/bin
 
 export EDITOR=nvim
 
-export TERM='xterm-256color'  # Make colors work right
+# export TERM='xterm-256color-italic'  # Make colors work
+export TERM='xterm-256color'  # Make colors work
 
 ############ /ENV VARS ############
 
@@ -55,6 +55,7 @@ alias nv="nvim"
 
 alias c="clear"
 alias reload!="source ~/.zshrc"
+alias fixterm="stty sane && tput reset"
 
 ############ /ALIASES ############
 
@@ -80,7 +81,7 @@ function colours() {
 
 ############ 3RD PARTY SETUP  ############
 # pyenv setup
-if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+if which pyenv > /dev/null; then eval "$(pyenv init - --no-rehash)"; fi
 # Make virtual env add a prefix to the prompt
 eval "$(pyenv virtualenv-init -)"
 
@@ -88,14 +89,18 @@ eval "$(pyenv virtualenv-init -)"
 # https://github.com/rupa/z
 . `brew --prefix`/etc/profile.d/z.sh
 
+# Rust up autocomplete
+export PATH="$PATH:$HOME/.cargo/bin"
 
 # Node version manager
-export NVM_DIR="$HOME/.nvm"
-. "$(brew --prefix nvm)/nvm.sh"
-[[ -r $NVM_DIR/bash_completion ]] && . $NVM_DIR/bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# . "$(brew --prefix nvm)/nvm.sh"
 
 # Kubectl autocomplete
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 ############ /3RD PARTY SETUP  ############
+
+# Clear out duplicate $PATH entries
+typeset -U PATH
