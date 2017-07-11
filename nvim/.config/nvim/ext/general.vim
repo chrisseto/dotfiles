@@ -47,7 +47,6 @@ augroup line_return
 augroup END
 
 " Look and feel
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = '1'
 
 set background=dark
 let g:hybrid_custom_term_colors = 1
