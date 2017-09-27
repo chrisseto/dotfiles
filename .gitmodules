@@ -7,3 +7,6 @@
 [submodule "nvim/.config/nvim/autoload"]
 	path = nvim/.config/nvim/autoload
 	url = https://github.com/junegunn/vim-plug
+[submodule "fonts"]
+	path = fonts
+	url = https://github.com/powerline/fonts
