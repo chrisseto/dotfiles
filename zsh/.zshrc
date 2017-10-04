@@ -35,10 +35,15 @@ export PATH=$PATH:~/.bin
 export GOPATH=$HOME/Go
 export PATH=$PATH:$GOPATH/bin
 
-export EDITOR=nvim
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 # export TERM='xterm-256color-italic'  # Make colors work
 export TERM='xterm-256color'  # Make colors work
+
+# Java Stuff
+export GROOVY_HOME=/usr/local/opt/groovy/libexec
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 ############ /ENV VARS ############
 
