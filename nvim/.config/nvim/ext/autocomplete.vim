@@ -19,6 +19,8 @@ Plug 'sebastianmarkow/deoplete-rust'
 let g:deoplete#sources#rust#racer_binary='$HOME/.cargo/bin/racer'
 let g:deoplete#sources#rust#rust_source_path = '$HOME/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src'
 
+Plug 'mxw/vim-jsx'
+
 " Golang Autocomplete
 Plug 'fatih/vim-go'
 Plug 'zchee/deoplete-go', { 'do': 'make'}
