@@ -8,6 +8,6 @@ chsh -s /bin/zsh
 git submodule init
 git submodule update
 stow zsh
-stow vim
+stow nvim
 stow git
 stow tmux

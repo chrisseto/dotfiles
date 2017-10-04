@@ -3,3 +3,6 @@ zsh
 tmux
 vim
 neovim
+pyenv
+pyenv-virtualenv
+reattach-to-usernamespace
