@@ -11,7 +11,6 @@ Plug 'itchyny/vim-cursorword' " Underlines the word under your cursor
 Plug 'junegunn/seoul256.vim' " More colors
 Plug 'qpkorr/vim-bufkill'
 Plug 'rstacruz/vim-opinion'
-Plug 'rust-lang/rust.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-commentary' " Simple commenting
 Plug 'tpope/vim-fugitive' " Git support
@@ -25,11 +24,8 @@ Plug 'Shougo/neomru.vim'
 
 Plug 'vimwiki/vimwiki'
 
-" Autocomplete
-execute 'source '. fnameescape('~/.config/nvim/ext/autocomplete.vim')
-
-" Linters
-execute 'source '. fnameescape('~/.config/nvim/ext/linting.vim')
+" Per FT Configurations
+execute 'source '. fnameescape('~/.config/nvim/ext/fts.vim')
 
 " NerdTree
 Plug 'scrooloose/nerdtree'
@@ -48,7 +44,7 @@ nmap <Leader>r :RainbowParentheses!!<CR>
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
 let g:limelight_conceal_ctermfg = 240
-let g:goyo_width = '50%'
+let g:goyo_width = '75%'
 
 call plug#end()
 
