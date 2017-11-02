@@ -230,7 +230,7 @@ function make_nfs_share {
   sudo exportfs -ra
 }
 
-if [[ -s "$(which activate.sh)" ]]; then
+if [[ -s "$(command -v activate.sh)" ]]; then
   source $(which activate.sh)
 fi
 
