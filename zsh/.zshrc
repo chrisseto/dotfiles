@@ -12,8 +12,12 @@ export PATH=$PATH:$GOPATH/bin
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python
 alias ansalon='telnet ansalonmud.net 8679'
 
+
+# typeset -U fpath
+fpath=(~/.zsh/oc $fpath)
+
 # Disable caps lock
-setxkbmap -option caps:none
+# setxkbmap -option caps:swapescape
 
 source ~/dotfiles/tmux/tmuxinator.zsh
 
@@ -250,3 +254,9 @@ alias j='fasd_cd -d'     # cd, same functionality as j in autojump
 alias zz='fasd_cd -d -i' # cd with interactive selection
 alias v='f -t -e vim -b viminfo'  # open file most recently edited in vim
 alias vv='f -i -t -e vim'  # open file in vim
+alias todo='todo -G'
+export GOBIN=/home/fabian/Go/bin
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOROOT/bin
+
+# source ~/.screen_layout/default.sh

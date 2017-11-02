@@ -7,7 +7,7 @@
         name = Fabian von Feilitzsch
         email = fabian@fabianism.us
 [credential]
-        helper = osxkeychain
+	helper = cache
 [alias]
         st = status
         co = checkout

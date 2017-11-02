@@ -2,6 +2,7 @@ set nocompatible              " be iMproved
 " Spacebar is a much better leader than \ or ,
 let mapleader = "\<Space>"
 
+set modifiable
 " Automatically source the vimrc file after saving it
 autocmd bufwritepost .vimrc source $MYVIMRC
 
@@ -231,6 +232,11 @@ function! ScratchToggle()
 endfunction
 
 nnoremap <silent> <leader><tab> :ScratchToggle<cr>
+
+""" Go configuration
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+let g:go_fmt_command = "goimports"
+
 
 call plug#end()
 filetype plugin indent on
