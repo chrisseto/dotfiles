@@ -48,7 +48,6 @@ export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 ############ /ENV VARS ############
 
 
-
 ############ ALIASES ############
 alias ipy="ipython"
 alias pt="py.test"
@@ -105,6 +104,11 @@ export PATH="$PATH:$HOME/.cargo/bin"
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
+
+# direnv hook (https://direnv.net/)
+# Executes a .env file upon entering a directory
+# Also appears to unload it
+eval "$(direnv hook zsh)"
 ############ /3RD PARTY SETUP  ############
 
 # Clear out duplicate $PATH entries
