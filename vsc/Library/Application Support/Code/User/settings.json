@@ -1,0 +1,8 @@
+{
+    "vim.easymotion": true,
+    "vim.hlsearch": true,
+    "vim.incsearch": true,
+    "vim.statusBarColorControl": true,
+    "vim.visualstar": true,
+    "workbench.colorTheme": "Hybrid Next"
+}
