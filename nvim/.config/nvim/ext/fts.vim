@@ -23,8 +23,8 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 """""" Python """"""
 Plug 'zchee/deoplete-jedi'
 let g:ale_linters.python = ['flake8']
-let g:python_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python_host_prog = $HOME.'/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog= $HOME.'/.pyenv/versions/neovim3/bin/python'
 " let g:deoplete#sources#jedi#show_docstring = 0
 " let g:deoplete#sources#jedi#show_docstring_sig = 0
 " set completeopt+=noinsert
@@ -39,6 +39,13 @@ let g:ale_linters.javascript = ['eslint']
 """""" Golang """"""
 Plug 'fatih/vim-go'
 Plug 'zchee/deoplete-go', { 'do': 'make'}
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+
 autocmd FileType go setlocal
       \ autoindent
       \ noexpandtab
@@ -65,3 +72,19 @@ let g:deoplete#sources#rust#rust_source_path = '$HOME/.rustup/toolchains/stable-
 """""" RDF """"""
 Plug 'niklasl/vim-rdf'
 """""" /RDF """"""
+
+
+"""""" Hashicorp Stuff """"""
+Plug 'hashivim/vim-terraform'
+"""""" /Hashicorp Stuff """"""
+
+
+"""""" Kotlin """"""
+Plug 'udalov/kotlin-vim'
+"""""" /Kotlin """"""
+
+
+"""""" Swift """"""
+Plug 'keith/swift.vim'
+" Plug 'landaire/deoplete-swift'
+"""""" /Swift """"""
