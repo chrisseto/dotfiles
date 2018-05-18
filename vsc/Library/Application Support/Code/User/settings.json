@@ -4,5 +4,6 @@
     "vim.incsearch": true,
     "vim.statusBarColorControl": true,
     "vim.visualstar": true,
-    "workbench.colorTheme": "Hybrid Next"
+    "workbench.colorTheme": "Hybrid Next",
+    "vim.useSystemClipboard": true
 }
