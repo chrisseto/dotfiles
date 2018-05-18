@@ -34,6 +34,7 @@ export PATH=$PATH:~/.bin
 # Go-lang things
 export GOPATH=$HOME/Go
 export PATH=$PATH:$GOPATH/bin
+export GOROOT="$(brew --prefix golang)/libexec"
 
 export EDITOR='nvim'
 export VISUAL='nvim'
@@ -45,6 +46,10 @@ export TERM='xterm-256color'  # Make colors work
 export GROOVY_HOME=/usr/local/opt/groovy/libexec
 export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
+# Android Junk
+export ANDROID_HOME="/usr/local/share/android-sdk"
+export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+export ANDROID_NDK_HOME="/usr/local/share/android-ndk"
 ############ /ENV VARS ############
 
 
@@ -58,7 +63,8 @@ alias g="git"
 alias nv="nvim"
 
 alias c="clear"
-alias reload!="source ~/.zshrc"
+alias reload!="exec zsh"
+# alias reload!="source ~/.zshrc"
 alias fixterm="stty sane && tput reset"
 
 ############ /ALIASES ############
@@ -85,9 +91,18 @@ function colours() {
 
 ############ 3RD PARTY SETUP  ############
 # pyenv setup
-if which pyenv > /dev/null; then eval "$(pyenv init - --no-rehash)"; fi
-# Make virtual env add a prefix to the prompt
-eval "$(pyenv virtualenv-init -)"
+# https://github.com/pyenv/pyenv-installer
+export PATH="/Users/chrisseto/.pyenv/bin:$PATH"
+# export CFLAGS="-I$(brew --prefix openssl)/include"
+# export LDFLAGS="-L$(brew --prefix openssl)/lib"
+
+if [ $commands[pyenv] ]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+
+  eval "$(pyenv init -)"
+  # Make virtual env add a prefix to the prompt
+  eval "$(pyenv virtualenv-init -)"
+fi
 
 # Z autocomplete
 # https://github.com/rupa/z
@@ -96,6 +111,11 @@ eval "$(pyenv virtualenv-init -)"
 # Rust up autocomplete
 export PATH="$PATH:$HOME/.cargo/bin"
 
+# RBenv autocomplete and shims
+if [ $commands[rbenv] ]; then
+  eval "$(rbenv init -)"
+fi
+
 # Node version manager
 # export NVM_DIR="$HOME/.nvm"
 # . "$(brew --prefix nvm)/nvm.sh"
@@ -103,6 +123,10 @@ export PATH="$PATH:$HOME/.cargo/bin"
 # Kubectl autocomplete
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
+fi
+
+if [ $commands[helm] ]; then
+  source <(helm completion zsh)
 fi
 
 # direnv hook (https://direnv.net/)
