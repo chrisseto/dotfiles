@@ -13,7 +13,6 @@ Plug 'qpkorr/vim-bufkill'
 Plug 'rstacruz/vim-opinion'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-commentary' " Simple commenting
-Plug 'tpope/vim-fugitive' " Git support
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
@@ -27,6 +26,10 @@ Plug 'vimwiki/vimwiki'
 " Per FT Configurations
 execute 'source '. fnameescape('~/.config/nvim/ext/fts.vim')
 
+" Git support
+Plug 'tpope/vim-fugitive'
+nmap <Leader>gb :Gblame<CR>
+
 " NerdTree
 Plug 'scrooloose/nerdtree'
 nnoremap <leader>d :NERDTreeToggle<CR>
@@ -39,7 +42,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 nmap <Leader>l :Limelight!!<CR>
-nmap <Leader>g :Goyo<CR>
+nmap <Leader>G :Goyo<CR>
 nmap <Leader>r :RainbowParentheses!!<CR>
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!

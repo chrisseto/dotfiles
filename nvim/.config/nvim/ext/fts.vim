@@ -5,7 +5,9 @@
 " Async linter
 Plug 'w0rp/ale'
 " Linters will be assigned on a per language basis
+let g:ale_fixers = {}
 let g:ale_linters = {}
+" let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 'never'  " Only lint on save
 let g:ale_sign_error = '⨉'
 let g:ale_sign_warning = '⚠'
@@ -17,6 +19,10 @@ let g:deoplete#enable_at_startup = 1
 set completeopt-=preview  " Don't open the preview window
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
+" Snippets
+Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
+let g:neosnippet#enable_completed_snippet = 1
 """""" /Plugins """"""
 
 
@@ -32,7 +38,14 @@ let g:python3_host_prog= $HOME.'/.pyenv/versions/neovim3/bin/python'
 
 """""" Javascript """"""
 Plug 'mxw/vim-jsx'
+Plug 'wokalski/autocomplete-flow'
+
+let g:ale_fixers.javascript = ['eslint']
 let g:ale_linters.javascript = ['eslint']
+" let g:ale_linters.javascript = ['prettier', 'eslint']
+autocmd FileType javascript.jsx  setlocal
+      \ tabstop=4
+      \ shiftwidth=4
 """""" /Javascript """"""
 
 
