@@ -79,6 +79,7 @@ let g:NERDTreeMouseMode = 3
 let g:NERDTreeRespectWildIgnore = 1
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 
+Plug 'tpope/vim-obsession'
 
 Plug 'scrooloose/syntastic'
 nnoremap <leader>s :SyntasticCheck<CR>
@@ -343,7 +344,8 @@ set wildignore+=*.swp,*~,._*
 set wildignore+=*.pyc,*__pycache__*
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a mousemodel=popup " Right-click pops up a menu
-if exists('$TMUX') " Support resizing in tmux
+
+if exists('$TMUX') && !has('nvim') " Support resizing in tmux
   set ttymouse=xterm2
 endif
 
