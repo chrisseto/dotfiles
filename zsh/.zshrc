@@ -2,7 +2,7 @@
 # shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/.dotfiles
 export ANSIBLE_NOCOWS=1
-export PATH=$PATH:~/scripts:~/.cabal/bin
+export PATH=$PATH:~/scripts:~/.cabal/bin:~/bin
 export SHELL='/usr/bin/zsh'
 export EDITOR='vim'
 export OSF=~/code/cos/osf.io
@@ -206,12 +206,67 @@ alias go-exec='PATH=$GOPATH/bin:$PATH'
 
 setopt clobber
 alias rhciag='ag -l --silent --ignore fusor/fusor-ember-cli --ignore fusor/ui --ignore \*.po'
-alias spotify-online='ssh -f -N -D localhost:1080 localhost'
 alias keep-trying='while [ $? -ne 0 ] ; do sleep 2 && $(fc -ln -1) ; done'
+alias try-forever='while [ true ] ; do sleep 2 && $(fc -ln -1) ; done'
 alias please='sudo $(fc -ln -1)'
 alias yum='sudo dnf'
 alias sssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 alias sscp='scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
+function kill-spotify {
+  local _processes=$(ps aux | grep com.spotify.Client | grep -v grep | awk '{print $2}')
+  while read -r _process; do
+    if [[ ! -z "${_process}" ]]; then
+      echo "Killing Spotify process (pid ${_process})"
+      while ((kill ${_process}) > /dev/null 2>&1); do
+        echo "Waiting for pid ${_process} to die..."
+        sleep 1
+      done
+    fi
+  done <<< "${_processes}"
+}
+
+function start-spotify {
+  local _processes=$(ps aux | grep com.spotify.Client | grep -v grep | awk '{print $2}')
+  if [[ ! -z "${_processes}" ]]; then
+    echo "Spotify is already running"
+  else
+    echo "Starting Spotify"
+    flatpak run com.spotify.Client > /var/log/spotify-script.log 2>&1
+  fi
+}
+
+function spotify {
+  local state=${1:-online}
+  local _proxy_pid="$(ps aux | grep 'ssh -f -N -D 0.0.0.0:1080 localhost' | grep -v grep | awk '{print $2}')"
+  case "${state}" in
+  "online")
+    if [[ -z "${_proxy_pid}" ]]; then
+      echo "Starting local socks proxy for Spotify"
+      ssh -f -N -D 0.0.0.0:1080 localhost
+      kill-spotify
+    fi
+    start-spotify
+    ;;
+  "offline")
+    if [[ ! -z "${_proxy_pid}" ]]; then
+      echo "Killing local socks proxy for Spotify running on pid ${_proxy_pid}"
+      kill ${_proxy_pid}
+    fi
+    start-spotify
+    ;;
+  "stop")
+    if [[ ! -z "${_proxy_pid}" ]]; then
+      echo "Killing local socks proxy for Spotify running on pid ${_proxy_pid}"
+      kill ${_proxy_pid}
+    fi
+    kill-spotify
+    ;;
+  "--help")
+    echo "USAGE: spotify online|offline|stop"
+    ;;
+  esac
+}
 
 function make_nfs_share {
   _path="/nfs_data/$1"
@@ -259,4 +314,6 @@ export GOBIN=/home/fabian/Go/bin
 export GOROOT=/usr/local/go
 export PATH=$PATH:$GOROOT/bin
 
-# source ~/.screen_layout/default.sh
+if [[ -s "$(command -v oc)" ]]; then
+  source <(oc completion zsh)
+fi
