@@ -151,10 +151,10 @@ nnoremap <silent> <leader><tab> :Scratch<cr>:set ft=python<cr>
 Plug 'airblade/vim-gitgutter'
 " Set gitgutter's bindings manually to avoid clashes
 let g:gitgutter_map_keys = 0
-nmap <leader>gh <Plug>GitGutterStageHunk
-nmap <leader>gH <Plug>GitGutterRevertHunk
-nmap [h <Plug>GitGutterPrevHunk
-nmap ]h <Plug>GitGutterNextHunk
+nmap <leader>gh <Plug>(GitGutterStageHunk)
+nmap <leader>gH <Plug>(GitGutterRevertHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+nmap ]h <Plug>(GitGutterNextHunk)
 Plug 'tpope/vim-fugitive'
 map <leader>gs :Gstatus<CR>
 map <leader>gb :Gblame<CR>

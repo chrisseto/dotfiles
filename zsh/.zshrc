@@ -50,8 +50,9 @@ cd .
 
 
 export WORKON_HOME=~/Envs
-if [[ -s "/usr/bin/virtualenvwrapper.sh" ]]; then
-  source /usr/bin/virtualenvwrapper.sh
+_virtualenvwrapper_script=$(command -v virtualenvwrapper.sh)
+if [[ "$?" = 0 ]]; then
+  source ${_virtualenvwrapper_script}
 fi
 
 pyclean () {
@@ -196,7 +197,7 @@ bindkey '^E' end-of-line
 bindkey '^A' beginning-of-line
 
 if which ruby >/dev/null && which gem >/dev/null; then
-    PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+    PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
 export VAGRANT_DEFAULT_PROVIDER=libvirt
@@ -206,9 +207,9 @@ alias go-exec='PATH=$GOPATH/bin:$PATH'
 
 setopt clobber
 alias rhciag='ag -l --silent --ignore fusor/fusor-ember-cli --ignore fusor/ui --ignore \*.po'
-alias keep-trying='while [ $? -ne 0 ] ; do sleep 2 && $(fc -ln -1) ; done'
-alias try-forever='while [ true ] ; do sleep 2 && $(fc -ln -1) ; done'
-alias please='sudo $(fc -ln -1)'
+alias keep-trying='while [ $? -ne 0 ] ; do sleep 2 && bash -c "$(fc -ln -1)" ; done'
+alias try-forever='while [ true ] ; do sleep 2 && bash -c "$(fc -ln -1)" ; done'
+alias please='sudo bash -c "$(fc -ln -1)"'
 alias yum='sudo dnf'
 alias sssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 alias sscp='scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
@@ -317,3 +318,9 @@ export PATH=$PATH:$GOROOT/bin
 if [[ -s "$(command -v oc)" ]]; then
   source <(oc completion zsh)
 fi
+
+alias pbcopy='xclip -selection clipboard'
+function kubesecret {
+  secret_name="${1}"
+  kubectl get secret ${secret_name} -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
+}
