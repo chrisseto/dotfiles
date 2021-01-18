@@ -1,0 +1,16 @@
+{
+  "go.goplsPath": "/Users/chrisseto/Go/bin/gopls",
+  "go.disable": {
+    "workspaceFolders": false
+  },
+  "go.goplsOptions": {
+  },
+  "languageserver": {
+    "dhall": {
+      "command": "dhall-lsp-server",
+      "filetypes": [
+        "dhall"
+      ]
+    }
+  }
+}

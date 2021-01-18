@@ -29,8 +29,8 @@ let g:neosnippet#enable_completed_snippet = 1
 """""" Python """"""
 Plug 'zchee/deoplete-jedi'
 let g:ale_linters.python = ['flake8']
-let g:python_host_prog = $HOME.'/.pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog= $HOME.'/.pyenv/versions/neovim3/bin/python'
+let g:python_host_prog = $HOME.'/.pyenv/versions/2.7.16/bin/python'
+let g:python3_host_prog= $HOME.'/.pyenv/versions/3.7.4/bin/python'
 " let g:deoplete#sources#jedi#show_docstring = 0
 " let g:deoplete#sources#jedi#show_docstring_sig = 0
 " set completeopt+=noinsert
@@ -50,14 +50,33 @@ autocmd FileType javascript.jsx  setlocal
 
 
 """""" Golang """"""
-Plug 'fatih/vim-go'
-Plug 'zchee/deoplete-go', { 'do': 'make'}
-let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_types = 1
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" Plug 'fatih/vim-go'
+" Plug 'zchee/deoplete-go', { 'do': 'make'}
+" let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+
+" let g:go_highlight_functions = 1
+" let g:go_highlight_methods = 1
+" let g:go_highlight_fields = 1
+" let g:go_highlight_types = 1
 
 autocmd FileType go setlocal
       \ autoindent

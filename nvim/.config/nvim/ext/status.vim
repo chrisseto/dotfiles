@@ -2,7 +2,7 @@ let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'mode_map': { 'c': 'NORMAL' },
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'ale' ] ]
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'cocstatus' ] ]
       \ },
       \ 'component_function': {
       \   'modified': 'LightlineModified',
@@ -14,6 +14,7 @@ let g:lightline = {
       \   'fileencoding': 'LightlineFileencoding',
       \   'mode': 'LightlineMode',
       \   'ale': 'ALEGetStatusLine',
+      \   'cocstatus': 'coc#status',
       \ },
       \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
       \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3"}
