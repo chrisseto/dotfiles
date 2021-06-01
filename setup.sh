@@ -9,14 +9,16 @@ if [ "$(uname)" == "Darwin" ]; then
   defaults write NSGlobalDomain InitialKeyRepeat -int 12
 fi
 
-chsh -s /bin/zsh
+# chsh -s /bin/zsh
 git submodule init
 git submodule update
+git submodule foreach git submodule init
+git submodule foreach git submodule update
 
 # Stops Stow from eating the .config directory
 mkdir -p ~/.config/
 
-stow zsh
+stow fish
 stow nvim
 stow git
 stow tmux
