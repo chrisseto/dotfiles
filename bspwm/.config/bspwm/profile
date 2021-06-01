@@ -1,8 +1,0 @@
-PANEL_FIFO=/tmp/bspwm-bar
-BARHEIGHT=15
-PANEL_FONT_FAMILY="-*-lemon-*-*-*-*-10-*-*-*-*-*-*-*"
-EDGEWIDTH=5
-SCREENHEIGHT=$(xrandr -q | grep Screen | awk '{print $10}' | sed s/,//)
-SCREENWIDTH=$(xrandr -q | grep Screen | awk '{print $8}')
-BARWIDTH=$(($SCREENWIDTH - $(($EDGEWIDTH * 2))))
-export PANEL_FIFO PANEL_FONT_FAMILY EDGEWIDTH SCREENHEIGHT SCREENWIDTH BARWIDTH
