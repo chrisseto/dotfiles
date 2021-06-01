@@ -1,121 +1,244 @@
 " Better leader key
 let mapleader = "\<Space>"
 
-" Use pyenv's python installations
-let g:python_host_prog = $HOME.'/.pyenv/versions/2.7.16/bin/python'
-let g:python3_host_prog= $HOME.'/.pyenv/versions/3.7.4/bin/python'
-
-call plug#begin('~/.config/nvim/plugged')
-
-Plug 'airblade/vim-gitgutter'
-Plug 'christoomey/vim-tmux-navigator' " Make Tmux panes not pains
-Plug 'flazz/vim-colorschemes' " Make things looks acceptable
-Plug 'itchyny/lightline.vim' " Minimal status bar
-Plug 'itchyny/vim-cursorword' " Underlines the word under your cursor
-Plug 'junegunn/seoul256.vim' " More colors
-Plug 'qpkorr/vim-bufkill'
-Plug 'rstacruz/vim-opinion'
-" Plug 'terryma/vim-multiple-cursors'
-Plug 'tpope/vim-commentary' " Simple commenting
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
-Plug 'codelitt/vim-qtpl'
-
+call plug#begin(stdpath('data') . '/plugged')
+" Generic lua deps
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+" Delve integration
 Plug 'sebdah/vim-delve'
-Plug 'vmchale/dhall-vim'
-
-"""""" Denite Settings """"""
-Plug 'Shougo/denite.nvim', { 'merged' : 0, 'loadconf' : 1, 'do': ':UpdateRemotePlugins' }
-"""""" /Denite Settings """"""
-
-Plug 'Shougo/neomru.vim'
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" use <tab> for trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
-
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-
-" gh - get hint on whatever's under the cursor
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-nnoremap <silent> gh :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if &filetype == 'vim'
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" gd - go to definition of word under cursor
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-
-" gi - go to implementation
-nmap <silent> gi <Plug>(coc-implementation)
-
-" gr - find references
-nmap <silent> gr <Plug>(coc-references)
-
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
-nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
-
-" view all errors
-nnoremap <silent> <leader>cl  :<C-u>CocList locationlist<CR>
-
-" rename the current word in the cursor
-nmap <leader>cr  <Plug>(coc-rename)
-
-" Plug 'vimwiki/vimwiki'
-
-" Per FT Configurations
-" execute 'source '. fnameescape('~/.config/nvim/ext/fts.vim')
-
-" Git support
-Plug 'tpope/vim-fugitive'
-nmap <Leader>gb :Gblame<CR>
-
-"""""" NerdTree """"""
+" A collection of colorschemes.
+" Plug 'flazz/vim-colorschemes'
+Plug 'rafamadriz/neon'
+Plug 'marko-cerovac/material.nvim'
+Plug 'christianchiarulli/nvcode-color-schemes.vim'
+" Autocompletion, recommended by neovim's LSP
+Plug 'hrsh7th/nvim-compe'
+" Simple commenting
+Plug 'tpope/vim-commentary'
+" Make Tmux panes not pains
+Plug 'christoomey/vim-tmux-navigator'
+" Treesitter is a better syntax highlighter for neovim.
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" Native neovim LSP integration.
+Plug 'neovim/nvim-lspconfig'
+" LSP installation help
+Plug 'kabouzeid/nvim-lspinstall'
+" NERDTree provides a file browser
 Plug 'scrooloose/nerdtree'
+" Telescope, FZF like browsing/grepping etc
+Plug 'nvim-telescope/telescope.nvim'
+
+" Elixir support (Mostly useful for FT detection)
+Plug 'elixir-editors/vim-elixir'
+
+" Initialize plugin system
+call plug#end()
+
+""""" Treesitter configuration """"
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  -- Install all syntax modules that have maintainers.
+  ensure_installed = "maintained",
+  -- Enabled TS powered indentation.
+  indent = {
+    enable = true
+  }
+}
+EOF
+""""" /Treesitter configuration """"
+
+""""" LSP configuration """"
+lua <<EOF
+require'lspinstall'.setup()
+local servers = require'lspinstall'.installed_servers()
+for _, server in pairs(servers) do
+require'lspconfig'[server].setup{}
+end
+
+-- LSP configuration
+-- For language server specifics, see: https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
+-- require'lspconfig'.gopls.setup{}
+
+local nvim_lsp = require('lspconfig')
+
+-- Use an on_attach function to only map the following keys 
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+-- local servers = { "gopls" }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup { on_attach = on_attach }
+end
+EOF
+""""" /LSP configuration """"
+
+""""" Completion Configuration """"
+lua <<EOF
+require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = true;
+
+  source = {
+    path = true;
+    buffer = true;
+    calc = true;
+    nvim_lsp = true;
+  };
+}
+
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+        return true
+    else
+        return false
+    end
+end
+
+-- Use (s-)tab to:
+--- move to prev/next item in completion menuone
+--- jump to prev/next snippet's placeholder
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  -- elseif vim.fn.call("vsnip#available", {1}) == 1 then
+    -- return t "<Plug>(vsnip-expand-or-jump)"
+  elseif check_back_space() then
+    return t "<Tab>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  -- elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
+  --   return t "<Plug>(vsnip-jump-prev)"
+  else
+    -- If <S-Tab> is not working in your terminal, change it to <C-h>
+    return t "<S-Tab>"
+  end
+end
+
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+EOF
+""""" /Completion Configuration """"
+
+""""" NERDTree configuration """"
 nnoremap <leader>d :NERDTreeToggle<CR>
 nnoremap <leader>D :NERDTreeFind<CR>
 let g:NERDTreeRepsectWildIgnore = 1
-let NERDTreeIgnore = ['\.pyc$', '__pycache__']
-"""""" /NerdTree """"""
+""""" /NERDTree configuration """"
 
-"""""" Typescript """"""
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-"""""" /Typescript """"""
+""""" Telescope configuration """"
+nnoremap <silent> <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>f <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+""""" /Telescope configuration """"
 
-"""""" Golang """"""
-autocmd FileType go setlocal
-      \ autoindent
-      \ noexpandtab
-      \ tabstop=4
-      \ shiftwidth=4
-"""""" Golang """"""
 
-call plug#end()
+" Yanks to the system clipboard
+set clipboard=unnamed
+" Faster saving
+nnoremap <leader>w :w<CR>
+" Remap jk to esc. the "Smash" setting
+imap jk <Esc>
+" Toggle comments with space-/
+nmap <leader>/ gcc
+vmap <leader>/ gc
+" Only insert one space between sentences when wrapping comments
+set nojoinspaces
 
-execute 'source '. fnameescape('~/.config/nvim/ext/status.vim')
-execute 'source '. fnameescape('~/.config/nvim/denite.vim')
-execute 'source '. fnameescape('~/.config/nvim/general.vim')
+" Move vertically over wrapped lines
+nmap j gj
+nmap k gk
+
+" Show line numbers
+set number
+" Use smart case searching
+set smartcase
+" Make sure Vim returns to the same line when you reopen a file.
+" TODO: There's gotta be a better way to handle this at this point.
+augroup line_return
+    au!
+    au BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \     execute 'normal! g`"zvzz' |
+        \ endif
+augroup END
+
+" Persistent undo
+" TODO: There's gotta be a better way to handle this at this point.
+if exists("+undofile")
+" undofile - This allows you to use undos after exiting and restarting
+" This, like swap and backups, uses .vim-undo first, then ~/.vim/undo
+" :help undo-persistence
+  if isdirectory($HOME . '/.config/nvim/undo') == 0
+    :silent !mkdir -p ~/.config/nvim/undo > /dev/null 2>&1
+  endif
+  set undodir=./.vim-undo// undodir+=~/.config/nvim/undo// undofile
+endif
+
+lua <<EOF
+vim.g.neon_style = "doom"
+vim.g.neon_italic_comment = false
+--vim g.tokyonight_italic_comments = false
+--vim.cmd[[colorscheme neon]]
+vim.g.tokyonight_italic_keywords = false
+vim.g.tokyonight_italic_keywords = false
+vim.cmd[[colorscheme neon]]
+EOF
+
+" Better colors
+set termguicolors
+" Visible white space
+set list listchars=tab:▸\ ,trail:▫
+" No Bells
+set noerrorbells visualbell t_vb=
+
+" Plug 'airblade/vim-gitgutter'
+" Plug 'itchyny/lightline.vim' " Minimal status bar
+" Plug 'itchyny/vim-cursorword' " Underlines the word under your cursor
+" Plug 'junegunn/seoul256.vim' " More colors
+" Plug 'qpkorr/vim-bufkill'
+" Plug 'rstacruz/vim-opinion'
+" Plug 'tpope/vim-repeat'
+" Plug 'tpope/vim-sensible'
+" Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-unimpaired'
+
+" " Git support
+" Plug 'tpope/vim-fugitive'
+" nmap <Leader>gb :Gblame<CR>
