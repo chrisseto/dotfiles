@@ -41,26 +41,20 @@ require'nvim-treesitter.configs'.setup {
   -- Install all syntax modules that have maintainers.
   ensure_installed = "maintained",
   -- Enabled TS powered indentation.
-  indent = {
-    enable = true
-  }
+		indent = {
+		-- too buggy for use just yet :[
+		-- enable = true
+		}
 }
 EOF
 """"" /Treesitter configuration """"
 
 """"" LSP configuration """"
 lua <<EOF
-require'lspinstall'.setup()
-local servers = require'lspinstall'.installed_servers()
-for _, server in pairs(servers) do
-require'lspconfig'[server].setup{}
-end
-
 -- LSP configuration
 -- For language server specifics, see: https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
--- require'lspconfig'.gopls.setup{}
-
-local nvim_lsp = require('lspconfig')
+require'lspinstall'.setup()
+local servers = require'lspinstall'.installed_servers()
 
 -- Use an on_attach function to only map the following keys 
 -- after the language server attaches to the current buffer
@@ -75,13 +69,30 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap("n", "<space>F", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
--- local servers = { "gopls" }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup { on_attach = on_attach }
+local config = { on_attach = on_attach }
+	if lsp == "go" then
+		config.settings = {
+			gopls = {
+				exec = {"crlfmt"},
+				directoryFilters = {"-console/node_modules", "-node_modules"},
+				linksInHover = false,
+				codelenses = {
+					tidy = false,
+					upgrade_dependency = false
+				}
+			}
+		}
+	end
+
+	require'lspconfig'[lsp].setup(config)
 end
 EOF
 """"" /LSP configuration """"
@@ -180,7 +191,13 @@ nmap <leader>/ gcc
 vmap <leader>/ gc
 " Only insert one space between sentences when wrapping comments
 set nojoinspaces
-
+" Don't wrap lines by default
+set nowrap
+" Only expand tabs to 4 spaces. Defaults to 8 which is too much.
+set tabstop=4
+set shiftwidth=4
+" search case insensitively until a capital becomes present.
+set smartcase
 " Move vertically over wrapped lines
 nmap j gj
 nmap k gk
