@@ -77,15 +77,23 @@ end
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 for _, lsp in ipairs(servers) do
-local config = { on_attach = on_attach }
+	local capabilities = vim.lsp.protocol.make_client_capabilities()
+	capabilities.textDocument.completion.completionItem.snippetSupport = true
+	local config = {
+		on_attach = on_attach,
+		capabilities = capabilities,
+	}
+
 	if lsp == "go" then
 		config.settings = {
 			gopls = {
 				exec = {"crlfmt"},
 				directoryFilters = {"-console/node_modules", "-node_modules"},
 				linksInHover = false,
+				allowImplicitNetworkAccess = true,
 				codelenses = {
 					tidy = false,
+					vendor = false,
 					upgrade_dependency = false
 				}
 			}
@@ -197,6 +205,7 @@ set nowrap
 set tabstop=4
 set shiftwidth=4
 " search case insensitively until a capital becomes present.
+set ignorecase
 set smartcase
 " Move vertically over wrapped lines
 nmap j gj
