@@ -28,10 +28,10 @@ Plug 'kabouzeid/nvim-lspinstall'
 Plug 'scrooloose/nerdtree'
 " Telescope, FZF like browsing/grepping etc
 Plug 'nvim-telescope/telescope.nvim'
-
 " Elixir support (Mostly useful for FT detection)
 Plug 'elixir-editors/vim-elixir'
-
+" Snippet support for complicated LSP completions.
+Plug 'norcalli/snippets.nvim'
 " Initialize plugin system
 call plug#end()
 
@@ -48,6 +48,11 @@ require'nvim-treesitter.configs'.setup {
 }
 EOF
 """"" /Treesitter configuration """"
+
+
+""""" Snippet configuration """"
+lua require'snippets'.use_suggested_mappings()
+""""" /Snippet configuration """"
 
 """"" LSP configuration """"
 lua <<EOF
@@ -67,8 +72,9 @@ local on_attach = function(client, bufnr)
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<Cmd>ua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   buf_set_keymap("n", "<space>F", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
@@ -79,9 +85,20 @@ end
 for _, lsp in ipairs(servers) do
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities.textDocument.completion.completionItem.snippetSupport = true
+	capabilities.textDocument.completion.completionItem.resolveSupport = {
+	  properties = {
+		'documentation',
+		'detail',
+		'additionalTextEdits',
+	  }
+	}
 	local config = {
 		on_attach = on_attach,
 		capabilities = capabilities,
+		flags = {
+			debounce_text_changes = 50,
+			allow_incremental_sync = true,
+		},
 	}
 
 	if lsp == "go" then
@@ -107,6 +124,8 @@ EOF
 
 """"" Completion Configuration """"
 lua <<EOF
+-- Not entirely sure what this does but compe says it's required.
+vim.o.completeopt = "menuone,noselect"
 require'compe'.setup {
   enabled = true;
   autocomplete = true;
@@ -119,7 +138,14 @@ require'compe'.setup {
   max_abbr_width = 100;
   max_kind_width = 100;
   max_menu_width = 100;
-  documentation = true;
+  documentation = {
+    border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
+    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+    max_width = 120,
+    min_width = 60,
+    max_height = math.floor(vim.o.lines * 0.3),
+    min_height = 1,
+  };
 
   source = {
     path = true;
