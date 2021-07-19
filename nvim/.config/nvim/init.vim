@@ -32,6 +32,8 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'elixir-editors/vim-elixir'
 " Snippet support for complicated LSP completions.
 Plug 'norcalli/snippets.nvim'
+" Git diff info + blame support
+Plug 'lewis6991/gitsigns.nvim'
 " Initialize plugin system
 call plug#end()
 
@@ -49,6 +51,9 @@ require'nvim-treesitter.configs'.setup {
 EOF
 """"" /Treesitter configuration """"
 
+""""" Git integration configuration """"
+lua require('gitsigns').setup()
+""""" /Git integration configuration """"
 
 """"" Snippet configuration """"
 lua require'snippets'.use_suggested_mappings()
