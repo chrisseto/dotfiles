@@ -31,7 +31,8 @@ Plug 'nvim-telescope/telescope.nvim'
 " Elixir support (Mostly useful for FT detection)
 Plug 'elixir-editors/vim-elixir'
 " Snippet support for complicated LSP completions.
-Plug 'norcalli/snippets.nvim'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
 " Git diff info + blame support
 Plug 'lewis6991/gitsigns.nvim'
 " Initialize plugin system
@@ -54,10 +55,6 @@ EOF
 """"" Git integration configuration """"
 lua require('gitsigns').setup()
 """"" /Git integration configuration """"
-
-""""" Snippet configuration """"
-lua require'snippets'.use_suggested_mappings()
-""""" /Snippet configuration """"
 
 """"" LSP configuration """"
 lua <<EOF
@@ -179,8 +176,8 @@ end
 _G.tab_complete = function()
   if vim.fn.pumvisible() == 1 then
     return t "<C-n>"
-  -- elseif vim.fn.call("vsnip#available", {1}) == 1 then
-    -- return t "<Plug>(vsnip-expand-or-jump)"
+  elseif vim.fn.call("vsnip#available", {1}) == 1 then
+    return t "<Plug>(vsnip-expand-or-jump)"
   elseif check_back_space() then
     return t "<Tab>"
   else
@@ -190,8 +187,8 @@ end
 _G.s_tab_complete = function()
   if vim.fn.pumvisible() == 1 then
     return t "<C-p>"
-  -- elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
-  --   return t "<Plug>(vsnip-jump-prev)"
+  elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
+    return t "<Plug>(vsnip-jump-prev)"
   else
     -- If <S-Tab> is not working in your terminal, change it to <C-h>
     return t "<S-Tab>"
@@ -203,6 +200,11 @@ vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 EOF
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
 """"" /Completion Configuration """"
 
 """"" NERDTree configuration """"
