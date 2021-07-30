@@ -1,9 +1,6 @@
 stow
-zsh
 fish
 tmux
-vim
 neovim
-pyenv
-pyenv-virtualenv
-reattach-to-usernamespace
+direnv
+git
