@@ -14,6 +14,11 @@ switch (uname)
 		set -gx GOPATH $HOME/go
 end
 
+# If we're on Apple Silicon, update our environment.
+if test -x /opt/homebrew/bin/brew
+	/opt/homebrew/bin/brew shellenv | source
+end
+
 # direnv hook (https://direnv.net/)
 # Executes a .envrc file upon entering a directory
 direnv hook fish | source
