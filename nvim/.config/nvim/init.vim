@@ -23,7 +23,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Native neovim LSP integration.
 Plug 'neovim/nvim-lspconfig'
 " LSP installation help
-Plug 'kabouzeid/nvim-lspinstall'
+Plug 'williamboman/nvim-lsp-installer'
 " NERDTree provides a file browser
 Plug 'scrooloose/nerdtree'
 " Telescope, FZF like browsing/grepping etc
@@ -41,13 +41,14 @@ call plug#end()
 """"" Treesitter configuration """"
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  -- Install all syntax modules that have maintainers.
-  ensure_installed = "maintained",
-  -- Enabled TS powered indentation.
-		indent = {
-		-- too buggy for use just yet :[
-		-- enable = true
-		}
+	-- Install all syntax modules that have maintainers.
+	ensure_installed = "maintained",
+	-- Enabled TS powered indentation.
+	indent = {
+	-- too buggy for use just yet :[
+	-- enable = true
+	},
+	highlight = { enable = true },
 }
 EOF
 """"" /Treesitter configuration """"
@@ -60,8 +61,6 @@ lua require('gitsigns').setup()
 lua <<EOF
 -- LSP configuration
 -- For language server specifics, see: https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
-require'lspinstall'.setup()
-local servers = require'lspinstall'.installed_servers()
 
 -- Use an on_attach function to only map the following keys 
 -- after the language server attaches to the current buffer
@@ -82,9 +81,12 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "<space>F", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
 
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-for _, lsp in ipairs(servers) do
+
+local lsp_installer = require("nvim-lsp-installer")
+
+-- Register a handler that will be called for all installed servers.
+-- Alternatively, you may also register handlers on specific server instances instead (see example below).
+lsp_installer.on_server_ready(function(server)
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities.textDocument.completion.completionItem.snippetSupport = true
 	capabilities.textDocument.completion.completionItem.resolveSupport = {
@@ -103,7 +105,7 @@ for _, lsp in ipairs(servers) do
 		},
 	}
 
-	if lsp == "go" then
+	if server.name == "gopls" then
 		config.settings = {
 			gopls = {
 				exec = {"crlfmt"},
@@ -119,8 +121,10 @@ for _, lsp in ipairs(servers) do
 		}
 	end
 
-	require'lspconfig'[lsp].setup(config)
-end
+    -- This setup() function is exactly the same as lspconfig's setup function.
+    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    server:setup(config)
+end)
 EOF
 """"" /LSP configuration """"
 
