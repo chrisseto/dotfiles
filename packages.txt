@@ -4,3 +4,6 @@ tmux
 neovim
 direnv
 git
+fzf
+fd
+ripgrep
