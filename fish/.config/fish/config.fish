@@ -10,8 +10,10 @@ set -gx VISUAL nvim
 switch (uname)
 	case Darwin
 		set -gx GOPATH $HOME/Go
+		fish_add_path $HOME/Go/bin
 	case Linux
 		set -gx GOPATH $HOME/go
+		fish_add_path $HOME/go/bin
 end
 
 # If we're on Apple Silicon, update our environment.
@@ -22,3 +24,6 @@ end
 # direnv hook (https://direnv.net/)
 # Executes a .envrc file upon entering a directory
 direnv hook fish | source
+
+# Generated for envman. Do not edit.
+test -s "$HOME/.config/envman/load.fish"; and source "$HOME/.config/envman/load.fish"
