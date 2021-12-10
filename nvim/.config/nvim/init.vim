@@ -35,8 +35,13 @@ Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 " Git diff info + blame support
 Plug 'lewis6991/gitsigns.nvim'
+" Support yanking to system clipboards across SSH
+Plug 'ojroques/vim-oscyank'
 " Initialize plugin system
 call plug#end()
+
+" Configure yanking to also copy to the system clipboard via OSC
+autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
 
 """"" Treesitter configuration """"
 lua <<EOF
