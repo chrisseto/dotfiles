@@ -12,8 +12,13 @@ Plug 'rafamadriz/neon'
 Plug 'marko-cerovac/material.nvim'
 Plug 'christianchiarulli/nvcode-color-schemes.vim'
 " Autocompletion, recommended by neovim's LSP
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
-Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/vim-vsnip'
 " Simple commenting
 Plug 'tpope/vim-commentary'
 " Make Tmux panes not pains
@@ -45,13 +50,15 @@ lua <<EOF
 require'nvim-treesitter.configs'.setup {
 	-- Install all syntax modules that have maintainers.
 	ensure_installed = "maintained",
+
+	highlight = {
+		enable = true,
+	},
+
 	-- Enabled TS powered indentation.
 	indent = {
 	-- too buggy for use just yet :[
 	-- enable = true
-	},
-	highlight = {
-		enable = true
 	}
 }
 EOF
@@ -63,27 +70,57 @@ lua require('gitsigns').setup()
 
 """"" LSP configuration """"
 
+set completeopt=menu,menuone,noselect
+
 lua <<EOF
 -- LSP configuration
 -- For language server specifics, see: https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
+local cmp = require'cmp'
 
--- Configure coq to autostart without a prompt.
--- Must be called before require "coq".
-vim.g.coq_settings = {
-	auto_start = 'shut-up',
-	keymap = {jump_to_mark = ''},
-	display = {
-		icons = {
-			spacing = 2
-		},
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
+cmp.setup({
+	snippet = {
+	  expand = function(args)
+		vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+	  end,
 	},
-	clients = {
-		tmux = {enabled = false},
-		tree_sitter = {enabled = false}
-	}
-}
+	mapping = {
+		["<Tab>"] = cmp.mapping(function(fallback)
+			  if cmp.visible() then
+				cmp.select_next_item()
+			  elseif vim.fn["vsnip#available"](1) == 1 then
+				feedkey("<Plug>(vsnip-expand-or-jump)", "")
+			  elseif has_words_before() then
+				cmp.complete()
+			  else
+				fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+			  end
+			end, { "i", "s" }),
+		["<S-Tab>"] = cmp.mapping(function()
+		  if cmp.visible() then
+			cmp.select_prev_item()
+		  elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+			feedkey("<Plug>(vsnip-jump-prev)", "")
+		  end
+		end, { "i", "s" }),
+	  ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+	},
+	sources = cmp.config.sources({
+		{ name = 'nvim_lsp' },
+		{ name = 'vsnip' },
+		{ name = 'buffer' },
+		{ name = 'nvim_lsp_signature_help' },
+	}),
+})
 
-local coq = require "coq"
 local lsp_installer = require("nvim-lsp-installer")
 
 -- Use an on_attach function to only map the following keys 
@@ -107,14 +144,8 @@ end
 
 lsp_installer.on_server_ready(function(server)
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities.textDocument.completion.completionItem.snippetSupport = true
-	capabilities.textDocument.completion.completionItem.resolveSupport = {
-	  properties = {
-		'documentation',
-		'detail',
-		'additionalTextEdits',
-	  }
-	}
+	capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
 	local config = {
 		on_attach = on_attach,
 		capabilities = capabilities,
@@ -140,7 +171,7 @@ lsp_installer.on_server_ready(function(server)
 		}
 	end
 
-	server:setup(coq.lsp_ensure_capabilities(config))
+	server:setup(config)
 end)
 EOF
 """"" /LSP configuration """"
