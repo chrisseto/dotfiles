@@ -1,3 +1,4 @@
 nvim/.config/nvim/undo/
 nvim/.config/nvim/plugged/
 fish/.config/fish/fish_variables
+fish/.config/fish/conf.d/local.fish

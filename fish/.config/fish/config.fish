@@ -7,6 +7,12 @@ set fish_greeting
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 
+# Set default XDG_*_HOME values as not everything knows how to provide the
+# defaults.
+set -gx XDG_CACHE_HOME $HOME/.cache
+set -gx XDG_CONFIG_HOME $HOME/.config
+
+# Properly setup go on MacOS and Linux distros
 switch (uname)
 	case Darwin
 		set -gx GOPATH $HOME/Go
@@ -15,6 +21,9 @@ switch (uname)
 		set -gx GOPATH $HOME/go
 		fish_add_path $HOME/go/bin
 end
+
+# Add any dotfile managed scripts/binaries.
+fish_add_path $HOME/.bin
 
 # If we're on Apple Silicon, update our environment.
 if test -x /opt/homebrew/bin/brew
