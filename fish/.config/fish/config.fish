@@ -23,7 +23,9 @@ switch (uname)
 end
 
 # Add any dotfile managed scripts/binaries.
-fish_add_path $HOME/.bin
+fish_add_path -g $HOME/.bin
+
+fish_add_path -g $HOME/.cargo/bin
 
 # If we're on Apple Silicon, update our environment.
 if test -x /opt/homebrew/bin/brew
@@ -33,6 +35,3 @@ end
 # direnv hook (https://direnv.net/)
 # Executes a .envrc file upon entering a directory
 direnv hook fish | source
-
-# Generated for envman. Do not edit.
-test -s "$HOME/.config/envman/load.fish"; and source "$HOME/.config/envman/load.fish"
