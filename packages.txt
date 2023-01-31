@@ -1,9 +1,0 @@
-stow
-fish
-tmux
-neovim
-direnv
-git
-fzf
-fd
-ripgrep
