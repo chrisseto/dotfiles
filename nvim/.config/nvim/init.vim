@@ -227,19 +227,12 @@ augroup line_return
         \ endif
 augroup END
 
-" Persistent undo
-" TODO: There's gotta be a better way to handle this at this point.
-if exists("+undofile")
-" undofile - This allows you to use undos after exiting and restarting
-" This, like swap and backups, uses .vim-undo first, then ~/.vim/undo
-" :help undo-persistence
-  if isdirectory($HOME . '/.config/nvim/undo') == 0
-    :silent !mkdir -p ~/.config/nvim/undo > /dev/null 2>&1
-  endif
-  set undodir=./.vim-undo// undodir+=~/.config/nvim/undo// undofile
-endif
 
 lua <<EOF
+-- Persistent undo
+vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
+vim.opt.undofile = true
+
 vim.g.neon_style = "doom"
 vim.g.neon_italic_comment = false
 --vim g.tokyonight_italic_comments = false

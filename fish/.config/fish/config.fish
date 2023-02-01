@@ -35,3 +35,8 @@ end
 # direnv hook (https://direnv.net/)
 # Executes a .envrc file upon entering a directory
 direnv hook fish | source
+
+# Home manager support while this configuration isn't written by homemanager itself.
+if test -f $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+	cat $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh | babelfish | source
+end

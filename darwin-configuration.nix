@@ -3,16 +3,7 @@
 {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = [
-    pkgs.fd
-    pkgs.git
-    pkgs.neovim
-    pkgs.nixfmt
-    pkgs.ripgrep
-    pkgs.stow
-    pkgs.tmux
-    pkgs.vim
-  ];
+  environment.systemPackages = [ pkgs.git pkgs.vim ];
 
   # Use a custom configuration.nix location.
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
@@ -56,17 +47,12 @@
     experimental-features = nix-command flakes
   '';
 
+  imports = [ <home-manager/nix-darwin> ];
+  users.users.chrisseto = {
+    name = "chrisseto";
+    home = "/Users/chrisseto";
+  };
 
-  # The previous iteration of this repo was managed by stow. To ease the
-  # transition, use postActivation to install all existing configurations.
-  system.activationScripts.postActivation.text = ''
-    #! /bin/bash
-    set -eo pipefail
-
-    # Create ~/.config to stop stow from trying to manage the entire directory.
-    mkdir -p ~/.config
-
-    # Use stow to link all our various dotfiles.
-    stow -R fish nvim git tmux
-  '';
+  /* home-manager.useUserPackages = true; */
+  home-manager.users.chrisseto = import ./home.nix;
 }
