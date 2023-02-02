@@ -1,5 +1,6 @@
 alias nv=nvim
 alias g=git
+alias bazel=bazelisk
 
 # No Greeting when opening fish
 set fish_greeting

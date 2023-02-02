@@ -20,15 +20,19 @@
   programs.home-manager.enable = true;
 
   home.packages = [
+    pkgs.babelfish
+    pkgs.direnv
     pkgs.fd
     pkgs.git
+    pkgs.git-machete
+    pkgs.go
     pkgs.neovim
     pkgs.nixfmt
     pkgs.ripgrep
     pkgs.tmux
     pkgs.vim
-    pkgs.babelfish
-    pkgs.git-machete
+    pkgs.bazelisk
+	pkgs.google-cloud-sdk
   ];
 
   # The previous iteration of this repo was managed by stow. To ease

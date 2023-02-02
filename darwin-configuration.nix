@@ -29,6 +29,17 @@
   system.defaults.NSGlobalDomain.KeyRepeat = 1;
   system.defaults.NSGlobalDomain.InitialKeyRepeat = 12;
 
+  system.defaults.NSGlobalDomain.AppleICUForce24HourTime = true;
+
+  # Enable dark mode UI
+  system.defaults.NSGlobalDomain.AppleInterfaceStyle = "Dark";
+
+  # Dock configuration
+  system.defaults.dock.autohide = true;
+  system.defaults.dock.mru-spaces = false;
+  system.defaults.dock.minimize-to-application = true;
+  system.defaults.dock.tilesize = 48;
+
   # No more RSI.
   system.keyboard.enableKeyMapping =
     true; # Required to enabled caps lock remap.
