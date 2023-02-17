@@ -20,8 +20,7 @@ chrisseto's dotfiles
 I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 
 ## TODO
-- [ ] Add font support for MacOS
-- [ ] See if there's a way to manage iterm2 with nix
+- [ ] Add support for nix flakes
 - [ ] See if there's a good way to manage terminfo with nix
 - [ ] Remove the indent from my vim git commit message config
 
