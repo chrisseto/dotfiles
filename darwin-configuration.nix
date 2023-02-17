@@ -66,7 +66,7 @@ in {
     home = "/Users/chrisseto";
   };
 
-  home-manager.users.chrisseto = import ./home.nix;
+  home-manager.users.chrisseto = import ./darwin-home.nix;
 
   fonts = {
     fontDir.enable = true;

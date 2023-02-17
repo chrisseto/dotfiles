@@ -16,10 +16,10 @@ set -gx XDG_CONFIG_HOME $HOME/.config
 # Properly setup go on MacOS and Linux distros
 switch (uname)
 	case Darwin
-		set -gx GOPATH $HOME/Go
+		set -Ux GOPATH $HOME/Go
 		fish_add_path $HOME/Go/bin
 	case Linux
-		set -gx GOPATH $HOME/go
+		set -Ux GOPATH $HOME/go
 		fish_add_path $HOME/go/bin
 end
 
@@ -36,6 +36,9 @@ end
 # direnv hook (https://direnv.net/)
 # Executes a .envrc file upon entering a directory
 direnv hook fish | source
+
+# zoxide hook for making z work.
+zoxide init fish | source
 
 # Home manager support while this configuration isn't written by homemanager itself.
 if test -f $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
