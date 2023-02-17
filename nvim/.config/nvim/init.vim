@@ -160,7 +160,6 @@ lsp_installer.on_server_ready(function(server)
 	if server.name == "gopls" then
 		config.settings = {
 			gopls = {
-				exec = {"crlfmt"},
 				directoryFilters = {"-console/node_modules", "-node_modules"},
 				linksInHover = false,
 				allowImplicitNetworkAccess = true,
@@ -190,7 +189,6 @@ nnoremap <leader>f <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 """"" /Telescope configuration """"
-
 
 " Yanks to the system clipboard
 set clipboard=unnamed
@@ -229,7 +227,6 @@ augroup line_return
         \ endif
 augroup END
 
-
 lua <<EOF
 -- Persistent undo
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
@@ -237,10 +234,6 @@ vim.opt.undofile = true
 
 vim.g.neon_style = "doom"
 vim.g.neon_italic_comment = false
---vim g.tokyonight_italic_comments = false
---vim.cmd[[colorscheme neon]]
-vim.g.tokyonight_italic_keywords = false
-vim.g.tokyonight_italic_keywords = false
 vim.cmd[[colorscheme neon]]
 EOF
 
@@ -250,18 +243,3 @@ set termguicolors
 set list listchars=tab:▸\ ,trail:▫
 " No Bells
 set noerrorbells visualbell t_vb=
-
-" Plug 'airblade/vim-gitgutter'
-" Plug 'itchyny/lightline.vim' " Minimal status bar
-" Plug 'itchyny/vim-cursorword' " Underlines the word under your cursor
-" Plug 'junegunn/seoul256.vim' " More colors
-" Plug 'qpkorr/vim-bufkill'
-" Plug 'rstacruz/vim-opinion'
-" Plug 'tpope/vim-repeat'
-" Plug 'tpope/vim-sensible'
-" Plug 'tpope/vim-surround'
-" Plug 'tpope/vim-unimpaired'
-
-" " Git support
-" Plug 'tpope/vim-fugitive'
-" nmap <Leader>gb :Gblame<CR>

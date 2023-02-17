@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let hammerspoon = pkgs.callPackage ./hammerspoon/package.nix { };
-in {
+{
   # # Home Manager needs a bit of information about you and the
   # # paths it should manage.
   # home.username = "chrisseto";
@@ -23,21 +22,20 @@ in {
   nixpkgs.config.allowUnfree = true;
 
   home.packages = [
+    pkgs.alacritty
     pkgs.babelfish
+    pkgs.bazelisk
     pkgs.direnv
     pkgs.fd
     pkgs.git
     pkgs.git-machete
     pkgs.go
+    pkgs.google-cloud-sdk
     pkgs.neovim
     pkgs.nixfmt
     pkgs.ripgrep
     pkgs.tmux
     pkgs.vim
-    pkgs.bazelisk
-    pkgs.google-cloud-sdk
-    pkgs.alacritty
-    hammerspoon
   ];
 
   # The previous iteration of this repo was managed by stow. To ease
@@ -52,24 +50,24 @@ in {
 
   # This should be removed once
   # https://github.com/nix-community/home-manager/issues/1341 is closed.
-  disabledModules = [ "targets/darwin/linkapps.nix" ];
-  home.activation.aliasApplications =
-    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      app_folder="$(echo ~/Applications)/Home Manager Apps"
-      home_manager_app_folder="$genProfilePath/home-path/Applications"
-      $DRY_RUN_CMD rm -rf "$app_folder"
-      # NB: aliasing ".../home-path/Applications" to "~/Applications/Home Manager Apps" doesn't
-      #     work (presumably because the individual apps are symlinked in that directory, not
-      #     aliased). So this makes "Home Manager Apps" a normal directory and then aliases each
-      #     application into there directly from its location in the nix store.
-      $DRY_RUN_CMD mkdir "$app_folder"
-      for app in $(find "$newGenPath/home-path/Applications" -type l -exec readlink -f {} \;)
-      do
-        $DRY_RUN_CMD /usr/bin/osascript \
-          -e "tell app \"Finder\"" \
-          -e "make new alias file at POSIX file \"$app_folder\" to POSIX file \"$app\"" \
-          -e "set name of result to \"$(basename $app)\"" \
-          -e "end tell"
-      done
-    '';
+  # disabledModules = [ "targets/darwin/linkapps.nix" ];
+  # home.activation.aliasApplications =
+  #   lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  #     app_folder="$(echo ~/Applications)/Home Manager Apps"
+  #     home_manager_app_folder="$genProfilePath/home-path/Applications"
+  #     $DRY_RUN_CMD rm -rf "$app_folder"
+  #     # NB: aliasing ".../home-path/Applications" to "~/Applications/Home Manager Apps" doesn't
+  #     #     work (presumably because the individual apps are symlinked in that directory, not
+  #     #     aliased). So this makes "Home Manager Apps" a normal directory and then aliases each
+  #     #     application into there directly from its location in the nix store.
+  #     $DRY_RUN_CMD mkdir "$app_folder"
+  #     for app in $(find "$newGenPath/home-path/Applications" -type l -exec readlink -f {} \;)
+  #     do
+  #       $DRY_RUN_CMD /usr/bin/osascript \
+  #         -e "tell app \"Finder\"" \
+  #         -e "make new alias file at POSIX file \"$app_folder\" to POSIX file \"$app\"" \
+  #         -e "set name of result to \"$(basename $app)\"" \
+  #         -e "end tell"
+  #     done
+  #   '';
 }

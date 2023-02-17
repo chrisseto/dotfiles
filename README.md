@@ -23,6 +23,9 @@ I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 - [ ] Add support for nix flakes
 - [ ] See if there's a good way to manage terminfo with nix
 - [ ] Remove the indent from my vim git commit message config
+- [ ] Setup https://github.com/glepnir/lspsaga.nvim
+- [ ] Make home.nix work on linux machines
+- [ ] Convert init.vim to lua
 
 ## Add terminfo entries with 256color and italics support.
 ```
