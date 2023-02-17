@@ -39,8 +39,3 @@ direnv hook fish | source
 
 # zoxide hook for making z work.
 zoxide init fish | source
-
-# Home manager support while this configuration isn't written by homemanager itself.
-if test -f $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-	cat $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh | babelfish | source
-end

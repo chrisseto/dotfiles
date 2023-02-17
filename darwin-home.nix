@@ -9,6 +9,7 @@
   home.packages = [ pkgs.alacritty pkgs.google-cloud-sdk ];
 
   home.file.".hammerspoon".source = ./hammerspoon;
+  home.file.".config/alacritty".source = ./alacritty;
 
   # This should be removed once
   # https://github.com/nix-community/home-manager/issues/1341 is closed.
