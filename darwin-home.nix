@@ -3,10 +3,11 @@
 {
   imports = [ ./common-home.nix ];
 
-  home.username = "chrisseto";
-  home.homeDirectory = "/home/chrisseto";
-
-  home.packages = [ pkgs.alacritty pkgs.google-cloud-sdk ];
+  home.packages = [
+   pkgs.alacritty
+   pkgs.google-cloud-sdk
+   pkgs.reattach-to-user-namespace
+  ];
 
   home.file.".hammerspoon".source = ./hammerspoon;
   home.file.".config/alacritty".source = ./alacritty;

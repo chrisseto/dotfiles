@@ -1,0 +1,4 @@
+#!/bin/sh
+# bazelisk doesn't install a bazel wrapper in nix land. This script just
+# ensures that bazel exists in $PATH and delgates to bazelisk.
+bazelisk "$@"

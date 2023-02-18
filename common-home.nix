@@ -18,9 +18,11 @@
 
   home.packages = [
     pkgs.babelfish
+    pkgs.bat
     pkgs.bazelisk
     pkgs.direnv
     pkgs.fd
+    pkgs.fzf
     pkgs.git
     pkgs.git-machete
     pkgs.go
@@ -28,36 +30,90 @@
     pkgs.nixfmt
     pkgs.ripgrep
     pkgs.tmux
-    pkgs.zoxide
   ];
 
+  # Zoxide provides the "z" command for faster cd'ing around.
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
+  # Fish configuration. See also https://nixos.wiki/wiki/Fish.
   programs.fish = {
     enable = true;
-    interactiveShellInit = (builtins.readFile ./fish/.config/fish/config.fish);
 
-    functions = {
-      fish_prompt =
-        (builtins.readFile ./fish/.config/fish/functions/fish_prompt.fish);
-      fish_right_prompt = (builtins.readFile
-        ./fish/.config/fish/functions/fish_right_prompt.fish);
+    interactiveShellInit = ''
+     # No Greeting when opening fish.
+     set fish_greeting
+
+     # Use Neovim as EDITOR.
+     set -gx EDITOR nvim
+     set -gx VISUAL nvim
+
+     # Configurations for the pure fish prompt.
+     set -U pure_enable_single_line_prompt true
+     set -U pure_color_success green
+     set -U pure_enable_container_detection false
+
+      # Set default XDG_*_HOME values as not everything knows how to provide the
+      # defaults.
+      set -gx XDG_CACHE_HOME $HOME/.cache
+      set -gx XDG_CONFIG_HOME $HOME/.config
+
+      # Add ~/.bin to $PATH for access to custom scripts and the like.
+      fish_add_path $HOME/.bin
+
+      # Properly setup go on MacOS and Linux distros
+      switch (uname)
+      	case Darwin
+      		set -Ux GOPATH $HOME/Go
+      		fish_add_path $HOME/Go/bin
+      	case Linux
+      		set -Ux GOPATH $HOME/go
+      		fish_add_path $HOME/go/bin
+      end
+    '';
+
+    shellAliases = {
+      nv = "nvim";
+      g = "git";
     };
 
-    plugins = [{
-      name = "nix-env";
-      src = pkgs.fetchFromGitHub {
-        owner = "lilyball";
-        repo = "nix-env.fish";
-        rev = "7b65bd228429e852c8fdfa07601159130a818cfa";
-		sha256 = "sha256-RG/0rfhgq6aEKNZ0XwIqOaZ6K5S4+/Y5EEMnIdtfPhk=";
-      };
-    }];
-
+    plugins = [
+      {
+        name = "fzf-fish";
+        src = pkgs.fishPlugins.fzf-fish.src;
+      }
+      {
+        name = "pure";
+        src = pkgs.fishPlugins.pure.src;
+      }
+      {
+        name = "kubectl";
+        src = pkgs.fetchFromGitHub {
+          owner = "evanlucas";
+          repo = "fish-kubectl-completions";
+          rev = "ced676392575d618d8b80b3895cdc3159be3f628";
+          sha256 = "sha256-OYiYTW+g71vD9NWOcX1i2/TaQfAg+c2dJZ5ohwWSDCc=";
+        };
+      }
+      {
+        name = "nix-env";
+        src = pkgs.fetchFromGitHub {
+          owner = "lilyball";
+          repo = "nix-env.fish";
+          rev = "7b65bd228429e852c8fdfa07601159130a818cfa";
+          sha256 = "sha256-RG/0rfhgq6aEKNZ0XwIqOaZ6K5S4+/Y5EEMnIdtfPhk=";
+        };
+      }
+    ];
   };
 
   # The previous iteration of this repo was managed by stow. To ease
   # the transition, just symlink the old configurations.
-  home.file.".gitconfig".source = ./git/.gitconfig;
-  home.file.".gitignore_global".source = ./git/.gitignore_global;
+  home.file.".bin".source = ./bin;
   home.file.".config/nvim".source = ./nvim/.config/nvim;
   home.file.".config/tmux".source = ./tmux;
+  home.file.".gitconfig".source = ./git/.gitconfig;
+  home.file.".gitignore_global".source = ./git/.gitignore_global;
 }
