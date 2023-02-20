@@ -16,6 +16,14 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  # Follow neovim nightly releases.
+  # https://github.com/nix-community/neovim-nightly-overlay
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+    }))
+  ];
+
   home.packages = [
     pkgs.babelfish
     pkgs.bat
@@ -30,6 +38,7 @@
     pkgs.nixfmt
     pkgs.ripgrep
     pkgs.tmux
+    pkgs.tree
   ];
 
   # Zoxide provides the "z" command for faster cd'ing around.

@@ -25,6 +25,9 @@ I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 - [ ] Remove the indent from my vim git commit message config
 - [ ] Setup https://github.com/glepnir/lspsaga.nvim
 - [ ] Convert init.vim to lua
+- [ ] Redo and re-document tmux.conf
+- [ ] Move dotfiles out of hidden directories
+- [ ] Fix Application linking on macOS
 
 ## Add terminfo entries with 256color and italics support.
 ```

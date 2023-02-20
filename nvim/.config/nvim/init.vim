@@ -5,12 +5,12 @@ call plug#begin(stdpath('data') . '/plugged')
 " Generic lua deps
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
+" Cute icons for various plugins
+Plug 'nvim-tree/nvim-web-devicons'
 " Delve integration
 Plug 'sebdah/vim-delve'
-" A collection of colorschemes.
+" Color scheme
 Plug 'rafamadriz/neon'
-Plug 'marko-cerovac/material.nvim'
-Plug 'christianchiarulli/nvcode-color-schemes.vim'
 " Autocompletion, recommended by neovim's LSP
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -29,6 +29,8 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
 " LSP installation help
 Plug 'williamboman/nvim-lsp-installer'
+" LSP helper
+Plug 'glepnir/lspsaga.nvim'
 " NERDTree provides a file browser
 Plug 'scrooloose/nerdtree'
 " Telescope, FZF like browsing/grepping etc
@@ -55,6 +57,11 @@ require'nvim-treesitter.configs'.setup {
 
 	highlight = {
 		enable = true,
+		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+		-- Using this option may slow down your editor, and you may see some duplicate highlights.
+		-- Instead of true it can also be a list of languages
+		additional_vim_regex_highlighting = false,
 	},
 
 	-- Enabled TS powered indentation.
@@ -113,7 +120,7 @@ cmp.setup({
 			feedkey("<Plug>(vsnip-jump-prev)", "")
 		  end
 		end, { "i", "s" }),
-	  ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+	  ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 	},
 	sources = cmp.config.sources({
 		{ name = 'nvim_lsp' },
@@ -135,30 +142,24 @@ local on_attach = function(client, bufnr)
   local opts = { noremap=true, silent=true }
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap("n", "<space>F", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  buf_set_keymap("n", "<space>F", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
 end
 
 lsp_installer.on_server_ready(function(server)
-	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+	local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-	local config = {
+	server:setup({
 		on_attach = on_attach,
 		capabilities = capabilities,
 		flags = {
 			debounce_text_changes = 50,
 			allow_incremental_sync = true,
 		},
-	}
-
-	if server.name == "gopls" then
-		config.settings = {
+		settings = {
 			gopls = {
 				directoryFilters = {"-console/node_modules", "-node_modules"},
 				linksInHover = false,
@@ -169,11 +170,20 @@ lsp_installer.on_server_ready(function(server)
 					upgrade_dependency = false
 				}
 			}
-		}
-	end
-
-	server:setup(config)
+		},
+	})
 end)
+
+require("lspsaga").setup({})
+local keymap = vim.keymap.set
+
+-- Toggle outline
+keymap("n","<leader>o", "<cmd>Lspsaga outline<CR>")
+-- Hover Doc
+keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>")
+-- Rename symbol
+keymap("n", "<leader>rn", "<cmd>Lspsaga rename ++project<CR>")
+
 EOF
 """"" /LSP configuration """"
 
@@ -232,8 +242,8 @@ lua <<EOF
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
 vim.opt.undofile = true
 
-vim.g.neon_style = "doom"
-vim.g.neon_italic_comment = false
+vim.g.neon_style = "default"
+vim.g.neon_italic_keyword = true
 vim.cmd[[colorscheme neon]]
 EOF
 
