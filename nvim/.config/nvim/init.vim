@@ -10,7 +10,7 @@ Plug 'nvim-tree/nvim-web-devicons'
 " Delve integration
 Plug 'sebdah/vim-delve'
 " Color scheme
-Plug 'rafamadriz/neon'
+Plug 'sainnhe/everforest'
 " Autocompletion, recommended by neovim's LSP
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -237,18 +237,23 @@ augroup line_return
         \ endif
 augroup END
 
+" Better colors
+set termguicolors
+
 lua <<EOF
 -- Persistent undo
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
 vim.opt.undofile = true
 
-vim.g.neon_style = "default"
-vim.g.neon_italic_keyword = true
-vim.cmd[[colorscheme neon]]
+-- See https://github.com/sainnhe/everforest/blob/master/doc/everforest.txt
+vim.g.everforest_background = 'medium'
+vim.g.everforest_enable_italic = 1
+vim.g.everforest_better_performance = 1
+vim.g.everforest_disable_italic_comment = 1
+
+vim.cmd[[colorscheme everforest]]
 EOF
 
-" Better colors
-set termguicolors
 " Visible white space
 set list listchars=tab:▸\ ,trail:▫
 " No Bells
