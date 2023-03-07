@@ -34,12 +34,15 @@
     pkgs.git
     pkgs.git-machete
     pkgs.go
+    pkgs.k9s # Kubernetes ncurses interface
+    pkgs.ncdu # Ncurses interactive du client
     pkgs.ncurses # Provides a terminfo database
     pkgs.neovim
     pkgs.nixfmt
     pkgs.ripgrep
     pkgs.tmux
     pkgs.tree
+    pkgs.vault
   ];
 
   # Zoxide provides the "z" command for faster cd'ing around.
