@@ -1,0 +1,11 @@
+#!/bin/sh
+# tit (Tmux in Tmux) is more or less a testing harness to help develop my tmux
+# nesting configuration which would otherwise be triggered by being in an SSH
+# session.
+
+# unset $TMUX to allow TMUX to nest sessions.
+unset TMUX
+
+# Invoke a new tmux server (-L) with TMUX_IN_TMUX set which will trigger an
+# if-shell within tmux.conf.
+TMUX_IN_TMUX=1 tmux -L nested "$@"

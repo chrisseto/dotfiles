@@ -34,6 +34,7 @@
     pkgs.git
     pkgs.git-machete
     pkgs.go
+    pkgs.ncurses # Provides a terminfo database
     pkgs.neovim
     pkgs.nixfmt
     pkgs.ripgrep
