@@ -174,7 +174,11 @@ lsp_installer.on_server_ready(function(server)
 	})
 end)
 
-require("lspsaga").setup({})
+require("lspsaga").setup({
+	symbol_in_winbar = {
+		enable = false, -- Cute but very slow.
+	}
+})
 local keymap = vim.keymap.set
 
 -- Toggle outline
