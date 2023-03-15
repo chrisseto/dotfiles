@@ -31,11 +31,11 @@
     pkgs.direnv
     pkgs.fd
     pkgs.fzf
+    pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.git
     pkgs.git-machete
     pkgs.go
     pkgs.k9s # Kubernetes ncurses interface
-    pkgs.ncdu # Ncurses interactive du client
     pkgs.ncurses # Provides a terminfo database
     pkgs.neovim
     pkgs.nixfmt

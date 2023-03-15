@@ -41,3 +41,7 @@
 
 [init]
 	defaultBranch = master
+
+# Always use SSH for accessing GitHub.
+[url "git@github.com:"]
+	insteadOf = https://github.com/
