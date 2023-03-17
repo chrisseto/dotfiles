@@ -28,6 +28,7 @@
     pkgs.babelfish
     pkgs.bat
     pkgs.bazelisk
+    pkgs.cargo
     pkgs.direnv
     pkgs.fd
     pkgs.fzf

@@ -28,7 +28,8 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Native neovim LSP integration.
 Plug 'neovim/nvim-lspconfig'
 " LSP installation help
-Plug 'williamboman/nvim-lsp-installer'
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 " LSP helper
 Plug 'glepnir/lspsaga.nvim'
 " NERDTree provides a file browser
@@ -130,8 +131,6 @@ cmp.setup({
 	}),
 })
 
-local lsp_installer = require("nvim-lsp-installer")
-
 -- Use an on_attach function to only map the following keys 
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -149,10 +148,15 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "<space>F", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
 end
 
-lsp_installer.on_server_ready(function(server)
-	local capabilities = require('cmp_nvim_lsp').default_capabilities()
+require("mason").setup()
+require("mason-lspconfig").setup({
+	ensure_installed = {"gopls", "nil_ls", "lua_ls"}
+})
 
-	server:setup({
+require("mason-lspconfig").setup_handlers {
+function (server_name)
+	local capabilities = require('cmp_nvim_lsp').default_capabilities()
+   require("lspconfig")[server_name].setup {
 		on_attach = on_attach,
 		capabilities = capabilities,
 		flags = {
@@ -171,8 +175,9 @@ lsp_installer.on_server_ready(function(server)
 				}
 			}
 		},
-	})
-end)
+	   }
+end,
+}
 
 require("lspsaga").setup({
 	symbol_in_winbar = {
