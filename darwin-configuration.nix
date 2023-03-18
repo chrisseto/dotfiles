@@ -1,10 +1,13 @@
-{ config, pkgs, ... }:
-
-let hammerspoon = pkgs.callPackage ./hammerspoon/package.nix { };
+{
+  config,
+  pkgs,
+  ...
+}: let
+  hammerspoon = pkgs.callPackage ./hammerspoon/package.nix {};
 in {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = [ hammerspoon ];
+  environment.systemPackages = [hammerspoon];
 
   # Use a custom configuration.nix location.
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
@@ -20,7 +23,7 @@ in {
   programs.bash.enable = true;
   programs.fish.enable = true;
 
-  environment.shells = [ pkgs.fish ];
+  environment.shells = [pkgs.fish];
   environment.loginShell = "/run/current-system/sw/bin/fish";
 
   # Used for backwards compatibility, please read the changelog before changing.
@@ -60,7 +63,7 @@ in {
     experimental-features = nix-command flakes
   '';
 
-  imports = [ <home-manager/nix-darwin> ];
+  imports = [<home-manager/nix-darwin>];
   users.users.chrisseto = {
     name = "chrisseto";
     home = "/Users/chrisseto";
@@ -70,7 +73,7 @@ in {
 
   fonts = {
     fontDir.enable = true;
-    fonts = [ (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
+    fonts = [(pkgs.nerdfonts.override {fonts = ["FiraCode"];})];
   };
 
   # Nix-darwin does not link installed applications to the user environment. This means apps will not show up
@@ -99,7 +102,7 @@ in {
   #           # It does understand MacOS aliases though, a unique filesystem feature. Sadly they cannot be created
   #           # from bash (as far as I know), so we use the oh-so-great Apple Script instead.
   #           /usr/bin/osascript -e "
-  #               set fileToAlias to POSIX file \"$src\" 
+  #               set fileToAlias to POSIX file \"$src\"
   #               set applicationsFolder to POSIX file \"$nix_apps\"
   #               tell application \"Finder\"
   #                   make alias file to fileToAlias at applicationsFolder
@@ -109,5 +112,4 @@ in {
   #           " 1>/dev/null
   #       done
   # '';
-
 }

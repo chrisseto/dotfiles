@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
@@ -20,7 +23,7 @@
   # https://github.com/nix-community/neovim-nightly-overlay
   nixpkgs.overlays = [
     (import (builtins.fetchTarball {
-      url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+      url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
     }))
   ];
 
@@ -57,35 +60,35 @@
     enable = true;
 
     interactiveShellInit = ''
-     # No Greeting when opening fish.
-     set fish_greeting
+      # No Greeting when opening fish.
+      set fish_greeting
 
-     # Use Neovim as EDITOR.
-     set -gx EDITOR nvim
-     set -gx VISUAL nvim
+      # Use Neovim as EDITOR.
+      set -gx EDITOR nvim
+      set -gx VISUAL nvim
 
-     # Configurations for the pure fish prompt.
-     set -U pure_enable_single_line_prompt true
-     set -U pure_color_success green
-     set -U pure_enable_container_detection false
+      # Configurations for the pure fish prompt.
+      set -U pure_enable_single_line_prompt true
+      set -U pure_color_success green
+      set -U pure_enable_container_detection false
 
-      # Set default XDG_*_HOME values as not everything knows how to provide the
-      # defaults.
-      set -gx XDG_CACHE_HOME $HOME/.cache
-      set -gx XDG_CONFIG_HOME $HOME/.config
+       # Set default XDG_*_HOME values as not everything knows how to provide the
+       # defaults.
+       set -gx XDG_CACHE_HOME $HOME/.cache
+       set -gx XDG_CONFIG_HOME $HOME/.config
 
-      # Add ~/.bin to $PATH for access to custom scripts and the like.
-      fish_add_path $HOME/.bin
+       # Add ~/.bin to $PATH for access to custom scripts and the like.
+       fish_add_path $HOME/.bin
 
-      # Properly setup go on MacOS and Linux distros
-      switch (uname)
-      	case Darwin
-      		set -Ux GOPATH $HOME/Go
-      		fish_add_path $HOME/Go/bin
-      	case Linux
-      		set -Ux GOPATH $HOME/go
-      		fish_add_path $HOME/go/bin
-      end
+       # Properly setup go on MacOS and Linux distros
+       switch (uname)
+       	case Darwin
+       		set -Ux GOPATH $HOME/Go
+       		fish_add_path $HOME/Go/bin
+       	case Linux
+       		set -Ux GOPATH $HOME/go
+       		fish_add_path $HOME/go/bin
+       end
     '';
 
     shellAliases = {

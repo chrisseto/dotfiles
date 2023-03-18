@@ -1,13 +1,13 @@
-{ stdenv ? (import <nixpkgs> { }).stdenv
-, fetchzip ? (import <nixpkgs> { }).fetchzip }:
-
+{
+  stdenv ? (import <nixpkgs> {}).stdenv,
+  fetchzip ? (import <nixpkgs> {}).fetchzip,
+}:
 stdenv.mkDerivation {
   pname = "hammerspoon";
   version = "0.9.96";
 
   src = fetchzip {
-    url =
-      "https://github.com/Hammerspoon/hammerspoon/releases/download/0.9.96/Hammerspoon-0.9.96.zip";
+    url = "https://github.com/Hammerspoon/hammerspoon/releases/download/0.9.96/Hammerspoon-0.9.96.zip";
     sha256 = "sha256-3euDPI0qJD3Nj7mUAUKDab/ZFQTcRVU68oNmQe+DxKQ=";
   };
 
