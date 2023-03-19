@@ -26,7 +26,7 @@
       system = "aarch64-linux";
       modules = [
         nixos-apple-silicon.nixosModules.apple-silicon-support
-        ./nas.nix
+        # ./nas.nix
         ./asahi-mini.nix
         home-manager.nixosModules.home-manager
         {

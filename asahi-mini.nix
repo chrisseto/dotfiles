@@ -18,6 +18,8 @@
   hardware.asahi.extractPeripheralFirmware = false;
 
   # Use the systemd-boot EFI boot loader.
+  networking.hostId = "b196b31b";
+  boot.supportedFilesystems = ["zfs" "btrfs"];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
 
@@ -73,6 +75,7 @@
     fish
     gcc
     gccStdenv
+    smartmontools
     btrfs-progs
   ];
 

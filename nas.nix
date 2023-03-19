@@ -4,6 +4,17 @@
   ...
 }: {
   config = {
+    fileSystems."/external" = {
+      device = "/dev/disk/by-uuid/e746c1ef-68ba-4855-beef-34d657cf629b";
+      fsType = "btrfs";
+    };
+
+    fileSystems."/var/lib" = {
+      device = "/dev/disk/by-uuid/e746c1ef-68ba-4855-beef-34d657cf629b";
+      fsType = "btrfs";
+      options = ["subvol=var_lib"];
+    };
+
     # Create a shared group for all NAS services
     users.groups.nasdaemons = {};
 
