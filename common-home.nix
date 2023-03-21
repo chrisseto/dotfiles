@@ -32,18 +32,21 @@
     pkgs.bat
     pkgs.bazelisk
     pkgs.cargo
-    pkgs.direnv
     pkgs.fd
     pkgs.fzf
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.git
     pkgs.git-machete
     pkgs.go
+    pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
+    pkgs.htop
+    pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.ncurses # Provides a terminfo database
     pkgs.neovim
     pkgs.nixfmt
     pkgs.ripgrep
+    pkgs.terraform
     pkgs.tmux
     pkgs.tree
     pkgs.vault
@@ -53,6 +56,10 @@
   programs.zoxide = {
     enable = true;
     enableFishIntegration = true;
+  };
+
+  programs.direnv = {
+    enable = true;
   };
 
   # Fish configuration. See also https://nixos.wiki/wiki/Fish.
