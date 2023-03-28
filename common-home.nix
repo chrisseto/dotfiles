@@ -21,27 +21,30 @@
 
   # Follow neovim nightly releases.
   # https://github.com/nix-community/neovim-nightly-overlay
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
-    }))
-  ];
+  # nixpkgs.overlays = [
+  #   (import (builtins.fetchTarball {
+  #     url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
+  #   }))
+  # ];
 
   home.packages = [
     pkgs.babelfish
     pkgs.bat
     pkgs.bazelisk
     pkgs.cargo
+    pkgs.delve # golang debugger
     pkgs.fd
     pkgs.fzf
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
+    pkgs.gh # GitHub CLI, slightly better than hub
     pkgs.git
     pkgs.git-machete
-    pkgs.go
+    pkgs.go_1_19 # Pin to 1.19 for as that's what we currently use.
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
+    pkgs.kubectl
     pkgs.ncurses # Provides a terminfo database
     pkgs.neovim
     pkgs.nixfmt

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+FORK_POINT=$(git machete fork-point)
+PR_NUMBER=$(git machete anno | grep -oP 'PR #\K\d+')
+PR_DESC=$(git log $FORK_POINT..HEAD --pretty=format:"**%s (%H)**%n%b")
+
+gh pr edit $PR_NUMBER --body="$PR_DESC"
