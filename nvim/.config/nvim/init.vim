@@ -41,12 +41,18 @@ Plug 'elixir-editors/vim-elixir'
 " Git diff info + blame support
 Plug 'lewis6991/gitsigns.nvim'
 " Support yanking to system clipboards across SSH
-Plug 'ojroques/vim-oscyank'
+Plug 'ojroques/nvim-osc52'
 " Initialize plugin system
 call plug#end()
 
-" Configure yanking to also copy to the system clipboard via OSC
-autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
+lua <<EOF
+-- Configure yanking to also copy to the system clipboard via OSC
+function copy()
+  if vim.v.event.operator == 'y' and vim.v.event.regname == '+' then
+    require('osc52').copy_register('+')
+  end
+end
+EOF
 
 """"" Treesitter configuration """"
 lua <<EOF
@@ -150,7 +156,7 @@ end
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-	ensure_installed = {"gopls", "nil_ls", "lua_ls"}
+	ensure_installed = {"gopls"}
 })
 
 require("mason-lspconfig").setup_handlers {
