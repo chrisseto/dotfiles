@@ -21,16 +21,15 @@ I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 
 ## TODO
 - [ ] Add support for nix flakes
-- [ ] See if there's a good way to manage terminfo with nix
 - [ ] Remove the indent from my vim git commit message config
 - [ ] Convert init.vim to lua
-- [ ] Redo and re-document tmux.conf
 - [ ] Move dotfiles out of hidden directories
 - [ ] Fix Application linking on macOS
 - [ ] Fix tabs vs spaces on various file types
 - [ ] Upgrade to a treesitter based commenting tool
 - [ ] Configure spell check on treesitter comments
 - [ ] Move vim plugin management to nix flakes so that plugin repos are pinned to SHAs and easily updatable.
+- [ ] Consider configuring BTT with nix as it seems to be the consistent answer for many tweaks and bindings.
 
 
 ## Add terminfo entries with 256color and italics support.
