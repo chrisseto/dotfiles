@@ -36,12 +36,16 @@ Plug 'glepnir/lspsaga.nvim'
 Plug 'scrooloose/nerdtree'
 " Telescope, FZF like browsing/grepping etc
 Plug 'nvim-telescope/telescope.nvim'
+" Telescope sorter, FZF C implementation for better performance.
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 " Elixir support (Mostly useful for FT detection)
 Plug 'elixir-editors/vim-elixir'
 " Git diff info + blame support
 Plug 'lewis6991/gitsigns.nvim'
 " Support yanking to system clipboards across SSH
 Plug 'ojroques/nvim-osc52'
+" Git conflict helper
+Plug 'akinsho/git-conflict.nvim'
 " Initialize plugin system
 call plug#end()
 
@@ -90,6 +94,7 @@ EOF
 
 """"" Git integration configuration """"
 lua require('gitsigns').setup()
+lua require('git-conflict').setup()
 """"" /Git integration configuration """"
 
 """"" LSP configuration """"
@@ -217,10 +222,27 @@ let g:NERDTreeRepsectWildIgnore = 1
 """"" /NERDTree configuration """"
 
 """"" Telescope configuration """"
-nnoremap <silent> <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>f <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+lua<<EOF
+require("telescope").setup {
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+    }
+  }
+}
+
+require("telescope").load_extension("fzf")
+
+-- Keymappings
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<C-p>', builtin.find_files, {})
+vim.keymap.set('n', '<leader>f', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+EOF
 """"" /Telescope configuration """"
 
 " Yanks to the system clipboard
