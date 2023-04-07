@@ -19,22 +19,14 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  # Follow neovim nightly releases.
-  # https://github.com/nix-community/neovim-nightly-overlay
-  # nixpkgs.overlays = [
-  #   (import (builtins.fetchTarball {
-  #     url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
-  #   }))
-  # ];
-
   home.packages = [
-    pkgs.babelfish
+    pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bat
     pkgs.bazelisk
     pkgs.cargo
     pkgs.delve # golang debugger
-    pkgs.fd
-    pkgs.fzf
+    pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
+    pkgs.fzf # Pluggable fuzzy finder
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.gh # GitHub CLI, slightly better than hub
     pkgs.git
@@ -42,13 +34,12 @@
     pkgs.go_1_19 # Pin to 1.19 for as that's what we currently use.
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
+    pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
-    pkgs.kubectl
     pkgs.ncurses # Provides a terminfo database
     pkgs.neovim
-    pkgs.nixfmt
-    pkgs.ripgrep
+    pkgs.ripgrep # `rg`, better grep/ag/ack
     pkgs.terraform
     pkgs.tmux
     pkgs.tree
