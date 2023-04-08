@@ -12,7 +12,7 @@
         description = "External Drive Pool";
         what = "/dev/disk/by-uuid/9f2b8872-d9c0-4762-a09a-97e82d2c8d48";
         where = "/external";
-        options = "noatime,nodatacow";
+        options = "noatime";
         type = "btrfs";
         wantedBy = ["sabnzbd.service" "radarr.service" "sonarr.service"];
         partOf = ["sabnzbd.service" "radarr.service" "sonarr.service"];

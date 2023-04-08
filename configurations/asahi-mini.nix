@@ -9,7 +9,7 @@
 }: {
   imports = [
     # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+    ./asahi-mini-hardware-configuration.nix
     nixos-apple-silicon.nixosModules.apple-silicon-support
   ];
 
@@ -18,10 +18,9 @@
   hardware.asahi.extractPeripheralFirmware = false;
 
   # Use the systemd-boot EFI boot loader.
-  networking.hostId = "b196b31b";
-  boot.supportedFilesystems = ["zfs" "btrfs"];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
+  boot.supportedFilesystems = ["btrfs"];
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.

@@ -66,8 +66,8 @@
         system = "aarch64-linux";
         modules = [
           nixos-apple-silicon.nixosModules.apple-silicon-support
-          # ./nas.nix
-          ./asahi-mini.nix
+          ./configurations/nas.nix
+          ./configurations/asahi-mini.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -82,7 +82,7 @@
               openssh.authorizedKeys.keys = ["SHA256:OlM7U4J9YBrCbk0zp9CQIvqAB8YLU4XVhD0Jt744Qe0"];
             };
 
-            home-manager.users.chrisseto = import ./linux-home.nix;
+            home-manager.users.chrisseto = import ./homes/gceworker.nix;
           }
         ];
         specialArgs = {
