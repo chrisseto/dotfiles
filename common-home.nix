@@ -58,6 +58,41 @@
     enable = true;
   };
 
+  # Starip terminal prompt - https://starship.rs/config/
+  programs.starship = {
+    enable = true;
+    settings = {
+      add_newline = false;
+
+      format = "$username$hostname$localip$directory$git_branch$git_commit$git_state$git_metrics$git_status$package$nix_shell$sudo$cmd_duration$line_break$jobs$battery$time$status$os$shell$character";
+
+      cmd_duration = {
+        format = "[$duration]($style) ";
+      };
+
+      directory = {
+        read_only = " ";
+      };
+
+      line_break = {
+        disabled = true;
+      };
+
+      git_branch = {
+        symbol = " ";
+        format = "[$symbol$branch(:$remote_branch)]($style) ";
+      };
+
+      git_status = {
+        format = "(\[$conflicted$modified$ahead_behind\]($style) )";
+      };
+
+      nix_shell = {
+        symbol = " ";
+      };
+    };
+  };
+
   # Fish configuration. See also https://nixos.wiki/wiki/Fish.
   programs.fish = {
     enable = true;
@@ -70,11 +105,6 @@
       set -gx EDITOR nvim
       set -gx VISUAL nvim
 
-      # Configurations for the pure fish prompt.
-      set -U pure_enable_single_line_prompt true
-      set -U pure_color_success green
-      set -U pure_enable_container_detection false
-
        # Set default XDG_*_HOME values as not everything knows how to provide the
        # defaults.
        set -gx XDG_CACHE_HOME $HOME/.cache
@@ -82,16 +112,6 @@
 
        # Add ~/.bin to $PATH for access to custom scripts and the like.
        fish_add_path $HOME/.bin
-
-       # Properly setup go on MacOS and Linux distros
-       switch (uname)
-       	case Darwin
-       		set -Ux GOPATH $HOME/Go
-       		fish_add_path $HOME/Go/bin
-       	case Linux
-       		set -Ux GOPATH $HOME/go
-       		fish_add_path $HOME/go/bin
-       end
     '';
 
     shellAliases = {
@@ -103,10 +123,6 @@
       {
         name = "fzf-fish";
         src = pkgs.fishPlugins.fzf-fish.src;
-      }
-      {
-        name = "pure";
-        src = pkgs.fishPlugins.pure.src;
       }
       {
         name = "kubectl";
