@@ -32,9 +32,8 @@ I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 - [ ] Add [home-manager standalone flake](https://nix-community.github.io/home-manager/index.html#sec-flakes-standalone) targets
 - [ ] Add a darwin configuration for work MBP
 
+## Layout
 
-## Add terminfo entries with 256color and italics support.
-```
-tic ./terminfo/tmux-256color.terminfo
-tic ./terminfo/xterm-256color-italic.terminfo
-```
+* `configuration` - Nix{OS,-Darwin} Configurations
+* `homes` - Home-Manager Configurations
+* `packages` - Custom Nix packages

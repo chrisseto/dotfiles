@@ -147,9 +147,9 @@
 
   # The previous iteration of this repo was managed by stow. To ease
   # the transition, just symlink the old configurations.
-  home.file.".bin".source = ./bin;
-  home.file.".config/nvim".source = ./nvim/.config/nvim;
-  home.file.".config/tmux".source = ./tmux;
-  home.file.".gitconfig".source = ./git/.gitconfig;
-  home.file.".gitignore_global".source = ./git/.gitignore_global;
+  home.file.".bin".source = ../bin;
+  home.file.".config/nvim".source = ../nvim/.config/nvim;
+  home.file.".config/tmux".source = ../tmux;
+  home.file.".gitconfig".source = ../git/.gitconfig;
+  home.file.".gitignore_global".source = ../git/.gitignore_global;
 }

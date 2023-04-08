@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  hammerspoon = pkgs.callPackage ./hammerspoon/package.nix {};
+  hammerspoon = pkgs.callPackage ../packages/hammerspoon.nix {};
 in {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -66,14 +66,7 @@ in {
   # Automatically clean up the nix store to save diskspace.
   nix.settings.auto-optimise-store = true;
   # Allow my user to run remote builds.
-  nix.settings.trusted-users = ["root" "chrisseto"];
-
-  users.users.chrisseto = {
-    name = "chrisseto";
-    home = "/Users/chrisseto";
-  };
-
-  home-manager.users.chrisseto = import ./darwin-home.nix;
+  nix.settings.trusted-users = ["root"];
 
   fonts = {
     fontDir.enable = true;

@@ -4,9 +4,9 @@
   lib,
   ...
 }: let
-  cockroachdb = pkgs.callPackage ./cockroachdb.nix {};
+  cockroachdb = pkgs.callPackage ../packages/cockroachdb.nix {};
 in {
-  imports = [./common-home.nix];
+  imports = [./common.nix];
 
   home.packages = [
     (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.kubectl])
@@ -15,8 +15,8 @@ in {
     pkgs.reattach-to-user-namespace
   ];
 
-  home.file.".hammerspoon".source = ./hammerspoon;
-  home.file.".config/alacritty".source = ./alacritty;
+  home.file.".hammerspoon".source = ../hammerspoon;
+  home.file.".config/alacritty".source = ../alacritty;
 
   # This should be removed once
   # https://github.com/nix-community/home-manager/issues/1341 is closed.
