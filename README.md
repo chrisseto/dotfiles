@@ -8,7 +8,7 @@ chrisseto's dotfiles
 1. Install [nix-darwin](https://github.com/LnL7/nix-darwin)
 1. Install [home-manager](https://github.com/nix-community/home-manager)
 1. Clone this repo to `~/.nixpkgs`
-1. Run `darwin-rebuild switch`
+1. Run `darwin-rebuild switch --flake ~/.nixpkgs#`
 
 ## Linux
 1. Install [Nix](https://nixos.org/download.html#nix-install-macos)
@@ -20,7 +20,6 @@ chrisseto's dotfiles
 I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 
 ## TODO
-- [ ] Add support for nix flakes
 - [ ] Remove the indent from my vim git commit message config
 - [ ] Convert init.vim to lua
 - [ ] Move dotfiles out of hidden directories
@@ -30,6 +29,8 @@ I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 - [ ] Configure spell check on treesitter comments
 - [ ] Move vim plugin management to nix flakes so that plugin repos are pinned to SHAs and easily updatable.
 - [ ] Consider configuring BTT with nix as it seems to be the consistent answer for many tweaks and bindings.
+- [ ] Add [home-manager standalone flake](https://nix-community.github.io/home-manager/index.html#sec-flakes-standalone) targets
+- [ ] Add a darwin configuration for work MBP
 
 
 ## Add terminfo entries with 256color and italics support.
