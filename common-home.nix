@@ -39,11 +39,13 @@
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.ncurses # Provides a terminfo database
     pkgs.neovim
+    pkgs.nodejs
     pkgs.ripgrep # `rg`, better grep/ag/ack
     pkgs.terraform
     pkgs.tmux
     pkgs.tree
     pkgs.vault
+    pkgs.yarn
   ];
 
   # Zoxide provides the "z" command for faster cd'ing around.
