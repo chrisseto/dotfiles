@@ -4,7 +4,7 @@
   lib,
   ...
 }: {
-  imports = [./common-home.nix];
+  imports = [./common.nix];
 
   home.packages = [
     pkgs.kubectl

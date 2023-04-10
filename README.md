@@ -29,7 +29,6 @@ I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 - [ ] Configure spell check on treesitter comments
 - [ ] Move vim plugin management to nix flakes so that plugin repos are pinned to SHAs and easily updatable.
 - [ ] Consider configuring BTT with nix as it seems to be the consistent answer for many tweaks and bindings.
-- [ ] Add [home-manager standalone flake](https://nix-community.github.io/home-manager/index.html#sec-flakes-standalone) targets
 - [ ] Add a darwin configuration for work MBP
 
 ## Layout

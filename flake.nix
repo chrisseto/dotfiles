@@ -27,8 +27,20 @@
     nixos-apple-silicon,
     ...
   }: {
-    formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.alejandra;
     formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
+    formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.alejandra;
+    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
+
+    homeConfigurations = {
+      chrisseto = home-manager.lib.homeManagerConfiguration {
+        # TODO don't hardcode system here...
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+
+        modules = [
+          ./homes/gceworker.nix
+        ];
+      };
+    };
 
     darwinConfigurations = {
       "Chriss-Air" = darwin.lib.darwinSystem {
