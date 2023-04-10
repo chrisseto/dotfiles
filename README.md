@@ -10,11 +10,15 @@ chrisseto's dotfiles
 1. Clone this repo to `~/.nixpkgs`
 1. Run `darwin-rebuild switch --flake ~/.nixpkgs#`
 
-## Linux
+## Linux (NixOS)
+1. Clone this repo to `~/.nixpkgs`
+1. Run `nixos-rebuild switch --flake ~/.nixpkgs#<profile>`
+
+## Linux (Home-Manager)
 1. Install [Nix](https://nixos.org/download.html#nix-install-macos)
 1. Install [home-manager](https://github.com/nix-community/home-manager)
 1. Clone this repo to `~/.nixpkgs`
-1. Run `home-manager switch -f ~/.nixpkgs/linux-home.nix`
+1. Run `home-manager switch --flake ~/.nixpkgs#<profile>`
 
 ## Fonts
 I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)

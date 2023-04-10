@@ -32,7 +32,7 @@
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
     homeConfigurations = {
-      chrisseto = home-manager.lib.homeManagerConfiguration {
+      gceworker = home-manager.lib.homeManagerConfiguration {
         # TODO don't hardcode system here...
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
