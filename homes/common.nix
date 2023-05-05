@@ -46,6 +46,7 @@
     pkgs.tmux
     pkgs.tree
     pkgs.vault
+    pkgs.xz # LZMA compression successor, used by container tooling.
     pkgs.yarn
   ];
 
@@ -106,13 +107,17 @@
       set -gx EDITOR nvim
       set -gx VISUAL nvim
 
-       # Set default XDG_*_HOME values as not everything knows how to provide the
-       # defaults.
-       set -gx XDG_CACHE_HOME $HOME/.cache
-       set -gx XDG_CONFIG_HOME $HOME/.config
+      # Use the new version of GCP's k8s auth.
+      # https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+      set -gx USE_GKE_GCLOUD_AUTH_PLUGIN false
 
-       # Add ~/.bin to $PATH for access to custom scripts and the like.
-       fish_add_path $HOME/.bin
+      # Set default XDG_*_HOME values as not everything knows how to provide the
+      # defaults.
+      set -gx XDG_CACHE_HOME $HOME/.cache
+      set -gx XDG_CONFIG_HOME $HOME/.config
+
+      # Add ~/.bin to $PATH for access to custom scripts and the like.
+      fish_add_path $HOME/.bin
     '';
 
     shellAliases = {

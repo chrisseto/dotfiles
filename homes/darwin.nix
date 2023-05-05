@@ -9,8 +9,9 @@ in {
   imports = [./common.nix];
 
   home.packages = [
-    (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.kubectl])
+    (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
     cockroachdb
+    pkgs.kubectl
     pkgs.alacritty
     pkgs.reattach-to-user-namespace
   ];
