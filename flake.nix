@@ -43,6 +43,23 @@
     };
 
     darwinConfigurations = {
+      "crlMBP-MV7L2CVHJQMTQ0" = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        modules = [
+          home-manager.darwinModules.home-manager
+          ./configurations/darwin.nix
+          {
+            users.users.chrisseto = {
+              name = "chrisseto";
+              home = "/Users/chrisseto";
+            };
+
+            home-manager.users.chrisseto = import ./homes/darwin.nix;
+          }
+        ];
+        inputs = {inherit darwin nixpkgs;};
+      };
+
       "Chriss-Air" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
