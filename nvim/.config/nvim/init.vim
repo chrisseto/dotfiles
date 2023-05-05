@@ -201,7 +201,10 @@ end,
 require("lspsaga").setup({
 	symbol_in_winbar = {
 		enable = false, -- Cute but very slow.
-	}
+	},
+	lightbulb = {
+		enable = false, -- lightbulb just gets in the way.
+	},
 })
 local keymap = vim.keymap.set
 
