@@ -148,8 +148,19 @@
   # The previous iteration of this repo was managed by stow. To ease
   # the transition, just symlink the old configurations.
   home.file.".bin".source = ../bin;
-  home.file.".config/nvim".source = ../nvim/.config/nvim;
   home.file.".config/tmux".source = ../tmux;
   home.file.".gitconfig".source = ../git/.gitconfig;
   home.file.".gitignore_global".source = ../git/.gitignore_global;
+
+  # Use (abuse?) a helper in home manager to symlink directly to the config
+  # file within the repository. This allows programs to modify ~/.config
+  # directly and have those changes get tracked by this respository. On the
+  # downside, this repository MUST be cloned to ~/.nixpkgs to work correctly,
+  # which is a bit less than ideal.
+  # See https://github.com/nix-community/home-manager/issues/2085
+  # It may be preferable to instead use something that ensures ~/.nixpkgs
+  # exists as a git repository (not changing it if it already exists!!) which
+  # would allow this type of symlinking to be acceptable..
+  # See https://www.foodogsquared.one/posts/2023-03-24-managing-mutable-files-in-nixos/
+  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/nvim/.config/nvim";
 }
