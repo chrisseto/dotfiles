@@ -57,30 +57,25 @@
       };
 
       dynamicConfigOptions = {
-        http.services.sonarr.loadBalancer.servers = [
-          {url = "http://localhost:8989";}
+        http.services.bazarr.loadBalancer.servers = [
+          {url = "http://localhost:6767";}
         ];
 
         http.services.radarr.loadBalancer.servers = [
           {url = "http://localhost:7878";}
         ];
 
-        http.services.prowlarr.loadBalancer.servers = [
-          {url = "http://localhost:9696";}
-        ];
-
         http.services.sabnzbd.loadBalancer.servers = [
           {url = "http://localhost:8080";}
         ];
 
-        http.routers.to-sabnzbd = {
-          rule = "PathPrefix(`/sabnzbd`)";
-          service = "sabnzbd";
-        };
+        http.services.sonarr.loadBalancer.servers = [
+          {url = "http://localhost:8989";}
+        ];
 
-        http.routers.to-sonarr = {
-          rule = "PathPrefix(`/sonarr`) || HeadersRegexp(`Referer`, `https?://[^/]+/sonarr.*`)";
-          service = "sonarr";
+        http.routers.to-bazarr = {
+          rule = "PathPrefix(`/bazarr`)";
+          service = "prowlarr";
         };
 
         http.routers.to-radarr = {
@@ -88,9 +83,14 @@
           service = "radarr";
         };
 
-        http.routers.to-prowlarr = {
-          rule = "PathPrefix(`/prowlarr`)";
-          service = "prowlarr";
+        http.routers.to-sabnzbd = {
+          rule = "PathPrefix(`/sabnzbd`)";
+          service = "sabnzbd";
+        };
+
+        http.routers.to-sonarr = {
+          rule = "PathPrefix(`/sonarr`)";
+          service = "sonarr";
         };
       };
     };
@@ -115,14 +115,10 @@
       group = "nasdaemons";
     };
 
-    # Prowlarr's service definition is a bit broken in the upstream.
-    # TODO: Pull this into an overlay.
-    # TODO: Copy the same configuration for all nas daemon services.
-    # TODO: Mount /var/lib as a btrfs subvolume.
-    # services.prowlarr = {
-    #   enable = true;
-    #   group = "nasdaemons";
-    # };
+    services.bazarr = {
+      enable = true;
+      group = "nasdaemons";
+    };
 
     users.users = {
       prowlarr = {
