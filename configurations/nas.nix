@@ -161,6 +161,17 @@
       };
     };
 
+    # Web service serving open whisper (AI subtitle generator).
+    virtualisation.oci-containers.containers = {
+      whisper = {
+        image = "onerahmet/openai-whisper-asr-webservice:latest";
+        ports = ["127.0.0.1:9000:9000"];
+        environment = {
+          ASR_MODEL = "base.en";
+        };
+      };
+    };
+
     services.jellyfin = {
       enable = true;
       group = "nasdaemons";
