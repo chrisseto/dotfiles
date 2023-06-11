@@ -18,13 +18,22 @@
         partOf = ["sabnzbd.service" "radarr.service" "sonarr.service"];
       }
       {
-        description = "Sabnzbd configuration";
+        description = "Bazarr configuration";
         what = "/dev/disk/by-uuid/9f2b8872-d9c0-4762-a09a-97e82d2c8d48";
-        where = "/var/lib/sabnzbd";
-        options = "subvol=configs/sabnzbd";
+        where = "/var/lib/bazarr";
+        options = "subvol=configs/bazarr";
         type = "btrfs";
-        wantedBy = ["sabnzbd.service"];
-        partOf = ["sabnzbd.service"];
+        partOf = ["bazarr.service"];
+        wantedBy = ["bazarr.service"];
+      }
+      {
+        description = "Jellyfin configuration";
+        what = "/dev/disk/by-uuid/9f2b8872-d9c0-4762-a09a-97e82d2c8d48";
+        where = "/var/lib/jellyfin";
+        options = "subvol=configs/jellyfin";
+        type = "btrfs";
+        partOf = ["jellyfin.service"];
+        wantedBy = ["jellyfin.service"];
       }
       {
         description = "Radarr configuration";
@@ -36,6 +45,15 @@
         wantedBy = ["radarr.service"];
       }
       {
+        description = "Sabnzbd configuration";
+        what = "/dev/disk/by-uuid/9f2b8872-d9c0-4762-a09a-97e82d2c8d48";
+        where = "/var/lib/sabnzbd";
+        options = "subvol=configs/sabnzbd";
+        type = "btrfs";
+        wantedBy = ["sabnzbd.service"];
+        partOf = ["sabnzbd.service"];
+      }
+      {
         description = "Sonarr configuration";
         what = "/dev/disk/by-uuid/9f2b8872-d9c0-4762-a09a-97e82d2c8d48";
         where = "/var/lib/sonarr";
@@ -43,15 +61,6 @@
         type = "btrfs";
         partOf = ["sonarr.service"];
         wantedBy = ["sonarr.service"];
-      }
-      {
-        description = "Jellyfin configuration";
-        what = "/dev/disk/by-uuid/9f2b8872-d9c0-4762-a09a-97e82d2c8d48";
-        where = "/var/lib/jellyfin";
-        options = "subvol=configs/jellyfin";
-        type = "btrfs";
-        partOf = ["jellyfin.service"];
-        wantedBy = ["jellyfin.service"];
       }
     ];
 
@@ -66,6 +75,9 @@
 
     systemd.services.sonarr.serviceConfig.StateDirectory = "sonarr";
     systemd.services.sonarr.serviceConfig.StateDirectoryMode = "0700";
+
+    systemd.services.bazarr.serviceConfig.StateDirectory = "bazarr";
+    systemd.services.bazarr.serviceConfig.StateDirectoryMode = "0700";
 
     # TODO: systemd has this build into the serviceConfig. See Jellyfin's
     # config.
@@ -129,7 +141,7 @@
 
         http.routers.to-bazarr = {
           rule = "PathPrefix(`/bazarr`)";
-          service = "prowlarr";
+          service = "bazarr";
         };
 
         http.routers.to-radarr = {
