@@ -147,10 +147,10 @@
 
   # The previous iteration of this repo was managed by stow. To ease
   # the transition, just symlink the old configurations.
-  home.file.".bin".source = ../bin;
-  home.file.".config/tmux".source = ../tmux;
-  home.file.".gitconfig".source = ../git/.gitconfig;
-  home.file.".gitignore_global".source = ../git/.gitignore_global;
+  home.file.".bin".source = ../assets/bin;
+  home.file.".config/tmux".source = ../assets/tmux;
+  home.file.".gitconfig".source = ../assets/git/.gitconfig;
+  home.file.".gitignore_global".source = ../assets/git/.gitignore_global;
 
   # Use (abuse?) a helper in home manager to symlink directly to the config
   # file within the repository. This allows programs to modify ~/.config
@@ -162,5 +162,5 @@
   # exists as a git repository (not changing it if it already exists!!) which
   # would allow this type of symlinking to be acceptable..
   # See https://www.foodogsquared.one/posts/2023-03-24-managing-mutable-files-in-nixos/
-  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/nvim/.config/nvim";
+  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/nvim";
 }

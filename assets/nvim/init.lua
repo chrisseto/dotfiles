@@ -1,56 +1,55 @@
-lua<<EOF
-	vim.cmd[[
-		" Better leader key
-		let mapleader = "\<Space>"
+vim.cmd[[
+	" Better leader key
+	let mapleader = "\<Space>"
 
-		call plug#begin(stdpath('data') . '/plugged')
-		" Generic lua deps
-		Plug 'nvim-lua/popup.nvim'
-		Plug 'nvim-lua/plenary.nvim'
-		" Cute icons for various plugins
-		Plug 'nvim-tree/nvim-web-devicons'
-		" Delve integration
-		Plug 'sebdah/vim-delve'
-		" Color scheme
-		Plug 'sainnhe/everforest'
-		" Autocompletion, recommended by neovim's LSP
-		Plug 'hrsh7th/cmp-buffer'
-		Plug 'hrsh7th/cmp-nvim-lsp'
-		Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
-		Plug 'hrsh7th/cmp-path'
-		Plug 'hrsh7th/cmp-vsnip'
-		Plug 'hrsh7th/nvim-cmp'
-		Plug 'hrsh7th/vim-vsnip'
-		" Simple commenting
-		Plug 'tpope/vim-commentary'
-		" Make Tmux panes not pains
-		Plug 'christoomey/vim-tmux-navigator'
-		" Treesitter is a better syntax highlighter for neovim.
-		Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-		" Native neovim LSP integration.
-		Plug 'neovim/nvim-lspconfig'
-		" LSP installation help
-		Plug 'williamboman/mason.nvim'
-		Plug 'williamboman/mason-lspconfig.nvim'
-		" LSP helper
-		Plug 'glepnir/lspsaga.nvim'
-		" NERDTree provides a file browser
-		Plug 'scrooloose/nerdtree'
-		" Telescope, FZF like browsing/grepping etc
-		Plug 'nvim-telescope/telescope.nvim'
-		" Telescope sorter, FZF C implementation for better performance.
-		Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-		" Elixir support (Mostly useful for FT detection)
-		Plug 'elixir-editors/vim-elixir'
-		" Git diff info + blame support
-		Plug 'lewis6991/gitsigns.nvim'
-		" Support yanking to system clipboards across SSH
-		Plug 'ojroques/nvim-osc52'
-		" Git conflict helper
-		Plug 'akinsho/git-conflict.nvim'
-		" Initialize plugin system
-		call plug#end()
-	]]
+	call plug#begin(stdpath('data') . '/plugged')
+	" Generic lua deps
+	Plug 'nvim-lua/popup.nvim'
+	Plug 'nvim-lua/plenary.nvim'
+	" Cute icons for various plugins
+	Plug 'nvim-tree/nvim-web-devicons'
+	" Delve integration
+	Plug 'sebdah/vim-delve'
+	" Color scheme
+	Plug 'sainnhe/everforest'
+	" Autocompletion, recommended by neovim's LSP
+	Plug 'hrsh7th/cmp-buffer'
+	Plug 'hrsh7th/cmp-nvim-lsp'
+	Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+	Plug 'hrsh7th/cmp-path'
+	Plug 'hrsh7th/cmp-vsnip'
+	Plug 'hrsh7th/nvim-cmp'
+	Plug 'hrsh7th/vim-vsnip'
+	" Simple commenting
+	Plug 'tpope/vim-commentary'
+	" Make Tmux panes not pains
+	Plug 'christoomey/vim-tmux-navigator'
+	" Treesitter is a better syntax highlighter for neovim.
+	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+	" Native neovim LSP integration.
+	Plug 'neovim/nvim-lspconfig'
+	" LSP installation help
+	Plug 'williamboman/mason.nvim'
+	Plug 'williamboman/mason-lspconfig.nvim'
+	" LSP helper
+	Plug 'glepnir/lspsaga.nvim'
+	" NERDTree provides a file browser
+	Plug 'scrooloose/nerdtree'
+	" Telescope, FZF like browsing/grepping etc
+	Plug 'nvim-telescope/telescope.nvim'
+	" Telescope sorter, FZF C implementation for better performance.
+	Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+	" Elixir support (Mostly useful for FT detection)
+	Plug 'elixir-editors/vim-elixir'
+	" Git diff info + blame support
+	Plug 'lewis6991/gitsigns.nvim'
+	" Support yanking to system clipboards across SSH
+	Plug 'ojroques/nvim-osc52'
+	" Git conflict helper
+	Plug 'akinsho/git-conflict.nvim'
+	" Initialize plugin system
+	call plug#end()
+]]
 
 require('osc52').setup{
   max_length = 0,      -- Maximum length of selection (0 for no limit)
@@ -303,4 +302,3 @@ vim.cmd[[
 	" No Bells
 	set noerrorbells visualbell t_vb=
 ]]
-EOF

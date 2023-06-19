@@ -15,8 +15,8 @@ in {
     pkgs.reattach-to-user-namespace
   ];
 
-  home.file.".hammerspoon".source = ../hammerspoon;
-  home.file.".config/alacritty".source = ../alacritty;
+  home.file.".hammerspoon".source = ../assets/hammerspoon;
+  home.file.".config/alacritty".source = ../assets/alacritty;
 
   # This should be removed once
   # https://github.com/nix-community/home-manager/issues/1341 is closed.
