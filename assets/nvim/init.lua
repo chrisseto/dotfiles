@@ -17,6 +17,16 @@ vim.opt.rtp:prepend(lazypath)
 -- TODO: Might be interesting to have multiple leaders to make certain keyhooks work.
 vim.g.mapleader = " "
 
+-- TODO continue "borrowing" plugins from https://www.lazyvim.org/plugins/coding
+-- Flit or Leap seem worthwhile https://www.lazyvim.org/plugins/editor#flitnvim
+-- https://github.com/folke/trouble.nvim
+-- https://www.lazyvim.org/plugins/editor#todo-commentsnvim
+-- https://www.lazyvim.org/plugins/ui#bufferlinenvim
+-- https://www.lazyvim.org/plugins/ui#lualinenvim
+-- https://www.lazyvim.org/plugins/ui#miniindentscope
+-- https://github.com/folke/neoconf.nvim
+-- https://github.com/folke/neodev.nvim (Partial replacement for lsp saga)
+-- https://github.com/folke/persistence.nvim
 require("lazy").setup({
 	{
 		-- Colorscheme. Configured to load before everything else.
@@ -36,9 +46,33 @@ require("lazy").setup({
 	},
 
 	-- Generic lua deps, defered until another plugin loads them.
-	{ 'nvim-tree/nvim-web-devicons',   lazy = true },
-	{ 'nvim-lua/popup.nvim',           lazy = true },
-	{ 'nvim-lua/plenary.nvim',         lazy = true },
+	{ 'nvim-tree/nvim-web-devicons', lazy = true },
+	{ 'nvim-lua/popup.nvim',         lazy = true },
+	{ 'nvim-lua/plenary.nvim',       lazy = true },
+	{ 'kkharji/sqlite.lua',          lazy = true },
+
+	{
+		'stevearc/dressing.nvim',
+		config = function()
+			require('dressing').setup({
+				select = {
+					backend = { "fzf_lua", "fzf", "builtin", "nui" },
+				},
+			})
+		end
+	},
+
+	-- TODO Delve into the possible configuration options here.
+	-- Really need a way to doll it up but it's much snappier than telescope.
+	{
+		'ibhagwan/fzf-lua',
+		dependencies = { 'nvim-tree/nvim-web-devicons' },
+		config = function()
+			require('fzf-lua').setup {
+				'skim'
+			}
+		end
+	},
 
 	-- Git diff info + blame support.
 	{ 'lewis6991/gitsigns.nvim',       config = true },
@@ -46,8 +80,7 @@ require("lazy").setup({
 	{ 'akinsho/git-conflict.nvim',     config = true },
 	-- Delve integration
 	{ 'sebdah/vim-delve' },
-	-- Simple commenting (TODO Find a lua/treesitter replacement)
-	{ 'tpope/vim-commentary' },
+	{ 'echasnovski/mini.comment',      config = true, version = '*' },
 	--  Make Tmux panes not pains
 	{ 'christoomey/vim-tmux-navigator' },
 	-- Native neovim LSP integration.
@@ -78,23 +111,15 @@ require("lazy").setup({
 
 	{
 		-- NERDTree provides a file browser
+		-- TODO: Consider replacing with https://github.com/nvim-neo-tree/neo-tree.nvim
 		'scrooloose/nerdtree',
 		config = function()
-			vim.cmd [[
-				nnoremap <leader>d :NERDTreeToggle<CR>
-				nnoremap <leader>D :NERDTreeFind<CR>
-				let g:NERDTreeRepsectWildIgnore = 1
-			]]
+			vim.cmd [[ let g:NERDTreeRepsectWildIgnore = 1 ]]
 		end
 	},
 
 	-- LSP server installation help
-	{
-		'williamboman/mason.nvim',
-		config = function()
-			require("mason").setup()
-		end
-	},
+	{ 'williamboman/mason.nvim',            config = true },
 	{
 		'williamboman/mason-lspconfig.nvim',
 		dependencies = {
@@ -106,29 +131,10 @@ require("lazy").setup({
 				ensure_installed = { "gopls" }
 			})
 
-			-- TODO figure out how to make this all play nice with lazy.nvim.
-			-- Use an on_attach function to only map the following keys
-			-- after the language server attaches to the current buffer
-			local on_attach = function(client, bufnr)
-				local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-				local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-				-- Mappings.
-				local opts = { noremap = true, silent = true }
-
-				-- See `:help vim.lsp.*` for documentation on any of the below functions
-				buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-				buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-				buf_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)
-				buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-				buf_set_keymap("n", "<space>F", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
-			end
-
 			require("mason-lspconfig").setup_handlers {
 				function(server_name)
 					local capabilities = require('cmp_nvim_lsp').default_capabilities()
 					require("lspconfig")[server_name].setup {
-						on_attach = on_attach,
 						capabilities = capabilities,
 						flags = {
 							debounce_text_changes = 50,
@@ -151,6 +157,12 @@ require("lazy").setup({
 								-- Do not send telemetry data containing a randomized but unique identifier
 								telemetry = {
 									enable = false,
+								},
+								-- TODO Figure out how to get this working to stop the formatter from wrapping all my key mapping lines.
+								config = {
+									format = {
+										defaultConfig = [[ max_line_length = 500 ]]
+									},
 								},
 							},
 							gopls = {
@@ -176,6 +188,7 @@ require("lazy").setup({
 	{ 'hrsh7th/cmp-nvim-lsp-signature-help' },
 	{ 'hrsh7th/cmp-path' },
 	{ 'hrsh7th/cmp-vsnip' },
+	-- TODO migrate from vsnip over to lua snip
 	{ 'hrsh7th/vim-vsnip' },
 	{
 		'hrsh7th/nvim-cmp',
@@ -281,50 +294,64 @@ require("lazy").setup({
 					enable = false, -- lightbulb just gets in the way.
 				},
 			})
-			local keymap = vim.keymap.set
-
-			-- Toggle outline
-			keymap("n", "<leader>o", "<cmd>Lspsaga outline<CR>")
-			-- Hover Doc
-			keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>")
-			-- Rename symbol
-			keymap("n", "<leader>rn", "<cmd>Lspsaga rename ++project<CR>")
 		end
 	},
 
-	{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 	{
-		'nvim-telescope/telescope.nvim',
-		dependencies = {
-			'nvim-telescope/telescope-fzf-native.nvim',
-			'nvim-tree/nvim-web-devicons',
-		},
+		'mrjones2014/legendary.nvim',
+		dependencies = { 'kkharji/sqlite.lua' },
 		config = function()
-			-- Telescope configuration
-			require("telescope").setup {
-				extensions = {
-					fzf = {
-						fuzzy = true, -- false will only do exact matching
-						override_generic_sorter = true, -- override the generic sorter
-						override_file_sorter = true, -- override the file sorter
-						case_mode = "smart_case", -- or "ignore_case" or "respect_case"
-					}
-				}
-			}
+			local h = require('legendary.toolbox')
 
-			require("telescope").load_extension("fzf")
-
-			-- Keymappings
-			local builtin = require('telescope.builtin')
-			vim.keymap.set('n', '<C-p>', builtin.find_files, {})
-			vim.keymap.set('n', '<leader>f', builtin.live_grep, {})
-			vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-			vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+			-- TODO write a custom formatter. Works great but looks like trash and feels backwards.
+			require('legendary').setup({
+				keymaps = {
+					{
+						'<leader>/',
+						{ n = 'gcc', v = 'gcc', },
+						description = 'Toggle Comment',
+						opts = {
+							remap = true },
+					},
+					{ '<C-p>',     h.lazy_required_fn('fzf-lua', 'files'),     description = 'Files' },
+					{ '<leader>d', ':NERDTreeToggle',                          description = 'Toggle File Tree' },
+					{ '<leader>D', ':NERDTreeFind',                            description = 'Find in File Tree' },
+					{ '<leader>f', h.lazy_required_fn('fzf-lua', 'live_grep'), description = 'Live Search' },
+					{ '<leader>l', ':Legendary',                               description = 'Legendary' },
+					{ '<leader>F', vim.lsp.buf.format,                         description = 'LSP Format' },
+					{ 'gD',        vim.lsp.buf.type_definition,                description = 'Go to type definition' },
+					{ 'gd',        vim.lsp.buf.definition,                     description = 'Go to definition' },
+					{ 'gr',        vim.lsp.buf.references,                     description = 'Find references' },
+					{ '<leader>e', vim.lsp.diagnostic.show_line_diagnostics,   description = 'Line diagnostics' },
+					{
+						'<leader>o',
+						':Lspsaga outlint<CR>',
+						description = 'Toggle Outline',
+						mode = {
+							'n' }
+					},
+					{
+						'K',
+						':Lspsaga hover_doc<CR>',
+						description = 'Show Documentation',
+						mode = {
+							'n' }
+					},
+					{
+						'<leader>rn',
+						':Lspsaga rename ++project<CR>',
+						description = 'Rename',
+						mode = {
+							'n' },
+					},
+				},
+			})
 		end
 	},
 })
 
 -- Persistent undo
+-- TODO use persitent.nvim?
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
 vim.opt.undofile = true
 
@@ -336,9 +363,6 @@ vim.cmd [[
 	nnoremap <leader>w :w<CR>
 	" Remap jk to esc. the "Smash" setting
 	imap jk <Esc>
-	" Toggle comments with space-/
-	nmap <leader>/ gcc
-	vmap <leader>/ gc
 	" Only insert one space between sentences when wrapping comments
 	set nojoinspaces
 	" Don't wrap lines by default

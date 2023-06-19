@@ -41,6 +41,7 @@
     pkgs.neovim
     pkgs.nodejs
     pkgs.ripgrep # `rg`, better grep/ag/ack
+    pkgs.skim # `sk`, Competitor of fzf
     pkgs.terraform
     pkgs.tmux
     pkgs.tree
