@@ -1,55 +1,57 @@
-" Better leader key
-let mapleader = "\<Space>"
+lua<<EOF
+	vim.cmd[[
+		" Better leader key
+		let mapleader = "\<Space>"
 
-call plug#begin(stdpath('data') . '/plugged')
-" Generic lua deps
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-" Cute icons for various plugins
-Plug 'nvim-tree/nvim-web-devicons'
-" Delve integration
-Plug 'sebdah/vim-delve'
-" Color scheme
-Plug 'sainnhe/everforest'
-" Autocompletion, recommended by neovim's LSP
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/vim-vsnip'
-" Simple commenting
-Plug 'tpope/vim-commentary'
-" Make Tmux panes not pains
-Plug 'christoomey/vim-tmux-navigator'
-" Treesitter is a better syntax highlighter for neovim.
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-" Native neovim LSP integration.
-Plug 'neovim/nvim-lspconfig'
-" LSP installation help
-Plug 'williamboman/mason.nvim'
-Plug 'williamboman/mason-lspconfig.nvim'
-" LSP helper
-Plug 'glepnir/lspsaga.nvim'
-" NERDTree provides a file browser
-Plug 'scrooloose/nerdtree'
-" Telescope, FZF like browsing/grepping etc
-Plug 'nvim-telescope/telescope.nvim'
-" Telescope sorter, FZF C implementation for better performance.
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-" Elixir support (Mostly useful for FT detection)
-Plug 'elixir-editors/vim-elixir'
-" Git diff info + blame support
-Plug 'lewis6991/gitsigns.nvim'
-" Support yanking to system clipboards across SSH
-Plug 'ojroques/nvim-osc52'
-" Git conflict helper
-Plug 'akinsho/git-conflict.nvim'
-" Initialize plugin system
-call plug#end()
+		call plug#begin(stdpath('data') . '/plugged')
+		" Generic lua deps
+		Plug 'nvim-lua/popup.nvim'
+		Plug 'nvim-lua/plenary.nvim'
+		" Cute icons for various plugins
+		Plug 'nvim-tree/nvim-web-devicons'
+		" Delve integration
+		Plug 'sebdah/vim-delve'
+		" Color scheme
+		Plug 'sainnhe/everforest'
+		" Autocompletion, recommended by neovim's LSP
+		Plug 'hrsh7th/cmp-buffer'
+		Plug 'hrsh7th/cmp-nvim-lsp'
+		Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+		Plug 'hrsh7th/cmp-path'
+		Plug 'hrsh7th/cmp-vsnip'
+		Plug 'hrsh7th/nvim-cmp'
+		Plug 'hrsh7th/vim-vsnip'
+		" Simple commenting
+		Plug 'tpope/vim-commentary'
+		" Make Tmux panes not pains
+		Plug 'christoomey/vim-tmux-navigator'
+		" Treesitter is a better syntax highlighter for neovim.
+		Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+		" Native neovim LSP integration.
+		Plug 'neovim/nvim-lspconfig'
+		" LSP installation help
+		Plug 'williamboman/mason.nvim'
+		Plug 'williamboman/mason-lspconfig.nvim'
+		" LSP helper
+		Plug 'glepnir/lspsaga.nvim'
+		" NERDTree provides a file browser
+		Plug 'scrooloose/nerdtree'
+		" Telescope, FZF like browsing/grepping etc
+		Plug 'nvim-telescope/telescope.nvim'
+		" Telescope sorter, FZF C implementation for better performance.
+		Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+		" Elixir support (Mostly useful for FT detection)
+		Plug 'elixir-editors/vim-elixir'
+		" Git diff info + blame support
+		Plug 'lewis6991/gitsigns.nvim'
+		" Support yanking to system clipboards across SSH
+		Plug 'ojroques/nvim-osc52'
+		" Git conflict helper
+		Plug 'akinsho/git-conflict.nvim'
+		" Initialize plugin system
+		call plug#end()
+	]]
 
-lua <<EOF
 require('osc52').setup{
   max_length = 0,      -- Maximum length of selection (0 for no limit)
   silent     = true,  -- Disable message on successful copy
@@ -64,10 +66,8 @@ function copy()
 end
 
 vim.api.nvim_create_autocmd('TextYankPost', {callback = copy})
-EOF
 
-""""" Treesitter configuration """"
-lua <<EOF
+-- Treesitter configuration
 require'nvim-treesitter.configs'.setup {
 	-- Install all syntax modules that have maintainers.
 	ensure_installed = "all",
@@ -89,21 +89,16 @@ require'nvim-treesitter.configs'.setup {
 	-- enable = true
 	}
 }
-EOF
-""""" /Treesitter configuration """"
 
-""""" Git integration configuration """"
-lua require('gitsigns').setup()
-lua require('git-conflict').setup()
-""""" /Git integration configuration """"
+require('gitsigns').setup()
+require('git-conflict').setup()
 
-""""" LSP configuration """"
-
-set completeopt=menu,menuone,noselect
-
-lua <<EOF
 -- LSP configuration
 -- For language server specifics, see: https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md
+vim.cmd[[
+	set completeopt=menu,menuone,noselect
+]]
+
 local has_words_before = function()
   unpack = unpack or table.unpack
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -214,18 +209,17 @@ keymap("n","<leader>o", "<cmd>Lspsaga outline<CR>")
 keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>")
 -- Rename symbol
 keymap("n", "<leader>rn", "<cmd>Lspsaga rename ++project<CR>")
+-- /LSP configuration
 
-EOF
-""""" /LSP configuration """"
+vim.cmd[[
+	""""" NERDTree configuration """"
+	nnoremap <leader>d :NERDTreeToggle<CR>
+	nnoremap <leader>D :NERDTreeFind<CR>
+	let g:NERDTreeRepsectWildIgnore = 1
+	""""" /NERDTree configuration """"
+]]
 
-""""" NERDTree configuration """"
-nnoremap <leader>d :NERDTreeToggle<CR>
-nnoremap <leader>D :NERDTreeFind<CR>
-let g:NERDTreeRepsectWildIgnore = 1
-""""" /NERDTree configuration """"
-
-""""" Telescope configuration """"
-lua<<EOF
+-- Telescope configuration
 require("telescope").setup {
   extensions = {
     fzf = {
@@ -245,50 +239,48 @@ vim.keymap.set('n', '<C-p>', builtin.find_files, {})
 vim.keymap.set('n', '<leader>f', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-EOF
-""""" /Telescope configuration """"
+-- /Telescope configuration
 
-" Yanks to the system clipboard
-set clipboard=unnamed
-" Faster saving
-nnoremap <leader>w :w<CR>
-" Remap jk to esc. the "Smash" setting
-imap jk <Esc>
-" Toggle comments with space-/
-nmap <leader>/ gcc
-vmap <leader>/ gc
-" Only insert one space between sentences when wrapping comments
-set nojoinspaces
-" Don't wrap lines by default
-set nowrap
-" Only expand tabs to 4 spaces. Defaults to 8 which is too much.
-set tabstop=4
-set shiftwidth=4
-" search case insensitively until a capital becomes present.
-set ignorecase
-set smartcase
-" Move vertically over wrapped lines
-nmap j gj
-nmap k gk
+-- TODO convert to lua.
+vim.cmd[[
+	" Yanks to the system clipboard
+	set clipboard=unnamed
+	" Faster saving
+	nnoremap <leader>w :w<CR>
+	" Remap jk to esc. the "Smash" setting
+	imap jk <Esc>
+	" Toggle comments with space-/
+	nmap <leader>/ gcc
+	vmap <leader>/ gc
+	" Only insert one space between sentences when wrapping comments
+	set nojoinspaces
+	" Don't wrap lines by default
+	set nowrap
+	" Only expand tabs to 4 spaces. Defaults to 8 which is too much.
+	set tabstop=4
+	set shiftwidth=4
+	" search case insensitively until a capital becomes present.
+	set ignorecase
+	set smartcase
+	" Move vertically over wrapped lines
+	nmap j gj
+	nmap k gk
 
-" Show line numbers
-set number
-" Use smart case searching
-set smartcase
-" Make sure Vim returns to the same line when you reopen a file.
-" TODO: There's gotta be a better way to handle this at this point.
-augroup line_return
-    au!
-    au BufReadPost *
-        \ if line("'\"") > 0 && line("'\"") <= line("$") |
-        \     execute 'normal! g`"zvzz' |
-        \ endif
-augroup END
+	" Show line numbers
+	set number
+	" Use smart case searching
+	set smartcase
+	" Make sure Vim returns to the same line when you reopen a file.
+	" TODO: There's gotta be a better way to handle this at this point.
+	augroup line_return
+		au!
+		au BufReadPost *
+			\ if line("'\"") > 0 && line("'\"") <= line("$") |
+			\     execute 'normal! g`"zvzz' |
+			\ endif
+	augroup END
+]]
 
-" Better colors
-set termguicolors
-
-lua <<EOF
 -- Persistent undo
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
 vim.opt.undofile = true
@@ -299,10 +291,16 @@ vim.g.everforest_enable_italic = 1
 vim.g.everforest_better_performance = 1
 vim.g.everforest_disable_italic_comment = 1
 
-vim.cmd[[colorscheme everforest]]
-EOF
+-- TODO convert to lua.
+vim.cmd[[
+	" Better colors
+	set termguicolors
+	colorscheme everforest
 
-" Visible white space
-set list listchars=tab:▸\ ,trail:▫
-" No Bells
-set noerrorbells visualbell t_vb=
+	" Visible white space
+	set list listchars=tab:▸\ ,trail:▫
+
+	" No Bells
+	set noerrorbells visualbell t_vb=
+]]
+EOF
