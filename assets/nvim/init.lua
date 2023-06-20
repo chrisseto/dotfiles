@@ -75,18 +75,30 @@ require("lazy").setup({
 	},
 
 	-- Git diff info + blame support.
-	{ 'lewis6991/gitsigns.nvim',       config = true },
+	{ 'lewis6991/gitsigns.nvim',                    config = true },
 	-- Git conflict helper
-	{ 'akinsho/git-conflict.nvim',     config = true },
+	{ 'akinsho/git-conflict.nvim',                  config = true },
 	-- Delve integration
 	{ 'sebdah/vim-delve' },
-	{ 'echasnovski/mini.comment',      config = true, version = '*' },
 	--  Make Tmux panes not pains
 	{ 'christoomey/vim-tmux-navigator' },
 	-- Native neovim LSP integration.
 	{ 'neovim/nvim-lspconfig' },
 	-- Elixir support (Mostly useful for FT detection)
 	{ 'elixir-editors/vim-elixir' },
+	-- Helper for Comment.nvim
+	{ 'JoosepAlviste/nvim-ts-context-commentstring' },
+
+	{
+		-- Comment toggler powered by treesitter and friends
+		'numToStr/Comment.nvim',
+		dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring' },
+		config = function()
+			require('Comment').setup({
+				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+			})
+		end,
+	},
 
 	{
 		-- Support yanking to system clipboards across SSH
@@ -255,6 +267,7 @@ require("lazy").setup({
 	-- Treesitter is a better syntax highlighter for neovim.
 	{
 		'nvim-treesitter/nvim-treesitter',
+		dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring' },
 		build = ':TSUpdate',
 		config = function()
 			-- Treesitter configuration
@@ -271,6 +284,11 @@ require("lazy").setup({
 					-- Using this option may slow down your editor, and you may see some duplicate highlights.
 					-- Instead of true it can also be a list of languages
 					additional_vim_regex_highlighting = false,
+				},
+
+				-- Enable context-commentstring support.
+				context_commentstring = {
+					enable = true,
 				},
 
 				-- Enable TS powered indentation.
@@ -304,20 +322,20 @@ require("lazy").setup({
 			local h = require('legendary.toolbox')
 
 			-- TODO write a custom formatter. Works great but looks like trash and feels backwards.
+			-- TODO Might be worth to just switch to which-key.nvim and then look for something to bolt on top. Then I get to use lazy's keymapping features.
 			require('legendary').setup({
 				keymaps = {
 					{
 						'<leader>/',
-						{ n = 'gcc', v = 'gcc', },
+						{ n = 'gcc', v = 'gc', },
 						description = 'Toggle Comment',
-						opts = {
-							remap = true },
+						opts = { remap = true },
 					},
 					{ '<C-p>',     h.lazy_required_fn('fzf-lua', 'files'),     description = 'Files' },
-					{ '<leader>d', ':NERDTreeToggle',                          description = 'Toggle File Tree' },
-					{ '<leader>D', ':NERDTreeFind',                            description = 'Find in File Tree' },
 					{ '<leader>f', h.lazy_required_fn('fzf-lua', 'live_grep'), description = 'Live Search' },
-					{ '<leader>l', ':Legendary',                               description = 'Legendary' },
+					{ '<leader>d', ':NERDTreeToggle<CR>',                      description = 'Toggle File Tree' },
+					{ '<leader>D', ':NERDTreeFind<CR>',                        description = 'Find in File Tree' },
+					{ '<leader>l', ':Legendary<CR>',                           description = 'Legendary' },
 					{ '<leader>F', vim.lsp.buf.format,                         description = 'LSP Format' },
 					{ 'gD',        vim.lsp.buf.type_definition,                description = 'Go to type definition' },
 					{ 'gd',        vim.lsp.buf.definition,                     description = 'Go to definition' },
