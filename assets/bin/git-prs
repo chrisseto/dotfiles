@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # Fuzzy-find and checkout PRs for current repo
 # Usage:
 #    git prs

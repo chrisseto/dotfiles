@@ -21,6 +21,7 @@
 
   home.packages = [
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
+    pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
     pkgs.bat
     pkgs.bazelisk
     pkgs.cargo
@@ -109,7 +110,7 @@
 
       # Use the new version of GCP's k8s auth.
       # https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
-      set -gx USE_GKE_GCLOUD_AUTH_PLUGIN false
+      set -gx USE_GKE_GCLOUD_AUTH_PLUGIN True
 
       # Set default XDG_*_HOME values as not everything knows how to provide the
       # defaults.
