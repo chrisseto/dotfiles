@@ -147,6 +147,16 @@ require("lazy").setup({
 				function(server_name)
 					local capabilities = require('cmp_nvim_lsp').default_capabilities()
 					require("lspconfig")[server_name].setup {
+						on_new_config = function(new_config, new_root_dir)
+							-- Primarily for CRDB, if gopackagesdriver.sh exists, set the GOPACKAGESDRIVER envvar to read package data from bazel instead of go source files.
+							-- This is faster and actually work if generated files (.pb.go) aren't present in the working directory.
+							-- https://github.com/bazelbuild/rules_go/wiki/Editor-and-tool-integration
+							if vim.fn.filereadable(new_root_dir .. '/build/bazelutil/gopackagesdriver.sh') then
+								new_config.cmd_env = {
+									GOPACKAGESDRIVER = new_root_dir .. '/build/bazelutil/gopackagesdriver.sh'
+								}
+							end
+						end,
 						capabilities = capabilities,
 						flags = {
 							debounce_text_changes = 50,
@@ -178,7 +188,14 @@ require("lazy").setup({
 								},
 							},
 							gopls = {
-								directoryFilters = { "-console/node_modules", "-node_modules" },
+								directoryFilters = {
+									"-_bazel",
+									"-bazel-bin",
+									"-bazel-out",
+									"-bazel-testlogs",
+									"-console/node_modules",
+									"-node_modules",
+								},
 								linksInHover = false,
 								allowImplicitNetworkAccess = true,
 								codelenses = {
@@ -334,6 +351,7 @@ require("lazy").setup({
 					{ '<C-p>',     h.lazy_required_fn('fzf-lua', 'files'),     description = 'Files' },
 					{ '<leader>f', h.lazy_required_fn('fzf-lua', 'live_grep'), description = 'Live Search' },
 					{ '<leader>d', ':NERDTreeToggle<CR>',                      description = 'Toggle File Tree' },
+					{ '<leader>t', ':Trouble<CR>',                             description = 'Toggle Trouble List' },
 					{ '<leader>D', ':NERDTreeFind<CR>',                        description = 'Find in File Tree' },
 					{ '<leader>l', ':Legendary<CR>',                           description = 'Legendary' },
 					{ '<leader>F', vim.lsp.buf.format,                         description = 'LSP Format' },
@@ -366,6 +384,12 @@ require("lazy").setup({
 			})
 		end
 	},
+
+	{
+		--
+		'folke/trouble.nvim',
+		dependencies = { 'nvim-tree/nvim-web-devicons' },
+	}
 })
 
 -- Persistent undo
@@ -375,6 +399,10 @@ vim.opt.undofile = true
 
 -- TODO convert to lua.
 vim.cmd [[
+	set spell
+	set spelllang=en,cjk
+	set spellsuggest=best,9
+
 	" Yanks to the system clipboard
 	set clipboard=unnamed
 	" Faster saving
