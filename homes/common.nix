@@ -26,12 +26,14 @@
     pkgs.bazelisk
     pkgs.cargo
     pkgs.delve # golang debugger
+    pkgs.fastmod
     pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
     pkgs.fzf # Pluggable fuzzy finder
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.gh # GitHub CLI, slightly better than hub
     pkgs.git
     pkgs.git-machete
+    pkgs.git-branchless
     pkgs.go_1_19 # Pin to 1.19 for as that's what we currently use.
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
@@ -66,6 +68,7 @@
     enable = true;
     settings = {
       add_newline = false;
+      command_timeout = 750;
 
       format = "$username$hostname$localip$directory$git_branch$git_commit$git_state$git_metrics$git_status$package$nix_shell$sudo$cmd_duration$line_break$jobs$battery$time$status$os$shell$character";
 
