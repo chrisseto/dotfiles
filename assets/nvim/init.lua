@@ -144,17 +144,23 @@ require("lazy").setup({
 			})
 
 			require("mason-lspconfig").setup_handlers {
+				-- NOTE: lua print(vim.inspect(vim.lsp.get_active_clients())) is a great command to check if your settings are actually being used or not.
 				function(server_name)
 					local capabilities = require('cmp_nvim_lsp').default_capabilities()
 					require("lspconfig")[server_name].setup {
-						on_new_config = function(new_config, new_root_dir)
-							-- Primarily for CRDB, if gopackagesdriver.sh exists, set the GOPACKAGESDRIVER envvar to read package data from bazel instead of go source files.
-							-- This is faster and actually work if generated files (.pb.go) aren't present in the working directory.
-							-- https://github.com/bazelbuild/rules_go/wiki/Editor-and-tool-integration
-							if vim.fn.filereadable(new_root_dir .. '/build/bazelutil/gopackagesdriver.sh') then
-								new_config.cmd_env = {
-									GOPACKAGESDRIVER = new_root_dir .. '/build/bazelutil/gopackagesdriver.sh'
-								}
+						on_new_config = function(config, new_root_dir)
+							-- -- If new_root_dir seems like a bazel project and there isn't a `.nogopackagesdriver` file, set GOPACKAGESDRIVER to a
+							-- -- global script (which seems to be safe as they all contain the same contents, it just needs to exist as a file somewhere).
+							-- -- https://github.com/bazelbuild/rules_go/wiki/Editor-and-tool-integration
+							local packagesdriver = nil
+							if vim.fn.filereadable(new_root_dir .. '/.bazelrc') == 1 and vim.fn.filereadable(new_root_dir .. '/.nogopackagesdriver') == 0 then
+								packagesdriver = vim.fn.expand("~/.bin/gopackagesdriver")
+							end
+
+							if config.cmd_env then
+								config.cmd_env.GOPACKAGESDRIVER = packagesdriver
+							else
+								config.cmd_env = { GOPACKAGESDRIVER = packagesdriver }
 							end
 						end,
 						capabilities = capabilities,
