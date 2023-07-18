@@ -42,6 +42,9 @@
 [init]
 	defaultBranch = master
 
-# Always use SSH for accessing GitHub.
-[url "git@github.com:"]
-	insteadOf = https://github.com/
+# Always use SSH for accessing CRL GitHub.
+[url "git@github.com:cockroachdb"]
+	insteadOf = https://github.com/cockroachdb
+
+[url "git@github.com:cockroachlabs"]
+	insteadOf = https://github.com/cockroachlabs
