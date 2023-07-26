@@ -145,9 +145,14 @@ require("lazy").setup({
 
 			require("mason-lspconfig").setup_handlers {
 				-- NOTE: lua print(vim.inspect(vim.lsp.get_active_clients())) is a great command to check if your settings are actually being used or not.
-				function(server_name)
+				["gopls"] = function()
 					local capabilities = require('cmp_nvim_lsp').default_capabilities()
-					require("lspconfig")[server_name].setup {
+					require("lspconfig").gopls.setup {
+						capabilities = capabilities,
+						flags = {
+							debounce_text_changes = 50,
+							allow_incremental_sync = true,
+						},
 						on_new_config = function(config, new_root_dir)
 							-- -- If new_root_dir seems like a bazel project and there isn't a `.nogopackagesdriver` file, set GOPACKAGESDRIVER to a
 							-- -- global script (which seems to be safe as they all contain the same contents, it just needs to exist as a file somewhere).
@@ -163,6 +168,36 @@ require("lazy").setup({
 								config.cmd_env = { GOPACKAGESDRIVER = packagesdriver }
 							end
 						end,
+						settings = {
+							-- cmd = { "gopls", "serve", "-rpc.trace" },
+							gopls = {
+								directoryFilters = {
+									"-_bazel",
+									"-bazel-bin",
+									"-bazel-out",
+									"-bazel-testlogs",
+									"-**/node_modules",
+								},
+								linksInHover = false,
+								allowImplicitNetworkAccess = true,
+								buildFlags = { "-tags=bazel" },
+								hints = { parameterNames = true },
+								semanticTokens = true,
+								codelenses = {
+									gc_details = false,
+									regenerate_gco = false,
+									test = false,
+									tidy = false,
+									upgrade_dependency = false,
+									vendor = false,
+								}
+							}
+						}
+					}
+				end,
+				["lua_ls"] = function()
+					local capabilities = require('cmp_nvim_lsp').default_capabilities()
+					require("lspconfig").lua_ls.setup {
 						capabilities = capabilities,
 						flags = {
 							debounce_text_changes = 50,
@@ -193,29 +228,65 @@ require("lazy").setup({
 									},
 								},
 							},
-							gopls = {
-								directoryFilters = {
-									"-_bazel",
-									"-bazel-bin",
-									"-bazel-out",
-									"-bazel-testlogs",
-									"-console/node_modules",
-									"-node_modules",
-								},
-								linksInHover = false,
-								allowImplicitNetworkAccess = true,
-								codelenses = {
-									tidy = false,
-									vendor = false,
-									upgrade_dependency = false
-								}
-							}
 						},
 					}
 				end,
+				-- function(server_name)
+				-- 	local capabilities = require('cmp_nvim_lsp').default_capabilities()
+				-- 	require("lspconfig")[server_name].setup {
+				-- 		on_new_config = function(config, new_root_dir)
+				-- 			-- -- If new_root_dir seems like a bazel project and there isn't a `.nogopackagesdriver` file, set GOPACKAGESDRIVER to a
+				-- 			-- -- global script (which seems to be safe as they all contain the same contents, it just needs to exist as a file somewhere).
+				-- 			-- -- https://github.com/bazelbuild/rules_go/wiki/Editor-and-tool-integration
+				-- 			local packagesdriver = nil
+				-- 			if vim.fn.filereadable(new_root_dir .. '/.bazelrc') == 1 and vim.fn.filereadable(new_root_dir .. '/.nogopackagesdriver') == 0 then
+				-- 				packagesdriver = vim.fn.expand("~/.bin/gopackagesdriver")
+				-- 			end
+				--
+				-- 			if config.cmd_env then
+				-- 				config.cmd_env.GOPACKAGESDRIVER = packagesdriver
+				-- 			else
+				-- 				config.cmd_env = { GOPACKAGESDRIVER = packagesdriver }
+				-- 			end
+				-- 		end,
+				-- 		capabilities = capabilities,
+				-- 		flags = {
+				-- 			debounce_text_changes = 50,
+				-- 			allow_incremental_sync = true,
+				-- 		},
+				-- 		settings = {
+				-- 			Lua = {
+				-- 				runtime = {
+				-- 					-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+				-- 					version = 'LuaJIT',
+				-- 				},
+				-- 				diagnostics = {
+				-- 					-- Get the language server to recognize the `vim` global
+				-- 					globals = { 'vim' },
+				-- 				},
+				-- 				workspace = {
+				-- 					-- Make the server aware of Neovim runtime files
+				-- 					library = vim.api.nvim_get_runtime_file("", true),
+				-- 				},
+				-- 				-- Do not send telemetry data containing a randomized but unique identifier
+				-- 				telemetry = {
+				-- 					enable = false,
+				-- 				},
+				-- 				-- TODO Figure out how to get this working to stop the formatter from wrapping all my key mapping lines.
+				-- 				config = {
+				-- 					format = {
+				-- 						defaultConfig = [[ max_line_length = 500 ]]
+				-- 					},
+				-- 				},
+				-- 			},
+				-- 		},
+				-- 	}
+				-- end,
 			}
 		end
 	},
+
+	{ 'simrat39/symbols-outline.nvim',      opts = {} },
 
 	-- Autocompletion, recommended by neovim's LSP
 	{ 'hrsh7th/cmp-buffer' },
@@ -367,8 +438,8 @@ require("lazy").setup({
 					{ '<leader>e', vim.lsp.diagnostic.show_line_diagnostics,   description = 'Line diagnostics' },
 					{
 						'<leader>o',
-						':Lspsaga outlint<CR>',
-						description = 'Toggle Outline',
+						':SymbolsOutline<CR>',
+						description = 'Toggle LSP Symbol Outline',
 						mode = {
 							'n' }
 					},

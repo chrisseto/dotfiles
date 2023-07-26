@@ -3,7 +3,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  crlfmt = pkgs.callPackage ../packages/crlfmt.nix {pkgs = pkgs;};
+in {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
@@ -20,6 +22,7 @@
   nixpkgs.config.allowUnfree = true;
 
   home.packages = [
+    crlfmt # CockroachLabs golang formatter
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
     pkgs.bat
@@ -32,8 +35,8 @@
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.gh # GitHub CLI, slightly better than hub
     pkgs.git
-    pkgs.git-machete
     pkgs.git-branchless
+    pkgs.git-machete
     pkgs.go_1_19 # Pin to 1.19 for as that's what we currently use.
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
