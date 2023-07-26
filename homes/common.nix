@@ -23,11 +23,13 @@ in {
 
   home.packages = [
     crlfmt # CockroachLabs golang formatter
+    pkgs.less # Ensure the latest version of less is available
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
     pkgs.bat
     pkgs.bazelisk
     pkgs.cargo
+    pkgs.delta # Better git diff viewer
     pkgs.delve # golang debugger
     pkgs.fastmod
     pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
@@ -43,7 +45,7 @@ in {
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
-    pkgs.ncurses # Provides a terminfo database
+    pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
     pkgs.neovim
     pkgs.nodejs
     pkgs.ripgrep # `rg`, better grep/ag/ack

@@ -1,41 +1,53 @@
-[hub]
-        protocol = https
-[user]
-        name = Chris Seto
-        email = chriskseto@gmail.com
-[credential]
-        helper = osxkeychain
-[alias]
-        m = machete
-        st = status
-        co = checkout
-        ci = commit
-        df = diff
-        dfs = diff --staged
-        br = branch --sort=-committerdate
-        logg = log --graph --decorate --oneline --abbrev-commit --all
-        unstage = reset HEAD --
-        pr-msg = log HEAD...upstream/master --pretty=format:"**%s**%n%b"
-[color]
-        diff = auto
-        status = auto
-        branch = auto
-        ui = true
 [core]
-        excludesfile = ~/.gitignore_global
-        editor = nvim
+	excludesfile = ~/.gitignore_global
+	editor = nvim
+	pager = delta
+
+[hub]
+	protocol = https
+
+[user]
+	name = Chris Seto
+	email = chriskseto@gmail.com
+
+[credential]
+	helper = osxkeychain
+
+[alias]
+	m = machete
+	st = status
+	co = checkout
+	ci = commit
+	df = diff
+	dfs = diff --staged
+	br = branch --sort=-committerdate
+	logg = log --graph --decorate --oneline --abbrev-commit --all
+	unstage = reset HEAD --
+	pr-msg = log HEAD...upstream/master --pretty=format:"**%s**%n%b"
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	ui = true
+
 [apply]
-        whitespace = nowarn
+	whitespace = nowarn
+
 [mergetool]
-        keepBackup = false
+	keepBackup = false
+
 [difftool]
-        prompt = false
+	prompt = false
+	colorMoved = default
+
 [push]
-        # See `git help config` (search for push.default)
-        # for more information on different options of the below setting.
-        #
-        # Setting to git 2.0 default to surpress warning message
-        default = current
+	# See `git help config` (search for push.default)
+	# for more information on different options of the below setting.
+	#
+	# Setting to git 2.0 default to surpress warning message
+	default = current
+
 [pull]
 	ff = only
 
@@ -48,3 +60,14 @@
 
 [url "git@github.com:cockroachlabs"]
 	insteadOf = https://github.com/cockroachlabs
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true    # use n and N to move between diff sections
+	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+	true-color = always
+
+[merge]
+	conflictstyle = diff3
