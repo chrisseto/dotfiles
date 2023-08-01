@@ -24,6 +24,7 @@
 	logg = log --graph --decorate --oneline --abbrev-commit --all
 	unstage = reset HEAD --
 	pr-msg = log HEAD...upstream/master --pretty=format:"**%s**%n%b"
+	diff-raw = -c pager.diff='less -R' diff
 
 [color]
 	diff = auto
