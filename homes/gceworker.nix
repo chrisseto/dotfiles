@@ -9,6 +9,7 @@
   home.packages = [
     pkgs.bazel-remote # An HTTP/1.1 cache for bazel builds
     pkgs.kubectl
+    pkgs.patchelf # Required for --config=crossbuild in CRDB
   ];
 
   home.username = "chrisseto";
