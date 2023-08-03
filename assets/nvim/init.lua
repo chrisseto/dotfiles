@@ -74,6 +74,20 @@ require("lazy").setup({
 		end
 	},
 
+	-- Generate links to GitHub
+	-- {
+	-- 	'ruifm/gitlinker.nvim',
+	-- 	dependencies = { 'nvim-lua/plenary.nvim', 'ojroques/nvim-osc52' },
+	-- 	config = function()
+	-- 		require("gitlinker").setup({
+	-- 			opts = {
+	-- 				action_callback = require('osc52').copy,
+	-- 				print_url = true,
+	-- 			},
+	-- 			mappings = nil,
+	-- 		})
+	-- 	end,
+	-- },
 	-- Git diff info + blame support.
 	{ 'lewis6991/gitsigns.nvim',                    config = true },
 	-- Git conflict helper
@@ -438,6 +452,13 @@ require("lazy").setup({
 					{ 'gd',        vim.lsp.buf.definition,                     description = 'Go to definition' },
 					{ 'gr',        vim.lsp.buf.references,                     description = 'Find references' },
 					{ '<leader>e', vim.lsp.diagnostic.show_line_diagnostics,   description = 'Line diagnostics' },
+
+					-- {
+					-- 	'<leader>gy',
+					-- 	h.lazy_required_fn('gitlinker', 'get_buf_range_url', 'n', { action_callback = require("osc52").copy }),
+					-- 	description = 'Permalink to GitHub',
+					-- },
+
 					{
 						'<leader>o',
 						':SymbolsOutline<CR>',
