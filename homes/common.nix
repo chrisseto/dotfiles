@@ -42,6 +42,7 @@ in {
     pkgs.go_1_19 # Pin to 1.19 for as that's what we currently use.
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
+    pkgs.hub # Old (?) GitHub CLI
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
