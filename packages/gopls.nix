@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "golang";
     repo = "tools";
     rev = "gopls/v${version}";
-	sha256 = "sha256-2eGnctA5HlNRGv9iV5HoT4ByA8fK/mTxldHll0UMD5c=";
+    sha256 = "sha256-2eGnctA5HlNRGv9iV5HoT4ByA8fK/mTxldHll0UMD5c=";
   };
 
   modRoot = "gopls";

@@ -158,6 +158,10 @@ require("lazy").setup({
 			local lspconfig = require('lspconfig')
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+			-- To Debug LSP settings:
+			-- :lua print(vim.inspect(vim.lsp.get_active_clients()))
+
+			-- TODO gopackagesdriver helps with speed and memory but results in a lot of weird issues. Namely: 1) "pkg_test" should be "pkg" 2) "no metadata for (stdlib package)"
 			lspconfig.gopls.setup {
 				flags = {
 					debounce_text_changes = 50,
@@ -177,15 +181,10 @@ require("lazy").setup({
 				-- 							else
 				-- 								config.cmd_env = { GOPACKAGESDRIVER = packagesdriver }
 				-- 							end
-				--
-				-- -- ~/.local/state/nvim/lsp.log"
-				-- -- vim.lsp.set_log_level("debug")
-				--
-				-- 							table.insert(config.cmd, "serve")
-				-- 							table.insert(config.cmd, "-rpc.trace")
-				-- 						end,
+
+				-- For debugging add --logfile=auto and -rpc.trace. Log files will be in /tmp/gopls-[pid].log
+				cmd = { "gopls", "serve" },
 				settings = {
-					cmd = { "gopls", "serve", "-rpc.trace" },
 					gopls = {
 						directoryFilters = {
 							"-_bazel",
@@ -196,9 +195,11 @@ require("lazy").setup({
 						},
 						linksInHover = false,
 						allowImplicitNetworkAccess = true,
-						buildFlags = { "-tags=bazel" },
+						-- May be causing issues??
+						-- buildFlags = { "-tags=bazel" },
 						hints = { parameterNames = true },
 						semanticTokens = true,
+						symbolScope = "workspace",
 						codelenses = {
 							gc_details = false,
 							regenerate_gco = false,
