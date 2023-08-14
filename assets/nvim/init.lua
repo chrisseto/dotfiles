@@ -16,6 +16,9 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: MUST be done before anything else to ensure that key mappings get setup as expect.
 -- TODO: Might be interesting to have multiple leaders to make certain keyhooks work.
 vim.g.mapleader = " "
+vim.g.maplocalleader = ","
+
+-- vim.g:conjure#client#fennel#aniseed#aniseed_module_prefix`
 
 -- TODO continue "borrowing" plugins from https://www.lazyvim.org/plugins/coding
 -- Flit or Leap seem worthwhile https://www.lazyvim.org/plugins/editor#flitnvim
@@ -100,6 +103,8 @@ require("lazy").setup({
 	{ 'elixir-editors/vim-elixir' },
 	-- Helper for Comment.nvim
 	{ 'JoosepAlviste/nvim-ts-context-commentstring' },
+	{ 'Olical/conjure' },
+	{ 'Olical/aniseed' },
 
 	{
 		-- Comment toggler powered by treesitter and friends
@@ -242,8 +247,8 @@ require("lazy").setup({
 								defaultConfig = [[ max_line_length = 500 ]]
 							},
 						},
-					},
-				},
+					}
+				}
 			}
 		end
 	},
@@ -257,6 +262,7 @@ require("lazy").setup({
 	{ 'hrsh7th/cmp-path' },
 	-- TODO migrate from vsnip over to lua snip
 	{ 'hrsh7th/vim-vsnip' },
+	{ 'PaterJason/cmp-conjure' },
 	{
 		'hrsh7th/nvim-cmp',
 		dependencies = {
@@ -266,6 +272,7 @@ require("lazy").setup({
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-vsnip',
 			'hrsh7th/vim-vsnip',
+			'PaterJason/cmp-conjure',
 		},
 		config = function()
 			vim.cmd [[ set completeopt=menu,menuone,noselect ]]
@@ -310,10 +317,11 @@ require("lazy").setup({
 					['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 				},
 				sources = cmp.config.sources({
-					{ name = 'nvim_lsp' },
-					{ name = 'vsnip' },
 					{ name = 'buffer' },
+					{ name = 'conjure' },
+					{ name = 'nvim_lsp' },
 					{ name = 'nvim_lsp_signature_help' },
+					{ name = 'vsnip' },
 				}),
 			})
 		end

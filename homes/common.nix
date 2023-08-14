@@ -25,7 +25,6 @@ in {
   home.packages = [
     crlfmt # CockroachLabs golang formatter
     gopls # Go Language Server
-    pkgs.lua-language-server
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
     pkgs.bat
@@ -35,6 +34,7 @@ in {
     pkgs.delve # golang debugger
     pkgs.fastmod
     pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
+    pkgs.fnlfmt # Fennel formatter
     pkgs.fzf # Pluggable fuzzy finder
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.gh # GitHub CLI, slightly better than hub
@@ -49,6 +49,7 @@ in {
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available
+    pkgs.lua-language-server
     pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
     pkgs.neovim
     pkgs.nodejs
