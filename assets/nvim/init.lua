@@ -127,7 +127,7 @@ require("lazy").setup({
 			}
 
 			-- Configure yanking to also copy to the system clipboard via OSC
-			function copy()
+			local function copy()
 				if vim.v.event.operator == 'y' and vim.v.event.regname == '' then
 					require('osc52').copy_register('')
 				end
@@ -169,21 +169,27 @@ require("lazy").setup({
 							debounce_text_changes = 50,
 							allow_incremental_sync = true,
 						},
-						on_new_config = function(config, new_root_dir)
-							-- -- If new_root_dir seems like a bazel project and there isn't a `.nogopackagesdriver` file, set GOPACKAGESDRIVER to a
-							-- -- global script (which seems to be safe as they all contain the same contents, it just needs to exist as a file somewhere).
-							-- -- https://github.com/bazelbuild/rules_go/wiki/Editor-and-tool-integration
-							local packagesdriver = nil
-							if vim.fn.filereadable(new_root_dir .. '/.bazelrc') == 1 and vim.fn.filereadable(new_root_dir .. '/.nogopackagesdriver') == 0 then
-								packagesdriver = vim.fn.expand("~/.bin/gopackagesdriver")
-							end
-
-							if config.cmd_env then
-								config.cmd_env.GOPACKAGESDRIVER = packagesdriver
-							else
-								config.cmd_env = { GOPACKAGESDRIVER = packagesdriver }
-							end
-						end,
+						-- 						on_new_config = function(config, new_root_dir)
+						-- 							-- -- If new_root_dir seems like a bazel project and there isn't a `.nogopackagesdriver` file, set GOPACKAGESDRIVER to a
+						-- 							-- -- global script (which seems to be safe as they all contain the same contents, it just needs to exist as a file somewhere).
+						-- 							-- -- https://github.com/bazelbuild/rules_go/wiki/Editor-and-tool-integration
+						-- 							local packagesdriver = nil
+						-- 							if vim.fn.filereadable(new_root_dir .. '/.bazelrc') == 1 and vim.fn.filereadable(new_root_dir .. '/.nogopackagesdriver') == 0 then
+						-- 								packagesdriver = vim.fn.expand("~/.bin/gopackagesdriver")
+						-- 							end
+						--
+						-- 							if config.cmd_env then
+						-- 								config.cmd_env.GOPACKAGESDRIVER = packagesdriver
+						-- 							else
+						-- 								config.cmd_env = { GOPACKAGESDRIVER = packagesdriver }
+						-- 							end
+						--
+						-- -- ~/.local/state/nvim/lsp.log"
+						-- -- vim.lsp.set_log_level("debug")
+						--
+						-- 							table.insert(config.cmd, "serve")
+						-- 							table.insert(config.cmd, "-rpc.trace")
+						-- 						end,
 						settings = {
 							-- cmd = { "gopls", "serve", "-rpc.trace" },
 							gopls = {
@@ -198,7 +204,7 @@ require("lazy").setup({
 								allowImplicitNetworkAccess = true,
 								buildFlags = { "-tags=bazel" },
 								hints = { parameterNames = true },
-								semanticTokens = true,
+								-- semanticTokens = true,
 								codelenses = {
 									gc_details = false,
 									regenerate_gco = false,
@@ -374,10 +380,12 @@ require("lazy").setup({
 		end
 	},
 
+	-- Useful for debugging/exploring how treesitter actually parses a document.
+	{ 'nvim-treesitter/playground' },
 	-- Treesitter is a better syntax highlighter for neovim.
 	{
 		'nvim-treesitter/nvim-treesitter',
-		dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring' },
+		dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring', 'nvim-treesitter/playground' },
 		build = ':TSUpdate',
 		config = function()
 			-- Treesitter configuration
@@ -405,7 +413,11 @@ require("lazy").setup({
 				indent = {
 					-- too buggy for use just yet :[
 					-- enable = true
-				}
+				},
+
+				playground = {
+					enable = true,
+				},
 			}
 		end
 	},
@@ -441,17 +453,18 @@ require("lazy").setup({
 						description = 'Toggle Comment',
 						opts = { remap = true },
 					},
-					{ '<C-p>',     h.lazy_required_fn('fzf-lua', 'files'),     description = 'Files' },
-					{ '<leader>f', h.lazy_required_fn('fzf-lua', 'live_grep'), description = 'Live Search' },
-					{ '<leader>d', ':NERDTreeToggle<CR>',                      description = 'Toggle File Tree' },
-					{ '<leader>t', ':Trouble<CR>',                             description = 'Toggle Trouble List' },
-					{ '<leader>D', ':NERDTreeFind<CR>',                        description = 'Find in File Tree' },
-					{ '<leader>l', ':Legendary<CR>',                           description = 'Legendary' },
-					{ '<leader>F', vim.lsp.buf.format,                         description = 'LSP Format' },
-					{ 'gD',        vim.lsp.buf.type_definition,                description = 'Go to type definition' },
-					{ 'gd',        vim.lsp.buf.definition,                     description = 'Go to definition' },
-					{ 'gr',        vim.lsp.buf.references,                     description = 'Find references' },
-					{ '<leader>e', vim.lsp.diagnostic.show_line_diagnostics,   description = 'Line diagnostics' },
+					{ '<C-p>',     h.lazy_required_fn('fzf-lua', 'files'),      description = 'Files' },
+					{ '<leader>f', h.lazy_required_fn('fzf-lua', 'live_grep'),  description = 'Live Search' },
+					{ '<leader>g', h.lazy_required_fn('fzf-lua', 'git_status'), description = 'Modified Files' },
+					{ '<leader>d', ':NERDTreeToggle<CR>',                       description = 'Toggle File Tree' },
+					{ '<leader>t', ':Trouble<CR>',                              description = 'Toggle Trouble List' },
+					{ '<leader>D', ':NERDTreeFind<CR>',                         description = 'Find in File Tree' },
+					{ '<leader>l', ':Legendary<CR>',                            description = 'Legendary' },
+					{ '<leader>F', vim.lsp.buf.format,                          description = 'LSP Format' },
+					{ 'gD',        vim.lsp.buf.type_definition,                 description = 'Go to type definition' },
+					{ 'gd',        vim.lsp.buf.definition,                      description = 'Go to definition' },
+					{ 'gr',        vim.lsp.buf.references,                      description = 'Find references' },
+					{ '<leader>e', vim.lsp.diagnostic.show_line_diagnostics,    description = 'Line diagnostics' },
 
 					-- {
 					-- 	'<leader>gy',
