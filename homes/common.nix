@@ -23,7 +23,6 @@ in {
 
   home.packages = [
     crlfmt # CockroachLabs golang formatter
-    pkgs.less # Ensure the latest version of less is available
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
     pkgs.bat
@@ -46,6 +45,7 @@ in {
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
+    pkgs.less # Ensure the latest version of less is available
     pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
     pkgs.neovim
     pkgs.nodejs
@@ -67,6 +67,14 @@ in {
 
   programs.direnv = {
     enable = true;
+  };
+
+  # Bottom, `btm`, a better [h]top - https://github.com/ClementTsang/bottom
+  programs.bottom = {
+    # Converted to TOML. Defaults: https://github.com/ClementTsang/bottom/blob/master/sample_configs/default_config.toml
+    settings = {
+      process_command = true;
+    };
   };
 
   # Starip terminal prompt - https://starship.rs/config/
