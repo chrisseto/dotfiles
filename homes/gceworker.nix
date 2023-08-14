@@ -15,23 +15,22 @@
   home.username = "chrisseto";
   home.homeDirectory = "/home/chrisseto";
 
-  # systemd.user.services.bazel-cache = {
-  #   Unit = {
-  #     Description = "Bazel HTTP/1.1 cache";
-  #     After = ["networking.target"];
-  #     PartOf = [];
-  #   };
+  systemd.user.services.bazel-cache = {
+    Unit = {
+      Description = "Bazel HTTP/1.1 cache";
+      After = ["networking.target"];
+      PartOf = [];
+    };
 
-  #   Service = {
-  #     Type = "simple";
-  #     Restart = "always";
-  #     ExecStart = "${pkgs.bazel-remote}/bin/bazel-remote --dir %C/bazel-remote";
-  #     Environment = [
-  #       "BAZEL_REMOTE_HTTP_ADDRESS=localhost:9867"
-  #       "BAZEL_REMOTE_MAX_SIZE=16"
-  #     ];
-  #   };
+    Service = {
+      Type = "simple";
+      Restart = "always";
+      ExecStart = "${pkgs.bazel-remote}/bin/bazel-remote --config_file %C/dev-bazel-remote/config.yml";
+      ExecStartPost = "/bin/sh -c 'echo $MAINPID > %C/dev-bazel-remote/.dev-cache.pid'";
+      Group = "chrisseto";
+      PIDFile = "%C/dev-bazel-remote/.dev-cache.pid";
+    };
 
-  #   Install = {WantedBy = ["default.target"];};
-  # };
+    Install = {WantedBy = ["default.target"];};
+  };
 }
