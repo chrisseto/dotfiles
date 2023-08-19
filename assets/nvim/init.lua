@@ -18,8 +18,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
--- vim.g:conjure#client#fennel#aniseed#aniseed_module_prefix`
-
 -- TODO continue "borrowing" plugins from https://www.lazyvim.org/plugins/coding
 -- Flit or Leap seem worthwhile https://www.lazyvim.org/plugins/editor#flitnvim
 -- https://github.com/folke/trouble.nvim
@@ -31,6 +29,9 @@ vim.g.maplocalleader = ","
 -- https://github.com/folke/neodev.nvim (Partial replacement for lsp saga)
 -- https://github.com/folke/persistence.nvim
 require("lazy").setup({
+	-- { 'Olical/conjure' },
+	{ 'rktjmp/hotpot.nvim' }, -- TODO, will need to bootstrap hotpot.
+
 	{
 		-- Colorscheme. Configured to load before everything else.
 		'sainnhe/everforest',
@@ -103,8 +104,6 @@ require("lazy").setup({
 	{ 'elixir-editors/vim-elixir' },
 	-- Helper for Comment.nvim
 	{ 'JoosepAlviste/nvim-ts-context-commentstring' },
-	{ 'Olical/conjure' },
-	{ 'Olical/aniseed' },
 
 	{
 		-- Comment toggler powered by treesitter and friends
@@ -168,6 +167,7 @@ require("lazy").setup({
 
 			-- TODO gopackagesdriver helps with speed and memory but results in a lot of weird issues. Namely: 1) "pkg_test" should be "pkg" 2) "no metadata for (stdlib package)"
 			lspconfig.gopls.setup {
+				capabilities = capabilities,
 				flags = {
 					debounce_text_changes = 50,
 					allow_incremental_sync = true,
@@ -250,19 +250,34 @@ require("lazy").setup({
 					}
 				}
 			}
+
+			require 'lspconfig'.openscad_lsp.setup {
+				capabilities = capabilities,
+			}
 		end
 	},
 
 	{ 'simrat39/symbols-outline.nvim',      opts = {} },
+
+	{
+		'L3MON4D3/LuaSnip',
+		version = "2.*",
+		build = "make install_jsregexp",
+		config = function()
+			-- require("luasnip.loaders").edit_snippet_files()
+			require('luasnip.loaders.from_lua').lazy_load({
+				paths = { "./luasnippets" },
+			})
+		end,
+	},
 
 	-- Autocompletion, recommended by neovim's LSP
 	{ 'hrsh7th/cmp-buffer' },
 	{ 'hrsh7th/cmp-nvim-lsp' },
 	{ 'hrsh7th/cmp-nvim-lsp-signature-help' },
 	{ 'hrsh7th/cmp-path' },
-	-- TODO migrate from vsnip over to lua snip
-	{ 'hrsh7th/vim-vsnip' },
-	{ 'PaterJason/cmp-conjure' },
+	{ 'saadparwaiz1/cmp_luasnip' },
+	-- { 'PaterJason/cmp-conjure' },
 	{
 		'hrsh7th/nvim-cmp',
 		dependencies = {
@@ -270,12 +285,14 @@ require("lazy").setup({
 			'hrsh7th/cmp-nvim-lsp',
 			'hrsh7th/cmp-nvim-lsp-signature-help',
 			'hrsh7th/cmp-path',
-			'hrsh7th/cmp-vsnip',
-			'hrsh7th/vim-vsnip',
-			'PaterJason/cmp-conjure',
+			-- 'PaterJason/cmp-conjure',
+			'saadparwaiz1/cmp_luasnip',
 		},
 		config = function()
-			vim.cmd [[ set completeopt=menu,menuone,noselect ]]
+			local cmp = require('cmp')
+			local luasnip = require('luasnip')
+
+			-- vim.cmd [[ set completeopt=menu,menuone,noselect ]]
 
 			local has_words_before = function()
 				unpack = unpack or table.unpack
@@ -284,44 +301,54 @@ require("lazy").setup({
 					vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 			end
 
-			local feedkey = function(key, mode)
-				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-			end
-
-			local cmp = require 'cmp'
 			cmp.setup({
 				snippet = {
 					expand = function(args)
-						vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-					end,
+						luasnip.lsp_expand(args.body)
+					end
 				},
 				mapping = {
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_next_item()
-						elseif vim.fn["vsnip#available"](1) == 1 then
-							feedkey("<Plug>(vsnip-expand-or-jump)", "")
+							-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
+							-- they way you will only jump inside the snippet region
+						elseif luasnip.expand_or_jumpable() then
+							luasnip.expand_or_jump()
 						elseif has_words_before() then
 							cmp.complete()
 						else
-							fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+							fallback()
 						end
 					end, { "i", "s" }),
-					["<S-Tab>"] = cmp.mapping(function()
+
+					["<S-Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_prev_item()
-						elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-							feedkey("<Plug>(vsnip-jump-prev)", "")
+						elseif luasnip.jumpable(-1) then
+							luasnip.jump(-1)
+						else
+							fallback()
 						end
 					end, { "i", "s" }),
-					['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+					["<CR>"] = cmp.mapping({
+						i = function(fallback)
+							if cmp.visible() and cmp.get_active_entry() then
+								cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+							else
+								fallback()
+							end
+						end,
+						s = cmp.mapping.confirm({ select = true }),
+						c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+					}),
 				},
 				sources = cmp.config.sources({
-					{ name = 'buffer' },
-					{ name = 'conjure' },
+					-- { name = 'conjure' },
+					{ name = 'luasnip' },
 					{ name = 'nvim_lsp' },
 					{ name = 'nvim_lsp_signature_help' },
-					{ name = 'vsnip' },
+					{ name = 'buffer' },
 				}),
 			})
 		end
