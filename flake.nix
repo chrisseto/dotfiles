@@ -71,7 +71,7 @@
               home = "/Users/chrisseto";
             };
 
-            home-manager.users.chrisseto = import ./homes/darwin.nix;
+            home-manager.users.chrisseto = import ./homes/personal-air.nix;
           }
         ];
         inputs = {inherit darwin nixpkgs;};

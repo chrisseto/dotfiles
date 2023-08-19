@@ -6,6 +6,7 @@
 }: let
   crlfmt = pkgs.callPackage ../packages/crlfmt.nix {};
   gopls = pkgs.callPackage ../packages/gopls.nix {};
+  openscad-lsp = pkgs.callPackage ../packages/openscad-lsp.nix {};
 in {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -25,6 +26,7 @@ in {
   home.packages = [
     crlfmt # CockroachLabs golang formatter
     gopls # Go Language Server
+    openscad-lsp # OpenSCAD LSP
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
     pkgs.bat
