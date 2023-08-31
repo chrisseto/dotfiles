@@ -302,6 +302,7 @@ require("lazy").setup({
 			end
 
 			cmp.setup({
+				preselect = cmp.PreselectMode.None, -- Don't preselect items.
 				snippet = {
 					expand = function(args)
 						luasnip.lsp_expand(args.body)
