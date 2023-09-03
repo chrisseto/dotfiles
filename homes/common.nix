@@ -22,10 +22,13 @@ in {
   programs.home-manager.enable = true;
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [
+    (import ../overlays/janet.nix)
+    (import ../overlays/gopls.nix)
+  ];
 
   home.packages = [
     crlfmt # CockroachLabs golang formatter
-    gopls # Go Language Server
     openscad-lsp # OpenSCAD LSP
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
@@ -42,12 +45,13 @@ in {
     pkgs.git
     pkgs.git-machete
     pkgs.go_1_19 # Pin to 1.19 for as that's what we currently use.
+    pkgs.gopls # Golang LSP
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
     pkgs.hub # Old (?) GitHub CLI
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
-    pkgs.janet # A clojure like lisp
-    pkgs.jpm # A package manager for the janet language.
+    pkgs.janet # A pretty neat lisp implementation
+    pkgs.jpm # Janet package manager
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available
@@ -140,6 +144,9 @@ in {
       # defaults.
       set -gx XDG_CACHE_HOME $HOME/.cache
       set -gx XDG_CONFIG_HOME $HOME/.config
+
+      # Configure a user local installation path for jpm.
+      set -gx JANET_TREE $HOME/.local/jpm_tree
 
       # Add ~/.bin to $PATH for access to custom scripts and the like.
       fish_add_path $HOME/.bin
