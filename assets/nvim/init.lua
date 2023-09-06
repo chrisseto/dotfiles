@@ -26,11 +26,10 @@ vim.g.maplocalleader = ","
 -- https://www.lazyvim.org/plugins/ui#lualinenvim
 -- https://www.lazyvim.org/plugins/ui#miniindentscope
 -- https://github.com/folke/neoconf.nvim
--- https://github.com/folke/neodev.nvim (Partial replacement for lsp saga)
 -- https://github.com/folke/persistence.nvim
 require("lazy").setup({
-	-- { 'Olical/conjure' },
-	{ 'rktjmp/hotpot.nvim' }, -- TODO, will need to bootstrap hotpot.
+	-- Plugin for making neovim lua configuration less painful.
+	{ "folke/neodev.nvim",           opts = {} },
 
 	{
 		-- Colorscheme. Configured to load before everything else.
@@ -53,18 +52,19 @@ require("lazy").setup({
 	{ 'nvim-tree/nvim-web-devicons', lazy = true },
 	{ 'nvim-lua/popup.nvim',         lazy = true },
 	{ 'nvim-lua/plenary.nvim',       lazy = true },
-	{ 'kkharji/sqlite.lua',          lazy = true },
+	-- { 'kkharji/sqlite.lua',          lazy = true },
 
-	{
-		'stevearc/dressing.nvim',
-		config = function()
-			require('dressing').setup({
-				select = {
-					backend = { "fzf_lua", "fzf", "builtin", "nui" },
-				},
-			})
-		end
-	},
+	-- TODO: Not sure if this actually does anything?
+	-- {
+	-- 	'stevearc/dressing.nvim',
+	-- 	config = function()
+	-- 		require('dressing').setup({
+	-- 			select = {
+	-- 				backend = { "fzf_lua", "fzf", "builtin", "nui" },
+	-- 			},
+	-- 		})
+	-- 	end
+	-- },
 
 	-- TODO Delve into the possible configuration options here.
 	-- Really need a way to doll it up but it's much snappier than telescope.
