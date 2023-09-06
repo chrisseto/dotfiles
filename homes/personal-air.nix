@@ -6,5 +6,5 @@
 }: {
   imports = [./darwin.nix];
 
-  home.packages = [ ];
+  home.packages = [];
 }

@@ -29,9 +29,8 @@ in {
     openscad-lsp # OpenSCAD LSP
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
-    pkgs.bat
+    pkgs.bat # Better `cat` with syntax highlighting
     pkgs.bazelisk
-    pkgs.cargo
     pkgs.delta # Better git diff viewer
     pkgs.delve # golang debugger
     pkgs.fastmod
@@ -41,13 +40,14 @@ in {
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.gh # GitHub CLI, slightly better than hub
     pkgs.git
-    pkgs.git-branchless
     pkgs.git-machete
     pkgs.go_1_19 # Pin to 1.19 for as that's what we currently use.
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
     pkgs.hub # Old (?) GitHub CLI
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
+    pkgs.janet # A clojure like lisp
+    pkgs.jpm # A package manager for the janet language.
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available
@@ -59,8 +59,7 @@ in {
     pkgs.skim # `sk`, Competitor of fzf
     pkgs.terraform
     pkgs.tmux
-    pkgs.tree
-    pkgs.vault
+    pkgs.tree # Prints a "tree" of a directory.
     pkgs.xz # LZMA compression successor, used by container tooling.
     pkgs.yarn
   ];
@@ -144,6 +143,10 @@ in {
 
       # Add ~/.bin to $PATH for access to custom scripts and the like.
       fish_add_path $HOME/.bin
+
+      # TODO upgrade git-machete to the latest version via an overlay.
+      # Config completion for git-machete
+      # ${pkgs.git-machete}/bin/git-machete completion fish | source
     '';
 
     shellAliases = {
