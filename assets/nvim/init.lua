@@ -27,9 +27,22 @@ vim.g.maplocalleader = ","
 -- https://www.lazyvim.org/plugins/ui#miniindentscope
 -- https://github.com/folke/neoconf.nvim
 -- https://github.com/folke/persistence.nvim
+-- require("lazy").setup("plugins")
 require("lazy").setup({
-	-- Plugin for making neovim lua configuration less painful.
-	{ "folke/neodev.nvim",           opts = {} },
+	{ import = "plugins" },
+	{
+		"folke/which-key.nvim",
+		event = "VeryLazy",
+		init = function()
+			vim.o.timeout = true
+			vim.o.timeoutlen = 300
+		end,
+		opts = {
+			-- your configuration comes here
+			-- or leave it empty to use the default settings
+			-- refer to the configuration section below
+		}
+	},
 
 	{
 		-- Colorscheme. Configured to load before everything else.
@@ -78,20 +91,6 @@ require("lazy").setup({
 		end
 	},
 
-	-- Generate links to GitHub
-	-- {
-	-- 	'ruifm/gitlinker.nvim',
-	-- 	dependencies = { 'nvim-lua/plenary.nvim', 'ojroques/nvim-osc52' },
-	-- 	config = function()
-	-- 		require("gitlinker").setup({
-	-- 			opts = {
-	-- 				action_callback = require('osc52').copy,
-	-- 				print_url = true,
-	-- 			},
-	-- 			mappings = nil,
-	-- 		})
-	-- 	end,
-	-- },
 	-- Git diff info + blame support.
 	{ 'lewis6991/gitsigns.nvim',                    config = true },
 	-- Git conflict helper
@@ -148,117 +147,6 @@ require("lazy").setup({
 		end
 	},
 
-	-- Native neovim LSP integration.
-	-- NOTE: LSP Servers are provided via nix.
-	-- TODO: Consider namespacing LSP server binaries.
-	{
-		'neovim/nvim-lspconfig',
-		cmd = "LSPInfo",
-		event = { 'BufReadPre', 'BufNewFile' },
-		dependencies = {
-			{ 'hrsh7th/cmp-nvim-lsp' },
-		},
-		config = function()
-			local lspconfig = require('lspconfig')
-			local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-			-- To Debug LSP settings:
-			-- :lua print(vim.inspect(vim.lsp.get_active_clients()))
-
-			-- TODO gopackagesdriver helps with speed and memory but results in a lot of weird issues. Namely: 1) "pkg_test" should be "pkg" 2) "no metadata for (stdlib package)"
-			lspconfig.gopls.setup {
-				capabilities = capabilities,
-				flags = {
-					debounce_text_changes = 50,
-					allow_incremental_sync = true,
-				},
-				-- 						on_new_config = function(config, new_root_dir)
-				-- 							-- -- If new_root_dir seems like a bazel project and there isn't a `.nogopackagesdriver` file, set GOPACKAGESDRIVER to a
-				-- 							-- -- global script (which seems to be safe as they all contain the same contents, it just needs to exist as a file somewhere).
-				-- 							-- -- https://github.com/bazelbuild/rules_go/wiki/Editor-and-tool-integration
-				-- 							local packagesdriver = nil
-				-- 							if vim.fn.filereadable(new_root_dir .. '/.bazelrc') == 1 and vim.fn.filereadable(new_root_dir .. '/.nogopackagesdriver') == 0 then
-				-- 								packagesdriver = vim.fn.expand("~/.bin/gopackagesdriver")
-				-- 							end
-				--
-				-- 							if config.cmd_env then
-				-- 								config.cmd_env.GOPACKAGESDRIVER = packagesdriver
-				-- 							else
-				-- 								config.cmd_env = { GOPACKAGESDRIVER = packagesdriver }
-				-- 							end
-
-				-- For debugging add --logfile=auto and -rpc.trace. Log files will be in /tmp/gopls-[pid].log
-				cmd = { "gopls", "serve" },
-				settings = {
-					gopls = {
-						directoryFilters = {
-							"-_bazel",
-							"-bazel-bin",
-							"-bazel-out",
-							"-bazel-testlogs",
-							"-**/node_modules",
-						},
-						linksInHover = false,
-						allowImplicitNetworkAccess = true,
-						-- May be causing issues??
-						-- buildFlags = { "-tags=bazel" },
-						hints = { parameterNames = true },
-						semanticTokens = true,
-						symbolScope = "workspace",
-						codelenses = {
-							gc_details = false,
-							regenerate_gco = false,
-							test = false,
-							tidy = false,
-							upgrade_dependency = false,
-							vendor = false,
-						}
-					}
-				}
-			}
-
-			lspconfig.lua_ls.setup {
-				capabilities = capabilities,
-				flags = {
-					debounce_text_changes = 50,
-					allow_incremental_sync = true,
-				},
-				settings = {
-					Lua = {
-						runtime = {
-							-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-							version = 'LuaJIT',
-						},
-						diagnostics = {
-							-- Get the language server to recognize the `vim` global
-							globals = { 'vim' },
-						},
-						workspace = {
-							-- Make the server aware of Neovim runtime files
-							library = vim.api.nvim_get_runtime_file("", true),
-						},
-						-- Do not send telemetry data containing a randomized but unique identifier
-						telemetry = {
-							enable = false,
-						},
-						-- TODO Figure out how to get this working to stop the formatter from wrapping all my key mapping lines.
-						config = {
-							format = {
-								defaultConfig = [[ max_line_length = 500 ]]
-							},
-						},
-					}
-				}
-			}
-
-			require 'lspconfig'.openscad_lsp.setup {
-				capabilities = capabilities,
-			}
-		end
-	},
-
-	{ 'simrat39/symbols-outline.nvim',      opts = {} },
-
 	{
 		'L3MON4D3/LuaSnip',
 		version = "2.*",
@@ -273,6 +161,7 @@ require("lazy").setup({
 
 	-- Autocompletion, recommended by neovim's LSP
 	{ 'hrsh7th/cmp-buffer' },
+	{ 'hrsh7th/cmp-cmdline' },
 	{ 'hrsh7th/cmp-nvim-lsp' },
 	{ 'hrsh7th/cmp-nvim-lsp-signature-help' },
 	{ 'hrsh7th/cmp-path' },
@@ -293,6 +182,7 @@ require("lazy").setup({
 			local luasnip = require('luasnip')
 
 			-- vim.cmd [[ set completeopt=menu,menuone,noselect ]]
+
 
 			local has_words_before = function()
 				unpack = unpack or table.unpack
@@ -332,25 +222,39 @@ require("lazy").setup({
 							fallback()
 						end
 					end, { "i", "s" }),
-					["<CR>"] = cmp.mapping({
-						i = function(fallback)
-							if cmp.visible() and cmp.get_active_entry() then
-								cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-							else
-								fallback()
-							end
-						end,
-						s = cmp.mapping.confirm({ select = true }),
-						c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-					}),
+					["<CR>"] = cmp.mapping.confirm({ select = false }),
+					-- ["<CR>"] = cmp.mapping({
+					-- 	i = function(fallback)
+					-- 		if cmp.visible() and cmp.get_active_entry() then
+					-- 			cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+					-- 		else
+					-- 			fallback()
+					-- 		end
+					-- 	end,
+					-- 	s = cmp.mapping.confirm({ select = true }),
+					-- 	c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+					-- }),
 				},
 				sources = cmp.config.sources({
 					-- { name = 'conjure' },
 					{ name = 'luasnip' },
 					{ name = 'nvim_lsp' },
 					{ name = 'nvim_lsp_signature_help' },
+				}, {
 					{ name = 'buffer' },
 				}),
+			})
+
+			-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+			cmp.setup.cmdline(':', {
+				mapping = cmp.mapping.preset.cmdline {
+					['<CR>'] = cmp.config.disable, -- TODO mappings for : don't seem to override globally specified mappings?
+				},
+				sources = cmp.config.sources({
+					{ name = 'path' }
+				}, {
+					{ name = 'cmdline' }
+				})
 			})
 		end
 	},
@@ -397,21 +301,6 @@ require("lazy").setup({
 		end
 	},
 
-	{
-		-- LSP helper (TODO Replace with simple customization and other plugins)
-		'glepnir/lspsaga.nvim',
-		config = function()
-			require("lspsaga").setup({
-				symbol_in_winbar = {
-					enable = false, -- Cute but very slow.
-				},
-				lightbulb = {
-					enable = false, -- lightbulb just gets in the way.
-				},
-			})
-		end
-	},
-
 	-- TODO switch to which-key.nvim instead.
 	{
 		'mrjones2014/legendary.nvim',
@@ -442,12 +331,6 @@ require("lazy").setup({
 					{ 'gr',        vim.lsp.buf.references,                      description = 'Find references' },
 					{ '<leader>e', vim.lsp.diagnostic.show_line_diagnostics,    description = 'Line diagnostics' },
 
-					-- {
-					-- 	'<leader>gy',
-					-- 	h.lazy_required_fn('gitlinker', 'get_buf_range_url', 'n', { action_callback = require("osc52").copy }),
-					-- 	description = 'Permalink to GitHub',
-					-- },
-
 					{
 						'<leader>o',
 						':SymbolsOutline<CR>',
@@ -473,12 +356,6 @@ require("lazy").setup({
 			})
 		end
 	},
-
-	{
-		--
-		'folke/trouble.nvim',
-		dependencies = { 'nvim-tree/nvim-web-devicons' },
-	}
 })
 
 -- Persistent undo
