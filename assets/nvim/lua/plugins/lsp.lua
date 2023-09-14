@@ -61,18 +61,6 @@ local function luals_config(capabilities)
 		},
 		settings = {
 			Lua = {
-				runtime = {
-					-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-					version = 'LuaJIT',
-				},
-				diagnostics = {
-					-- Get the language server to recognize the `vim` global
-					globals = { 'vim' },
-				},
-				workspace = {
-					-- Make the server aware of Neovim runtime files
-					library = vim.api.nvim_get_runtime_file("", true),
-				},
 				-- Do not send telemetry data containing a randomized but unique identifier
 				telemetry = {
 					enable = false,
@@ -93,6 +81,11 @@ return {
 	-- TODO: Do I need lua_ls configured?
 	{ "folke/neodev.nvim",             opts = {} },
 	{ 'simrat39/symbols-outline.nvim', opts = {} },
+	{
+		'folke/trouble.nvim',
+		opts = {},
+		dependencies = { 'nvim-tree/nvim-web-devicons' },
+	},
 
 	-- Native neovim LSP integration.
 	-- NOTE: LSP Servers are provided via nix.
@@ -102,11 +95,14 @@ return {
 		cmd = "LSPInfo",
 		event = { 'BufReadPre', 'BufNewFile' },
 		dependencies = {
+			{ 'folke/neodev.nvim' },
 			{ 'hrsh7th/cmp-nvim-lsp' },
 		},
 		config = function()
+			-- error("bar")
 			-- To Debug LSP settings:
 			-- :lua print(vim.inspect(vim.lsp.get_active_clients()))
+
 			local lspconfig = require('lspconfig')
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
@@ -131,8 +127,4 @@ return {
 		end
 	},
 
-	{
-		'folke/trouble.nvim',
-		dependencies = { 'nvim-tree/nvim-web-devicons' },
-	}
 }

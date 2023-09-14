@@ -68,16 +68,16 @@ require("lazy").setup({
 	-- { 'kkharji/sqlite.lua',          lazy = true },
 
 	-- TODO: Not sure if this actually does anything?
-	-- {
-	-- 	'stevearc/dressing.nvim',
-	-- 	config = function()
-	-- 		require('dressing').setup({
-	-- 			select = {
-	-- 				backend = { "fzf_lua", "fzf", "builtin", "nui" },
-	-- 			},
-	-- 		})
-	-- 	end
-	-- },
+	{
+		'stevearc/dressing.nvim',
+		config = function()
+			require('dressing').setup({
+				select = {
+					backend = { "fzf_lua", "fzf", "builtin", "nui" },
+				},
+			})
+		end
+	},
 
 	-- TODO Delve into the possible configuration options here.
 	-- Really need a way to doll it up but it's much snappier than telescope.
@@ -152,11 +152,27 @@ require("lazy").setup({
 		version = "2.*",
 		build = "make install_jsregexp",
 		config = function()
-			-- require("luasnip.loaders").edit_snippet_files()
+			-- TODO lua snippets seem ripe for a fennel integration.
+
+			-- See https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#config-options
+			require("luasnip").setup({
+				update_events = { "TextChanged", "TextChangedI" },
+			})
+
 			require('luasnip.loaders.from_lua').lazy_load({
-				paths = { "./luasnippets" },
+				paths = { "./lua/snippets" },
 			})
 		end,
+		keys = {
+			{
+				"<leader>es",
+				function()
+					require("luasnip.loaders").edit_snippet_files()
+				end,
+				"n",
+				desc = "Edit Snippets"
+			}
+		},
 	},
 
 	-- Autocompletion, recommended by neovim's LSP
@@ -180,9 +196,6 @@ require("lazy").setup({
 		config = function()
 			local cmp = require('cmp')
 			local luasnip = require('luasnip')
-
-			-- vim.cmd [[ set completeopt=menu,menuone,noselect ]]
-
 
 			local has_words_before = function()
 				unpack = unpack or table.unpack
