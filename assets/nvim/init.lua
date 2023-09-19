@@ -56,7 +56,9 @@ require("lazy").setup({
 			vim.g["conjure#debug"] = true
 		end,
 	},
-
+	-- Movement helpers
+	{ "ggandor/leap.nvim", opts = {} },
+	{ "ggandor/flit.nvim", opts = {} },
 	{
 		-- Colorscheme. Configured to load before everything else.
 		'sainnhe/everforest',
