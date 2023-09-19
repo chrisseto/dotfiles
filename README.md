@@ -16,24 +16,19 @@ chrisseto's dotfiles
 
 ## Linux (Home-Manager)
 1. Install [Nix](https://nixos.org/download.html#nix-install-macos)
-1. Install [home-manager](https://github.com/nix-community/home-manager)
 1. Clone this repo to `~/.nixpkgs`
-1. Run `home-manager switch --flake ~/.nixpkgs#<profile>`
+1. Run `nix run .#home-manager -- switch --flake .#gceworker`
 
 ## Fonts
 I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 
 ## TODO
-- [ ] Remove the indent from my vim git commit message config
-- [ ] Convert init.vim to lua
-- [ ] Move dotfiles out of hidden directories
 - [ ] Fix Application linking on macOS
 - [ ] Fix tabs vs spaces on various file types
-- [ ] Upgrade to a treesitter based commenting tool
 - [ ] Configure spell check on treesitter comments
-- [ ] Move vim plugin management to nix flakes so that plugin repos are pinned to SHAs and easily updatable.
 - [ ] Consider configuring BTT with nix as it seems to be the consistent answer for many tweaks and bindings.
 - [ ] Add a darwin configuration for work MBP
+- [ ] Make darwin configs load via `nix run`
 
 ## Layout
 

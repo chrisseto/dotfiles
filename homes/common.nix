@@ -23,8 +23,9 @@ in {
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
-    (import ../overlays/janet.nix)
+    (import ../overlays/git-machete.nix)
     (import ../overlays/gopls.nix)
+    (import ../overlays/janet.nix)
   ];
 
   home.packages = [

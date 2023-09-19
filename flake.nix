@@ -31,6 +31,8 @@
     formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.alejandra;
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
+	packages.x86_64-linux.home-manager = home-manager.packages.x86_64-linux.default;
+
     homeConfigurations = {
       gceworker = home-manager.lib.homeManagerConfiguration {
         # TODO don't hardcode system here...

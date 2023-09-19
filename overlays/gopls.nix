@@ -10,13 +10,13 @@ self: super: {
       rev = "gopls/v${version}";
       sha256 = "sha256-fRpVAYg4UwRe3bcjQPOnCGWSANfoTwD5Y9vs3QET1eM=";
     };
-    vendorSha256 = "sha256-9d7vgCMc1M5Cab+O10lQmKGfL9gqO3sajd+3rF5cums=";
+    vendorSha = "sha256-9d7vgCMc1M5Cab+O10lQmKGfL9gqO3sajd+3rF5cums=";
   in
     super.gopls.override rec {
       buildGoModule = args:
         super.buildGoModule (args
           // {
-            inherit src version vendorSha256;
+            inherit src version vendorSha;
           });
     };
 }
