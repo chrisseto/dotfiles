@@ -5,7 +5,7 @@
   ...
 }: let
   crlfmt = pkgs.callPackage ../packages/crlfmt.nix {};
-  gopls = pkgs.callPackage ../packages/gopls.nix {};
+  git-branch-stash = pkgs.callPackage ../packages/git-branch-stash.nix {};
   openscad-lsp = pkgs.callPackage ../packages/openscad-lsp.nix {};
 in {
   # This value determines the Home Manager release that your
@@ -23,13 +23,13 @@ in {
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
-    (import ../overlays/git-machete.nix)
     (import ../overlays/gopls.nix)
     (import ../overlays/janet.nix)
   ];
 
   home.packages = [
     crlfmt # CockroachLabs golang formatter
+    git-branch-stash
     openscad-lsp # OpenSCAD LSP
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
@@ -44,8 +44,10 @@ in {
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.gh # GitHub CLI, slightly better than hub
     pkgs.git
+    pkgs.git-dive
     pkgs.git-machete
-    pkgs.go_1_19 # Pin to 1.19 for as that's what we currently use.
+    pkgs.git-stack
+    pkgs.go_1_20 # Pin to 1.20 for as that's what we currently use.
     pkgs.gopls # Golang LSP
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
