@@ -5,7 +5,6 @@
   ...
 }: let
   crlfmt = pkgs.callPackage ../packages/crlfmt.nix {};
-  git-branch-stash = pkgs.callPackage ../packages/git-branch-stash.nix {};
   openscad-lsp = pkgs.callPackage ../packages/openscad-lsp.nix {};
 in {
   # This value determines the Home Manager release that your
@@ -29,7 +28,6 @@ in {
 
   home.packages = [
     crlfmt # CockroachLabs golang formatter
-    # git-branch-stash
     openscad-lsp # OpenSCAD LSP
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
@@ -66,6 +64,7 @@ in {
     pkgs.ripgrep # `rg`, better grep/ag/ack
     pkgs.skim # `sk`, Competitor of fzf
     pkgs.terraform
+    pkgs.terraform-ls
     pkgs.tmux
     pkgs.tree # Prints a "tree" of a directory.
     pkgs.xz # LZMA compression successor, used by container tooling.

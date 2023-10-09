@@ -3,10 +3,13 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  git-branch-stash = pkgs.callPackage ../packages/git-branch-stash.nix {};
+in {
   imports = [./common.nix];
 
   home.packages = [
+    git-branch-stash
     pkgs.bazel-remote # An HTTP/1.1 cache for bazel builds
     pkgs.kubectl
     pkgs.patchelf # Required for --config=crossbuild in CRDB

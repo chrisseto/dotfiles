@@ -34,6 +34,7 @@
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
     packages.aarch64-darwin.nix-darwin = darwin.packages.aarch64-darwin.default;
+
     packages.x86_64-linux.home-manager = home-manager.packages.x86_64-linux.default;
 
     homeConfigurations = let
@@ -93,7 +94,14 @@
               home = "/Users/chrisseto";
             };
 
-            home-manager.users.chrisseto = import ./homes/personal-air.nix;
+            home-manager.extraSpecialArgs = {inherit unstable;};
+            home-manager.users.chrisseto = {
+              imports = [
+                ./homes/common.nix
+                ./homes/darwin.nix
+                ./homes/personal-air.nix
+              ];
+            };
           }
         ];
         inputs = {inherit darwin nixpkgs;};
