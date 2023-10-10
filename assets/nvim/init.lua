@@ -295,6 +295,11 @@ require("lazy").setup({
 		dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring', 'nvim-treesitter/playground' },
 		build = ':TSUpdate',
 		config = function()
+			-- Configure folding to use treesitter.
+			vim.opt.foldmethod = "expr"
+			vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+			vim.opt.foldenable = false
+
 			-- Treesitter configuration
 			require 'nvim-treesitter.configs'.setup {
 				-- Install all syntax modules that have maintainers.
