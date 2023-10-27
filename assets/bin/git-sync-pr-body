@@ -7,6 +7,12 @@ if set -q argv[1]
 end
 
 set -l pr_no (git for-each-ref --points-at=$branch --count 1 --format='%(refname:lstrip=-1)' refs/prs)
+
+if [ -z "$pr_no" ]
+	echo "Failed to find a pr ref for $branch"
+	exit 1
+end
+
 set -l pr_body "$(git-pr-desc $branch)"
 set -l pr_title (git log -n 1 --format='%s' $branch)
 
@@ -15,4 +21,4 @@ echo "Title will be: $pr_title"
 echo "Body will be:"
 echo $pr_body
 
-gh pr edit --title="$pr_title" --body="$pr_body" $pr_no
+gh pr edit $pr_no --title="$pr_title" --body="$pr_body"
