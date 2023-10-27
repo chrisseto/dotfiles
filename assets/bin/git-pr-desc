@@ -1,0 +1,38 @@
+#!/usr/bin/env fish
+
+set -l base master
+set -l branch HEAD
+
+if set -q argv[1]
+	set branch $argv[1]
+end
+
+# Gather all PRs that $branch is based off of.
+set -l pr_refs (git --no-pager log --reverse --decorate-refs=refs/prs/ --format='%D' $base..$branch~1)
+
+set -l bases
+set -a bases $base
+
+if set -q pr_refs[1]
+	echo '### This PR is stacked on top of others!'
+	echo ''
+	echo 'Please consider reviewing those PRs first. This message will be removed once prerequisite PRs are merged and this one is rebased.'
+	echo ''
+
+	# Tersely callout the commits in this PR that are from PRs this one is based
+	# on.
+	set -a bases $pr_refs
+	for i in (seq 2 (count $bases));
+		set -l from $bases[$(math $i-1)]
+		set -l to $bases[$i]
+		set -l pr (string sub -s 10 $to)
+		git --no-pager log --reverse --format="* %H is from #$pr" $from..$to
+	end
+
+	echo ''
+	echo '---'
+	echo ''
+end
+
+# Log commits that are unique to this PR in a nice format.
+git log --reverse --format='#### %H %s%n%n%b%n' $bases[-1]..$branch

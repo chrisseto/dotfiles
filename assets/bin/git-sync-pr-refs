@@ -1,0 +1,10 @@
+#!/usr/bin/env fish
+
+# List all open PRs from me.
+set -l prs_json (gh pr list --author "@me" -s 'open' --json headRefName,number)
+
+# Use JQ to get them into git update-ref's format
+set -l update_refs "$(echo $prs_json | jq -r '. [] | "update refs/prs/\\(.number) refs/heads/\\(.headRefName)"')"
+
+# NOTE THIS BREAKS IF A BRANCH DOESN'T EXIST
+echo $update_refs | git update-ref --stdin

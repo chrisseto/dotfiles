@@ -1,0 +1,18 @@
+#!/usr/bin/env fish
+
+set -l branch HEAD
+
+if set -q argv[1]
+	set branch $argv[1]
+end
+
+set -l pr_no (git for-each-ref --points-at=$branch --count 1 --format='%(refname:lstrip=-1)' refs/prs)
+set -l pr_body "$(git-pr-desc $branch)"
+set -l pr_title (git log -n 1 --format='%s' $branch)
+
+echo "Found PR #$pr_no associated with $branch."
+echo "Title will be: $pr_title"
+echo "Body will be:"
+echo $pr_body
+
+gh pr edit --title="$pr_title" --body="$pr_body" $pr_no
