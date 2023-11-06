@@ -1,12 +1,12 @@
 #!/usr/bin/env fish
 
 # List all open PRs from me.
-set -l prs_json (gh pr list --author "@me" -s 'open' --json headRefName,number)
+set -l prs (gh pr list --author "@me" -s 'open' --json headRefName,number --template '{{range .}}{{ .number }} {{ .headRefName }}{{ printf "\n" }}{{end}}')
 
-# Use JQ to get them into git update-ref's format
-set -l update_refs "$(echo $prs_json | jq -r '. [] | "update refs/prs/\\(.number) refs/heads/\\(.headRefName)"')"
+for line in $prs
+	echo $line | read -t -l pr_no branch
 
-echo $update_refs
-
-# NOTE THIS BREAKS IF A BRANCH DOESN'T EXIST
-echo $update_refs | git update-ref --stdin
+	# TODO: Probably need to skip over branches that don't exist here.
+	echo "#$pr_no -> $branch"
+	git symbolic-ref refs/prs/$pr_no refs/heads/$branch
+end
