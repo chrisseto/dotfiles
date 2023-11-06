@@ -3,20 +3,20 @@
 # Thanks to https://discourse.nixos.org/t/inconsistent-vendoring-in-buildgomodule-when-overriding-source/9225/7
 self: super: {
   gopls = let
-    version = "0.13.2";
+    version = "0.14.1";
     src = super.fetchFromGitHub {
       owner = "golang";
       repo = "tools";
       rev = "gopls/v${version}";
-      sha256 = "sha256-fRpVAYg4UwRe3bcjQPOnCGWSANfoTwD5Y9vs3QET1eM=";
+      sha256 = "sha256-efajbCeUXOU3Yv8TyAV0U59ubQgcA4kiIY11rP2z61E=";
     };
-    vendorSha = "sha256-9d7vgCMc1M5Cab+O10lQmKGfL9gqO3sajd+3rF5cums=";
+    vendorHash = "sha256-x8d+9CLCvg+PXC+EaWluUZ+QNynu+vzOA5xxYXcWNyw=";
   in
     super.gopls.override rec {
       buildGoModule = args:
         super.buildGoModule (args
           // {
-            inherit src version vendorSha;
+            inherit src version vendorHash;
           });
     };
 }
