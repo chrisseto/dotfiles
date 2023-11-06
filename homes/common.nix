@@ -38,6 +38,7 @@ in {
     pkgs.delta # Better git diff viewer
     pkgs.delve # golang debugger
     pkgs.fastmod
+    pkgs.helix # A post-modern modal text editor
     pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
     pkgs.fnlfmt # Fennel formatter
     pkgs.fzf # Pluggable fuzzy finder
@@ -47,7 +48,7 @@ in {
     pkgs.git-dive
     pkgs.git-machete
     pkgs.git-stack
-    pkgs.go_1_20 # Pin to 1.20 for as that's what we currently use.
+    pkgs.go_1_21 # Pin to 1.21 for as that's what we currently use.
     pkgs.gopls # Golang LSP
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
@@ -208,4 +209,5 @@ in {
   # would allow this type of symlinking to be acceptable..
   # See https://www.foodogsquared.one/posts/2023-03-24-managing-mutable-files-in-nixos/
   home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/nvim";
+  home.file.".config/helix".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/helix";
 }
