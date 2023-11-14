@@ -36,12 +36,19 @@
     packages.aarch64-darwin.nix-darwin = darwin.packages.aarch64-darwin.default;
     packages.x86_64-linux.home-manager = home-manager.packages.x86_64-linux.default;
 
-    homeConfigurations = {
+    homeConfigurations = let
+      # TODO don't hardcode system here either...
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {inherit system;};
+      unstable = import nixpkgs-unstable {inherit system;};
+    in {
       gceworker = home-manager.lib.homeManagerConfiguration {
-        # TODO don't hardcode system here...
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        inherit pkgs;
+        extraSpecialArgs = {inherit unstable;};
 
         modules = [
+          ./homes/common.nix
+          ./homes/crl.nix
           ./homes/gceworker.nix
         ];
       };
