@@ -29,7 +29,7 @@ in {
 
   home.packages = [
     crlfmt # CockroachLabs golang formatter
-    git-branch-stash
+    # git-branch-stash
     openscad-lsp # OpenSCAD LSP
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.

@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "nixpkgs";
+    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
     nixos-apple-silicon = {
       url = "github:tpwrules/nixos-apple-silicon";
@@ -23,6 +24,7 @@
     self,
     darwin,
     nixpkgs,
+    nixpkgs-unstable,
     home-manager,
     nixos-apple-silicon,
     ...
@@ -31,7 +33,8 @@
     formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.alejandra;
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
 
-	packages.x86_64-linux.home-manager = home-manager.packages.x86_64-linux.default;
+    packages.aarch64-darwin.nix-darwin = darwin.packages.aarch64-darwin.default;
+    packages.x86_64-linux.home-manager = home-manager.packages.x86_64-linux.default;
 
     homeConfigurations = {
       gceworker = home-manager.lib.homeManagerConfiguration {
@@ -44,9 +47,13 @@
       };
     };
 
-    darwinConfigurations = {
+    darwinConfigurations = let
+      system = "aarch64-darwin";
+      unstable = import nixpkgs-unstable {inherit system;};
+    in {
       "crlMBP-MV7L2CVHJQMTQ0" = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
+        inherit system;
+
         modules = [
           home-manager.darwinModules.home-manager
           ./configurations/darwin.nix
@@ -56,10 +63,16 @@
               home = "/Users/chrisseto";
             };
 
-            home-manager.users.chrisseto = import ./homes/darwin.nix;
+            home-manager.extraSpecialArgs = {inherit unstable;};
+            home-manager.users.chrisseto = {
+              imports = [
+                ./homes/common.nix
+                ./homes/darwin.nix
+                ./homes/crl.nix
+              ];
+            };
           }
         ];
-        inputs = {inherit darwin nixpkgs;};
       };
 
       "Chriss-Air" = darwin.lib.darwinSystem {

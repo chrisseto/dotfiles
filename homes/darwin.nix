@@ -2,16 +2,13 @@
   config,
   pkgs,
   lib,
+  unstable,
   ...
 }: let
   cockroachdb = pkgs.callPackage ../packages/cockroachdb.nix {};
 in {
-  imports = [./common.nix];
-
   home.packages = [
-    (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
     cockroachdb
-    pkgs.kubectl
     pkgs.alacritty
     pkgs.reattach-to-user-namespace
   ];

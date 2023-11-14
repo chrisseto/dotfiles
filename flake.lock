@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1686307493,
-        "narHash": "sha256-R4VEFnDn7nRmNxAu1LwNbjns5DPM8IBsvnrWmZ8ymPs=",
+        "lastModified": 1698429334,
+        "narHash": "sha256-Gq3+QabboczSu7RMpcy79RSLMSqnySO3wsnHQk4DfbE=",
         "owner": "lnl7",
         "repo": "nix-darwin",
-        "rev": "7c16d31383a90e0e72ace0c35d2d66a18f90fb4f",
+        "rev": "afe83cbc2e673b1f08d32dd0f70df599678ff1e7",
         "type": "github"
       },
       "original": {
@@ -76,12 +76,28 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1699099776,
+        "narHash": "sha256-X09iKJ27mGsGambGfkKzqvw5esP1L/Rf8H3u3fCqIiU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "85f1ba3e51676fa8cc604a3d863d729026a6b8eb",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
         "home-manager": "home-manager",
         "nixos-apple-silicon": "nixos-apple-silicon",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-unstable": "nixpkgs-unstable"
       }
     },
     "rust-overlay": {
