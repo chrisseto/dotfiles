@@ -23,7 +23,7 @@ in {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
     (import ../overlays/gopls.nix)
-    (import ../overlays/janet.nix)
+    (import ../overlays/janet)
   ];
 
   home.packages = [
@@ -52,8 +52,11 @@ in {
     pkgs.htop
     pkgs.hub # Old (?) GitHub CLI
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
-    pkgs.janet # A pretty neat lisp implementation
-    pkgs.jpm # Janet package manager
+    (pkgs.janet.withPackages (ps:
+      with ps; [
+        sh
+        spork
+      ])) # A pretty neat lisp implementation
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available
