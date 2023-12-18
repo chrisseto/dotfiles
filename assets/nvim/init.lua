@@ -126,7 +126,7 @@ require("lazy").setup({
 	-- Git diff info + blame support.
 	{ 'lewis6991/gitsigns.nvim',                    config = true },
 	-- Git conflict helper
-	{ 'akinsho/git-conflict.nvim',                  config = true },
+	-- { 'akinsho/git-conflict.nvim',                  config = true },
 	-- Delve integration
 	{ 'sebdah/vim-delve' },
 	--  Make Tmux panes not pains

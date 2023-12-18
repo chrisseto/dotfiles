@@ -43,8 +43,9 @@ in {
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.gh # GitHub CLI, slightly better than hub
     pkgs.git
+    pkgs.git-absorb
     pkgs.git-dive
-    pkgs.git-machete
+    pkgs.git-revise
     pkgs.git-stack
     pkgs.go_1_21 # Pin to 1.21 for as that's what we currently use.
     pkgs.gopls # Golang LSP
