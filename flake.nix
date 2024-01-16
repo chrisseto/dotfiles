@@ -59,6 +59,30 @@
       system = "aarch64-darwin";
       unstable = import nixpkgs-unstable {inherit system;};
     in {
+      "redpanda-mbpro" = darwin.lib.darwinSystem {
+        inherit system;
+
+        modules = [
+          home-manager.darwinModules.home-manager
+          ./configurations/darwin.nix
+          {
+            users.users.chrisseto = {
+              name = "chrisseto";
+              home = "/Users/chrisseto";
+            };
+
+            home-manager.extraSpecialArgs = {inherit unstable;};
+            home-manager.users.chrisseto = {
+              imports = [
+                ./homes/common.nix
+                ./homes/darwin.nix
+                ./homes/redpanda.nix
+              ];
+            };
+          }
+        ];
+      };
+
       "crlMBP-MV7L2CVHJQMTQ0" = darwin.lib.darwinSystem {
         inherit system;
 

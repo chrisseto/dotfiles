@@ -3,8 +3,8 @@ local function gopls_config(capabilities)
 	return {
 		capabilities = capabilities,
 		flags = {
-			debounce_text_changes = 50,
-			allow_incremental_sync = true,
+			-- debounce_text_changes = 50,
+			-- allow_incremental_sync = true,
 		},
 		-- 						on_new_config = function(config, new_root_dir)
 		-- 							-- -- If new_root_dir seems like a bazel project and there isn't a `.nogopackagesdriver` file, set GOPACKAGESDRIVER to a
@@ -22,31 +22,40 @@ local function gopls_config(capabilities)
 		-- 							end
 
 		-- For debugging add --logfile=auto and -rpc.trace. Log files will be in /tmp/gopls-[pid].log
-		cmd = { "gopls", "serve" },
+		-- On MacOS: `fd "(pgrep gopls).log" /var/`
+		cmd = { "gopls", "serve", "--logfile=auto", "-rpc.trace" },
 		settings = {
 			gopls = {
+				gofumpt = true,
+
+				-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#templateextensions-string
+				templateExtensions = { "gotpl" },
+
+				-- https://github.com/golang/tools/blob/c95fa0ff4c2370b6f4b78947fc45987c8d0d664a/gopls/doc/settings.md#expandworkspacetomodule-bool
+				-- I think this is what makes gopls randomly lose its shit whenever I add a new import?
+				expandWorkspaceToModule = false,
 				directoryFilters = {
-					"-_bazel",
-					"-bazel-bin",
-					"-bazel-out",
-					"-bazel-testlogs",
+					-- 	"-_bazel",
+					-- 	"-bazel-bin",
+					-- 	"-bazel-out",
+					-- 	"-bazel-testlogs",
 					"-**/node_modules",
 				},
-				linksInHover = false,
-				allowImplicitNetworkAccess = true,
-				-- May be causing issues??
-				-- buildFlags = { "-tags=bazel" },
-				hints = { parameterNames = true },
-				semanticTokens = true,
-				symbolScope = "workspace",
-				codelenses = {
-					gc_details = false,
-					regenerate_gco = false,
-					test = false,
-					tidy = false,
-					upgrade_dependency = false,
-					vendor = false,
-				}
+				-- linksInHover = false,
+				-- allowImplicitNetworkAccess = true,
+				-- -- May be causing issues??
+				-- -- buildFlags = { "-tags=bazel" },
+				-- hints = { parameterNames = true },
+				-- semanticTokens = true,
+				-- -- symbolScope = "workspace",
+				-- codelenses = {
+				-- 	gc_details = false,
+				-- 	regenerate_gco = false,
+				-- 	test = false,
+				-- 	tidy = false,
+				-- 	upgrade_dependency = false,
+				-- 	vendor = false,
+				-- }
 			}
 		}
 	}
@@ -111,6 +120,8 @@ return {
 			lspconfig.tsserver.setup { capabilities = capabilities }
 			lspconfig.openscad_lsp.setup { capabilities = capabilities }
 			lspconfig.terraformls.setup { capabilities = capabilities }
+			lspconfig.zls.setup { capabilities = capabilities }
+			lspconfig.pyright.setup { capabilities = capabilities }
 		end
 	},
 

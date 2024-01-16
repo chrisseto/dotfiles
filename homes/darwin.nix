@@ -4,11 +4,8 @@
   lib,
   unstable,
   ...
-}: let
-  cockroachdb = pkgs.callPackage ../packages/cockroachdb.nix {};
-in {
+}: {
   home.packages = [
-    cockroachdb
     pkgs.alacritty
     pkgs.reattach-to-user-namespace
   ];

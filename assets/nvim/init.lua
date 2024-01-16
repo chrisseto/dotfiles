@@ -43,19 +43,6 @@ require("lazy").setup({
 			-- refer to the configuration section below
 		}
 	},
-	{
-		'Olical/conjure',
-		-- jpm janet -e "(import spork/netrepl) (netrepl/server)"
-		ft = { "janet" },
-		config = function(_, opts)
-			require("conjure.main").main()
-			require("conjure.mapping")["on-filetype"]()
-		end,
-		init = function()
-			-- Set configuration options here
-			vim.g["conjure#debug"] = true
-		end,
-	},
 	-- Movement helpers
 	{
 		"folke/flash.nvim",
@@ -313,9 +300,12 @@ require("lazy").setup({
 		build = ':TSUpdate',
 		config = function()
 			-- Configure folding to use treesitter.
-			vim.opt.foldmethod = "expr"
-			vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-			vim.opt.foldenable = false
+			vim.o.foldmethod = "expr"
+			vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+			vim.o.foldenable = false
+			-- vim.opt.foldnestmax = 3
+			-- vim.opt.foldminlines = 1
+			-- vim.o.foldtext = 'v:lua.vim.treesitter.foldtext()'
 
 			-- Treesitter configuration
 			require 'nvim-treesitter.configs'.setup {

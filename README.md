@@ -8,7 +8,8 @@ chrisseto's dotfiles
 1. Install [nix-darwin](https://github.com/LnL7/nix-darwin)
 1. Install [home-manager](https://github.com/nix-community/home-manager)
 1. Clone this repo to `~/.nixpkgs`
-1. Run `darwin-rebuild switch --flake ~/.nixpkgs#`
+1. `cd ~/.nixpkgs`
+1. Run `nix run .#nix-darwin -- switch --flake .#<profile>`
 
 ## Linux (NixOS)
 1. Clone this repo to `~/.nixpkgs`

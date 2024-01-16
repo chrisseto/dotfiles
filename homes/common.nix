@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  unstable,
   ...
 }: let
   crlfmt = pkgs.callPackage ../packages/crlfmt.nix {};
@@ -22,7 +23,7 @@ in {
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
-    (import ../overlays/gopls.nix)
+    # (import ../overlays/gopls.nix)
     (import ../overlays/janet)
   ];
 
@@ -36,7 +37,6 @@ in {
     pkgs.delta # Better git diff viewer
     pkgs.delve # golang debugger
     pkgs.fastmod
-    pkgs.helix # A post-modern modal text editor
     pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
     pkgs.fnlfmt # Fennel formatter
     pkgs.fzf # Pluggable fuzzy finder
@@ -47,9 +47,9 @@ in {
     pkgs.git-dive
     pkgs.git-revise
     pkgs.git-stack
-    pkgs.go_1_21 # Pin to 1.21 for as that's what we currently use.
-    pkgs.gopls # Golang LSP
+    pkgs.go
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
+    pkgs.helix # A post-modern modal text editor
     pkgs.htop
     pkgs.hub # Old (?) GitHub CLI
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
@@ -73,6 +73,8 @@ in {
     pkgs.tree # Prints a "tree" of a directory.
     pkgs.xz # LZMA compression successor, used by container tooling.
     pkgs.yarn
+    pkgs.gopls # Golang LSP
+    # unstable.gopls # Golang LSP
   ];
 
   # Zoxide provides the "z" command for faster cd'ing around.
@@ -83,6 +85,20 @@ in {
 
   programs.direnv = {
     enable = true;
+    nix-direnv.enable = true;
+    stdlib = ''
+      layout_poetry() {
+        if [[ ! -f pyproject.toml ]]; then
+          log_error 'No pyproject.toml found.  Use `poetry new` or `poetry init` to create one first.'
+          exit 2
+        fi
+
+        local VENV=$(dirname $(poetry run which python))
+        export VIRTUAL_ENV=$(echo "$VENV" | rev | cut -d'/' -f2- | rev)
+        export POETRY_ACTIVE=1
+        PATH_add "$VENV"
+      }
+    '';
   };
 
   # Bottom, `btm`, a different [h]top - https://github.com/ClementTsang/bottom
@@ -196,7 +212,6 @@ in {
 
   # The previous iteration of this repo was managed by stow. To ease
   # the transition, just symlink the old configurations.
-  home.file.".bin".source = ../assets/bin;
   home.file.".config/tmux".source = ../assets/tmux;
   home.file.".gitconfig".source = ../assets/git/.gitconfig;
   home.file.".gitignore_global".source = ../assets/git/.gitignore_global;
@@ -211,6 +226,7 @@ in {
   # exists as a git repository (not changing it if it already exists!!) which
   # would allow this type of symlinking to be acceptable..
   # See https://www.foodogsquared.one/posts/2023-03-24-managing-mutable-files-in-nixos/
+  home.file.".bin".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/bin";
   home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/nvim";
   home.file.".config/helix".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/helix";
   home.file.".config/fish/functions".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/fish-functions";
