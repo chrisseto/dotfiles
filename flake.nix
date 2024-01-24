@@ -138,6 +138,7 @@
         modules = [
           nixos-apple-silicon.nixosModules.apple-silicon-support
           ./configurations/nas.nix
+          ./configurations/memento.nix
           ./configurations/asahi-mini.nix
           home-manager.nixosModules.home-manager
           {
