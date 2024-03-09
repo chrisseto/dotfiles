@@ -23,13 +23,13 @@ in {
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
-    # (import ../overlays/gopls.nix)
     (import ../overlays/janet)
   ];
 
   home.packages = [
     crlfmt # CockroachLabs golang formatter
     openscad-lsp # OpenSCAD LSP
+    pkgs.age # age is a simple, modern and secure file encryption tool, format, and Go library.
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
     pkgs.bat # Better `cat` with syntax highlighting
@@ -38,7 +38,6 @@ in {
     pkgs.delve # golang debugger
     pkgs.fastmod
     pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
-    pkgs.fnlfmt # Fennel formatter
     pkgs.fzf # Pluggable fuzzy finder
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
     pkgs.gh # GitHub CLI, slightly better than hub
@@ -48,33 +47,29 @@ in {
     pkgs.git-revise
     pkgs.git-stack
     pkgs.go
+    pkgs.gopls # Golang LSP
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.helix # A post-modern modal text editor
     pkgs.htop
     pkgs.hub # Old (?) GitHub CLI
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
-    (pkgs.janet.withPackages (ps:
-      with ps; [
-        sh
-        spork
-      ])) # A pretty neat lisp implementation
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available
     pkgs.lua-language-server
     pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
     pkgs.neovim
-    pkgs.nodejs
     pkgs.ripgrep # `rg`, better grep/ag/ack
     pkgs.skim # `sk`, Competitor of fzf
-    pkgs.terraform
-    pkgs.terraform-ls
+    pkgs.sops # SOPS is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY
     pkgs.tmux
     pkgs.tree # Prints a "tree" of a directory.
     pkgs.xz # LZMA compression successor, used by container tooling.
-    pkgs.yarn
-    pkgs.gopls # Golang LSP
-    # unstable.gopls # Golang LSP
+    (pkgs.janet.withPackages (ps:
+      with ps; [
+        sh
+        spork
+      ])) # A pretty neat lisp implementation
   ];
 
   # Zoxide provides the "z" command for faster cd'ing around.

@@ -3,6 +3,11 @@
     nixpkgs.url = "nixpkgs";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixos-apple-silicon = {
       url = "github:tpwrules/nixos-apple-silicon";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -22,11 +27,12 @@
   # https://nixos.wiki/wiki/Flakes
   outputs = {
     self,
+    sops-nix,
     darwin,
-    nixpkgs,
-    nixpkgs-unstable,
     home-manager,
     nixos-apple-silicon,
+    nixpkgs,
+    nixpkgs-unstable,
     ...
   }: {
     formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
@@ -136,6 +142,7 @@
       asahi-mini = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
         modules = [
+          sops-nix.nixosModules.sops
           nixos-apple-silicon.nixosModules.apple-silicon-support
           ./configurations/nas.nix
           ./configurations/memento.nix
