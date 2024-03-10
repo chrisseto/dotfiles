@@ -139,23 +139,32 @@
           {url = "http://localhost:8989";}
         ];
 
+        http.services.jellyfin.loadBalancer.servers = [
+          {url = "http://localhost:8096";}
+        ];
+
+        http.routers.to-jellyfin = {
+          rule = "Host(`jellfin.home.seto.xyz`)";
+          service = "jellyfin";
+        };
+
         http.routers.to-bazarr = {
-          rule = "PathPrefix(`/bazarr`)";
+          rule = "Host(`bazarr.home.seto.xyz`) || PathPrefix(`/bazarr`)";
           service = "bazarr";
         };
 
         http.routers.to-radarr = {
-          rule = "PathPrefix(`/radarr`)";
+          rule = "Host(`radarr.home.seto.xyz`) || PathPrefix(`/radarr`)";
           service = "radarr";
         };
 
         http.routers.to-sabnzbd = {
-          rule = "PathPrefix(`/sabnzbd`)";
+          rule = "Host(`sabnzbd.home.seto.xyz`) || PathPrefix(`/sabnzbd`)";
           service = "sabnzbd";
         };
 
         http.routers.to-sonarr = {
-          rule = "PathPrefix(`/sonarr`)";
+          rule = "Host(`sonarr.home.seto.xyz`) || PathPrefix(`/sonarr`)";
           service = "sonarr";
         };
       };
