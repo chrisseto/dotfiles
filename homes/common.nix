@@ -61,7 +61,6 @@ in {
     pkgs.neovim
     pkgs.ripgrep # `rg`, better grep/ag/ack
     pkgs.skim # `sk`, Competitor of fzf
-    pkgs.sops # SOPS is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY
     pkgs.tmux
     pkgs.tree # Prints a "tree" of a directory.
     pkgs.xz # LZMA compression successor, used by container tooling.

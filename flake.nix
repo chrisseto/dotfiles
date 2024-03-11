@@ -3,8 +3,10 @@
     nixpkgs.url = "nixpkgs";
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.darwin.follows = "darwin";
+      inputs.home-manager.follows = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -27,7 +29,7 @@
   # https://nixos.wiki/wiki/Flakes
   outputs = {
     self,
-    sops-nix,
+    agenix,
     darwin,
     home-manager,
     nixos-apple-silicon,
@@ -142,11 +144,11 @@
       asahi-mini = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
         modules = [
-          sops-nix.nixosModules.sops
           nixos-apple-silicon.nixosModules.apple-silicon-support
           ./configurations/nas.nix
           ./configurations/memento.nix
           ./configurations/asahi-mini.nix
+          agenix.nixosModules.default
           home-manager.nixosModules.home-manager
           {
             home-manager.useUserPackages = true;
@@ -157,10 +159,23 @@
               home = "/home/chrisseto";
               hashedPassword = "$6$PK.EJqps/uhJSWsM$S1HGVnVQCVIlf.xYNeHjuot2YEzjv4Xy/PLlnyBUxrXo6d/lkxsujjgt7sSnnZ5v8F/eeP.CNMOgGsTL2IN8w0";
               extraGroups = ["wheel"]; # Enable ‘sudo’ for the user.
-              openssh.authorizedKeys.keys = ["SHA256:OlM7U4J9YBrCbk0zp9CQIvqAB8YLU4XVhD0Jt744Qe0"];
+              openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIClQd+Mx8j4tLqk/a2s705FlLPfEbXbXpMeUCcuwDqZ8"];
             };
 
-            home-manager.users.chrisseto = import ./homes/gceworker.nix;
+            age.secrets = {
+              git-credentials = {
+                file = ./secrets/asahi-mini/git-credentials.age;
+                owner = "chrisseto";
+                mode = "400";
+              };
+            };
+
+            home-manager.users.chrisseto = {
+              imports = [
+                ./homes/common.nix
+                ./homes/asahi-mini.nix
+              ];
+            };
           }
         ];
         specialArgs = {
