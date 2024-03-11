@@ -162,14 +162,6 @@
               openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIClQd+Mx8j4tLqk/a2s705FlLPfEbXbXpMeUCcuwDqZ8"];
             };
 
-            age.secrets = {
-              git-credentials = {
-                file = ./secrets/asahi-mini/git-credentials.age;
-                owner = "chrisseto";
-                mode = "400";
-              };
-            };
-
             home-manager.users.chrisseto = {
               imports = [
                 ./homes/common.nix
