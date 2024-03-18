@@ -20,5 +20,6 @@ in {
     pkgs.kustomize
     pkgs.pandoc
     pkgs.yq
+    pkgs.git-machete
   ];
 }

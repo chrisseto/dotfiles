@@ -52,7 +52,7 @@
       #   root = ./.;
       #   globalArgs = {inherit inputs;};
       # };
-      #
+
       perSystem = { pkgs, ... }: {
         formatter = pkgs.nixpkgs-fmt;
       };
@@ -82,60 +82,15 @@
             };
           };
 
-        darwinConfigurations =
-          let
-            system = "aarch64-darwin";
-            unstable = import nixpkgs-unstable { inherit system; };
-          in
-          {
-            "redpanda-mbpro" = darwin.lib.darwinSystem {
-              inherit system;
-
-              modules = [
-                home-manager.darwinModules.home-manager
-                ./configurations/darwin.nix
-                {
-                  users.users.chrisseto = {
-                    name = "chrisseto";
-                    home = "/Users/chrisseto";
-                  };
-
-                  home-manager.extraSpecialArgs = { inherit unstable; };
-                  home-manager.users.chrisseto = {
-                    imports = [
-                      ./homes/common.nix
-                      ./homes/darwin.nix
-                      ./homes/redpanda.nix
-                    ];
-                  };
-                }
-              ];
-            };
-
-            "Chriss-Air" = darwin.lib.darwinSystem {
-              system = "aarch64-darwin";
-              modules = [
-                home-manager.darwinModules.home-manager
-                ./configurations/darwin.nix
-                {
-                  users.users.chrisseto = {
-                    name = "chrisseto";
-                    home = "/Users/chrisseto";
-                  };
-
-                  home-manager.extraSpecialArgs = { inherit unstable; };
-                  home-manager.users.chrisseto = {
-                    imports = [
-                      ./homes/common.nix
-                      ./homes/darwin.nix
-                      ./homes/personal-air.nix
-                    ];
-                  };
-                }
-              ];
-              inputs = { inherit darwin nixpkgs; };
-            };
+        darwinConfigurations = {
+          "redpanda-mbpro" = import ./darwin-configurations/redpanda-mbpro.nix {
+            inherit darwin home-manager nixpkgs-unstable;
           };
+
+          "Chriss-Air" = import ./darwin-configurations/personal-air.nix {
+            inherit darwin home-manager nixpkgs-unstable;
+          };
+        };
 
         nixosConfigurations = {
           asahi-mini = nixpkgs.lib.nixosSystem {
