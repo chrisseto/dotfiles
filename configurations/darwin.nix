@@ -1,13 +1,14 @@
+{ config
+, pkgs
+, ...
+}:
+let
+  hammerspoon = pkgs.callPackage ../packages/hammerspoon.nix { };
+in
 {
-  config,
-  pkgs,
-  ...
-}: let
-  hammerspoon = pkgs.callPackage ../packages/hammerspoon.nix {};
-in {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = [hammerspoon];
+  environment.systemPackages = [ hammerspoon ];
 
   # Use a custom configuration.nix location.
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
@@ -23,7 +24,7 @@ in {
   programs.bash.enable = true;
   programs.fish.enable = true;
 
-  environment.shells = [pkgs.fish];
+  environment.shells = [ pkgs.fish ];
   environment.loginShell = "/run/current-system/sw/bin/fish";
 
   # Used for backwards compatibility, please read the changelog before changing.
@@ -66,11 +67,11 @@ in {
   # Automatically clean up the nix store to save diskspace.
   nix.settings.auto-optimise-store = true;
   # Allow my user to run remote builds.
-  nix.settings.trusted-users = ["root"];
+  nix.settings.trusted-users = [ "root" ];
 
   fonts = {
     fontDir.enable = true;
-    fonts = [(pkgs.nerdfonts.override {fonts = ["FiraCode"];})];
+    fonts = [ (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
   };
 
   # Nix-darwin does not link installed applications to the user environment. This means apps will not show up

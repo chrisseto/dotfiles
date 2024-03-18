@@ -1,11 +1,10 @@
-{
-  pkgs,
-  lib,
-  ...
+{ pkgs
+, lib
+, ...
 }: {
   config = {
     # Create a shared group for all NAS services
-    users.groups.nasdaemons = {};
+    users.groups.nasdaemons = { };
 
     systemd.mounts = [
       {
@@ -14,8 +13,8 @@
         where = "/external";
         options = "noatime";
         type = "btrfs";
-        wantedBy = ["sabnzbd.service" "radarr.service" "sonarr.service"];
-        partOf = ["sabnzbd.service" "radarr.service" "sonarr.service"];
+        wantedBy = [ "sabnzbd.service" "radarr.service" "sonarr.service" ];
+        partOf = [ "sabnzbd.service" "radarr.service" "sonarr.service" ];
       }
       {
         description = "Bazarr configuration";
@@ -23,8 +22,8 @@
         where = "/var/lib/bazarr";
         options = "subvol=configs/bazarr";
         type = "btrfs";
-        partOf = ["bazarr.service"];
-        wantedBy = ["bazarr.service"];
+        partOf = [ "bazarr.service" ];
+        wantedBy = [ "bazarr.service" ];
       }
       {
         description = "Jellyfin configuration";
@@ -32,8 +31,8 @@
         where = "/var/lib/jellyfin";
         options = "subvol=configs/jellyfin";
         type = "btrfs";
-        partOf = ["jellyfin.service"];
-        wantedBy = ["jellyfin.service"];
+        partOf = [ "jellyfin.service" ];
+        wantedBy = [ "jellyfin.service" ];
       }
       {
         description = "Radarr configuration";
@@ -41,8 +40,8 @@
         where = "/var/lib/radarr";
         options = "subvol=configs/radarr";
         type = "btrfs";
-        partOf = ["radarr.service"];
-        wantedBy = ["radarr.service"];
+        partOf = [ "radarr.service" ];
+        wantedBy = [ "radarr.service" ];
       }
       {
         description = "Sabnzbd configuration";
@@ -50,8 +49,8 @@
         where = "/var/lib/sabnzbd";
         options = "subvol=configs/sabnzbd";
         type = "btrfs";
-        wantedBy = ["sabnzbd.service"];
-        partOf = ["sabnzbd.service"];
+        wantedBy = [ "sabnzbd.service" ];
+        partOf = [ "sabnzbd.service" ];
       }
       {
         description = "Sonarr configuration";
@@ -59,8 +58,8 @@
         where = "/var/lib/sonarr";
         options = "subvol=configs/sonarr";
         type = "btrfs";
-        partOf = ["sonarr.service"];
-        wantedBy = ["sonarr.service"];
+        partOf = [ "sonarr.service" ];
+        wantedBy = [ "sonarr.service" ];
       }
     ];
 
@@ -124,23 +123,23 @@
 
       dynamicConfigOptions = {
         http.services.bazarr.loadBalancer.servers = [
-          {url = "http://localhost:6767";}
+          { url = "http://localhost:6767"; }
         ];
 
         http.services.radarr.loadBalancer.servers = [
-          {url = "http://localhost:7878";}
+          { url = "http://localhost:7878"; }
         ];
 
         http.services.sabnzbd.loadBalancer.servers = [
-          {url = "http://localhost:8080";}
+          { url = "http://localhost:8080"; }
         ];
 
         http.services.sonarr.loadBalancer.servers = [
-          {url = "http://localhost:8989";}
+          { url = "http://localhost:8989"; }
         ];
 
         http.services.jellyfin.loadBalancer.servers = [
-          {url = "http://localhost:8096";}
+          { url = "http://localhost:8096"; }
         ];
 
         http.routers.to-jellyfin = {
@@ -174,7 +173,7 @@
     virtualisation.oci-containers.containers = {
       whisper = {
         image = "onerahmet/openai-whisper-asr-webservice:latest";
-        ports = ["127.0.0.1:9000:9000"];
+        ports = [ "127.0.0.1:9000:9000" ];
         environment = {
           ASR_MODEL = "base.en";
         };

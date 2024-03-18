@@ -1,8 +1,8 @@
-{
-  pkgs,
-  unstable,
-  ...
-}: let
+{ pkgs
+, unstable
+, ...
+}:
+let
 in {
   home.packages = [
     pkgs.awscli

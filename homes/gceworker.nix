@@ -1,12 +1,13 @@
+{ config
+, pkgs
+, lib
+, ...
+}:
+let
+  git-branch-stash = pkgs.callPackage ../packages/git-branch-stash.nix { };
+in
 {
-  config,
-  pkgs,
-  lib,
-  ...
-}: let
-  git-branch-stash = pkgs.callPackage ../packages/git-branch-stash.nix {};
-in {
-  imports = [./common.nix];
+  imports = [ ./common.nix ];
 
   home.packages = [
     git-branch-stash
@@ -21,8 +22,8 @@ in {
   systemd.user.services.bazel-cache = {
     Unit = {
       Description = "Bazel HTTP/1.1 cache";
-      After = ["networking.target"];
-      PartOf = [];
+      After = [ "networking.target" ];
+      PartOf = [ ];
     };
 
     Service = {
@@ -34,6 +35,6 @@ in {
       PIDFile = "%C/dev-bazel-remote/.dev-cache.pid";
     };
 
-    Install = {WantedBy = ["default.target"];};
+    Install = { WantedBy = [ "default.target" ]; };
   };
 }

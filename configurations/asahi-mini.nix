@@ -1,11 +1,10 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{
-  config,
-  pkgs,
-  nixos-apple-silicon,
-  ...
+{ config
+, pkgs
+, nixos-apple-silicon
+, ...
 }: {
   imports = [
     # Include the results of the hardware scan.
@@ -20,7 +19,7 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
-  boot.supportedFilesystems = ["btrfs"];
+  boot.supportedFilesystems = [ "btrfs" ];
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -82,11 +81,11 @@
   programs.zsh.enable = true;
   programs.fish.enable = true;
 
-  environment.shells = [pkgs.fish pkgs.bash pkgs.zsh];
+  environment.shells = [ pkgs.fish pkgs.bash pkgs.zsh ];
   users.defaultUserShell = pkgs.fish;
 
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # started in user sessions.
   # programs.mtr.enable = true;

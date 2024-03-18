@@ -1,46 +1,48 @@
-{
-  janet,
-  jpm,
-  stdenv,
-  fetchFromGitHub,
-} @ defs: let
-  buildJanetPackage = {
-    src,
-    jpm ? defs.jpm,
-    janet ? defs.janet,
-    nativeBuildInputs ? [],
-    ...
-  } @ attrs:
+{ janet
+, jpm
+, stdenv
+, fetchFromGitHub
+,
+} @ defs:
+let
+  buildJanetPackage =
+    { src
+    , jpm ? defs.jpm
+    , janet ? defs.janet
+    , nativeBuildInputs ? [ ]
+    , ...
+    } @ attrs:
     stdenv.mkDerivation (attrs
       // {
-        inherit src;
+      inherit src;
 
-        dontConfigure = true;
+      dontConfigure = true;
 
-        nativeBuildInputs = [janet jpm] ++ nativeBuildInputs;
+      nativeBuildInputs = [ janet jpm ] ++ nativeBuildInputs;
 
-        # TODO there's probably just a build command or something I can set
-        # TODO deps
-        # TODO run tests (?)
-        # TODO verify proper environments and what not are being used
-        buildPhase = ''
-          runHook preBuild
+      # TODO there's probably just a build command or something I can set
+      # TODO deps
+      # TODO run tests (?)
+      # TODO verify proper environments and what not are being used
+      buildPhase = ''
+        runHook preBuild
 
-          jpm build --offline --local
+        jpm build --offline --local
 
-          runHook postBuild
-        '';
+        runHook postBuild
+      '';
 
-        installPhase = ''
-          runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-          mkdir -p $out
-          JANET_TREE=$out jpm install --offline
+        mkdir -p $out
+        JANET_TREE=$out jpm install --offline
 
-          runHook postInstall
-        '';
-      });
-in rec {
+        runHook postInstall
+      '';
+    });
+in
+rec {
   # TODO add a package with deps.
   spork = buildJanetPackage {
     name = "spork";
@@ -66,7 +68,7 @@ in rec {
   };
 
   sh = buildJanetPackage {
-    propagatedBuildInputs = [posix-spawn];
+    propagatedBuildInputs = [ posix-spawn ];
 
     name = "sh";
     version = "0.0.2";

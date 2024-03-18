@@ -1,8 +1,7 @@
-{
-  age,
-  pkgs,
-  config,
-  ...
+{ age
+, pkgs
+, config
+, ...
 }: {
   config = {
     # TODO add a backup on a cronjob to b2.
@@ -32,7 +31,7 @@
 
     networking.firewall = {
       # Allow tailscale to connect freely.
-      trustedInterfaces = ["tailscale0"];
+      trustedInterfaces = [ "tailscale0" ];
 
       allowedUDPPorts = [
         config.services.tailscale.port # tailscale
@@ -43,7 +42,7 @@
       postgres = {
         # TODO pgvector
         image = "postgres:16.1";
-        ports = ["5432:5432"];
+        ports = [ "5432:5432" ];
         environment = {
           # pls no hack.
           POSTGRES_USER = "postgres";

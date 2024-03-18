@@ -1,6 +1,6 @@
-{
-  stdenv ? (import <nixpkgs> {}).stdenv,
-  fetchzip ? (import <nixpkgs> {}).fetchzip,
+{ stdenv ? (import <nixpkgs> { }).stdenv
+, fetchzip ? (import <nixpkgs> { }).fetchzip
+,
 }:
 stdenv.mkDerivation {
   pname = "hammerspoon";

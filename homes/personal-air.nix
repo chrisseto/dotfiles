@@ -1,9 +1,8 @@
-{
-  config,
-  pkgs,
-  lib,
-  unstable,
-  ...
+{ config
+, pkgs
+, lib
+, unstable
+, ...
 }: {
   home.packages = [
     pkgs._1password

@@ -29,21 +29,21 @@
   };
 
   # https://nixos.wiki/wiki/Flakes
-  outputs = inputs @ {
-    self,
-    agenix,
-    darwin,
-    home-manager,
-    nixos-apple-silicon,
-    nixpkgs,
-    nixpkgs-unstable,
-    flake-parts,
-    ...
-  }:
-    flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
+  outputs =
+    inputs @ { self
+    , agenix
+    , darwin
+    , home-manager
+    , nixos-apple-silicon
+    , nixpkgs
+    , nixpkgs-unstable
+    , flake-parts
+    , ...
+    }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" ];
 
-	  # TODO: Configure ez-configs to split up configurations.
+      # TODO: Configure ez-configs to split up configurations.
       # imports = [
       #   inputs.ez-configs.flakeModule
       # ];
@@ -53,10 +53,8 @@
       #   globalArgs = {inherit inputs;};
       # };
       #
-      perSystem = {pkgs, ...}: {
-        # TODO move to nixpkgs-fmt.
-        # formatter = pkgs.nixpkgs-fmt;
-        formatter = pkgs.alejandra;
+      perSystem = { pkgs, ... }: {
+        formatter = pkgs.nixpkgs-fmt;
       };
 
       flake = {
@@ -64,76 +62,80 @@
         packages.aarch64-darwin.nix-darwin = darwin.packages.aarch64-darwin.default;
         packages.x86_64-linux.home-manager = home-manager.packages.x86_64-linux.default;
 
-        homeConfigurations = let
-          # TODO don't hardcode system here either...
-          system = "x86_64-linux";
-          pkgs = import nixpkgs {inherit system;};
-          unstable = import nixpkgs-unstable {inherit system;};
-        in {
-          gceworker = home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            extraSpecialArgs = {inherit unstable;};
+        homeConfigurations =
+          let
+            # TODO don't hardcode system here either...
+            system = "x86_64-linux";
+            pkgs = import nixpkgs { inherit system; };
+            unstable = import nixpkgs-unstable { inherit system; };
+          in
+          {
+            gceworker = home-manager.lib.homeManagerConfiguration {
+              inherit pkgs;
+              extraSpecialArgs = { inherit unstable; };
 
-            modules = [
-              ./homes/common.nix
-              ./homes/crl.nix
-              ./homes/gceworker.nix
-            ];
-          };
-        };
-
-        darwinConfigurations = let
-          system = "aarch64-darwin";
-          unstable = import nixpkgs-unstable {inherit system;};
-        in {
-          "redpanda-mbpro" = darwin.lib.darwinSystem {
-            inherit system;
-
-            modules = [
-              home-manager.darwinModules.home-manager
-              ./configurations/darwin.nix
-              {
-                users.users.chrisseto = {
-                  name = "chrisseto";
-                  home = "/Users/chrisseto";
-                };
-
-                home-manager.extraSpecialArgs = {inherit unstable;};
-                home-manager.users.chrisseto = {
-                  imports = [
-                    ./homes/common.nix
-                    ./homes/darwin.nix
-                    ./homes/redpanda.nix
-                  ];
-                };
-              }
-            ];
+              modules = [
+                ./homes/common.nix
+                ./homes/crl.nix
+                ./homes/gceworker.nix
+              ];
+            };
           };
 
-          "Chriss-Air" = darwin.lib.darwinSystem {
+        darwinConfigurations =
+          let
             system = "aarch64-darwin";
-            modules = [
-              home-manager.darwinModules.home-manager
-              ./configurations/darwin.nix
-              {
-                users.users.chrisseto = {
-                  name = "chrisseto";
-                  home = "/Users/chrisseto";
-                };
+            unstable = import nixpkgs-unstable { inherit system; };
+          in
+          {
+            "redpanda-mbpro" = darwin.lib.darwinSystem {
+              inherit system;
 
-                home-manager.extraSpecialArgs = {inherit unstable;};
-                home-manager.users.chrisseto = {
-                  imports = [
-                    ./homes/common.nix
-                    ./homes/darwin.nix
-                    ./homes/personal-air.nix
-                  ];
-                };
-              }
-            ];
-            inputs = {inherit darwin nixpkgs;};
+              modules = [
+                home-manager.darwinModules.home-manager
+                ./configurations/darwin.nix
+                {
+                  users.users.chrisseto = {
+                    name = "chrisseto";
+                    home = "/Users/chrisseto";
+                  };
+
+                  home-manager.extraSpecialArgs = { inherit unstable; };
+                  home-manager.users.chrisseto = {
+                    imports = [
+                      ./homes/common.nix
+                      ./homes/darwin.nix
+                      ./homes/redpanda.nix
+                    ];
+                  };
+                }
+              ];
+            };
+
+            "Chriss-Air" = darwin.lib.darwinSystem {
+              system = "aarch64-darwin";
+              modules = [
+                home-manager.darwinModules.home-manager
+                ./configurations/darwin.nix
+                {
+                  users.users.chrisseto = {
+                    name = "chrisseto";
+                    home = "/Users/chrisseto";
+                  };
+
+                  home-manager.extraSpecialArgs = { inherit unstable; };
+                  home-manager.users.chrisseto = {
+                    imports = [
+                      ./homes/common.nix
+                      ./homes/darwin.nix
+                      ./homes/personal-air.nix
+                    ];
+                  };
+                }
+              ];
+              inputs = { inherit darwin nixpkgs; };
+            };
           };
-        };
 
         nixosConfigurations = {
           asahi-mini = nixpkgs.lib.nixosSystem {
@@ -153,8 +155,8 @@
                   isNormalUser = true;
                   home = "/home/chrisseto";
                   hashedPassword = "$6$PK.EJqps/uhJSWsM$S1HGVnVQCVIlf.xYNeHjuot2YEzjv4Xy/PLlnyBUxrXo6d/lkxsujjgt7sSnnZ5v8F/eeP.CNMOgGsTL2IN8w0";
-                  extraGroups = ["wheel"]; # Enable ‘sudo’ for the user.
-                  openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIClQd+Mx8j4tLqk/a2s705FlLPfEbXbXpMeUCcuwDqZ8"];
+                  extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+                  openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIClQd+Mx8j4tLqk/a2s705FlLPfEbXbXpMeUCcuwDqZ8" ];
                 };
 
                 home-manager.users.chrisseto = {
