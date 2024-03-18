@@ -44,25 +44,25 @@ require("lazy").setup({
 		}
 	},
 	-- Movement helpers
-	{
-		"folke/flash.nvim",
-		event = "VeryLazy",
-		---@type Flash.Config
-		opts = {},
-		-- stylua: ignore
-		keys = {
-			{ "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-			{ "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc =
-			"Flash Treesitter" },
-			{ "r",     mode = "o",               function() require("flash").remote() end,            desc =
-			"Remote Flash" },
-			{ "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end,
-				                                                                                          desc =
-				"Treesitter Search" },
-			{ "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc =
-			"Toggle Flash Search" },
-		},
-	},
+	-- {
+	-- 	"folke/flash.nvim",
+	-- 	event = "VeryLazy",
+	-- 	---@type Flash.Config
+	-- 	opts = {},
+	-- 	-- stylua: ignore
+	-- 	keys = {
+	-- 		{ "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+	-- 		{ "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc =
+	-- 		"Flash Treesitter" },
+	-- 		{ "r",     mode = "o",               function() require("flash").remote() end,            desc =
+	-- 		"Remote Flash" },
+	-- 		{ "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end,
+	-- 			                                                                                          desc =
+	-- 			"Treesitter Search" },
+	-- 		{ "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc =
+	-- 		"Toggle Flash Search" },
+	-- 	},
+	-- },
 	{
 		-- Colorscheme. Configured to load before everything else.
 		'sainnhe/everforest',
@@ -306,6 +306,16 @@ require("lazy").setup({
 			-- vim.opt.foldnestmax = 3
 			-- vim.opt.foldminlines = 1
 			-- vim.o.foldtext = 'v:lua.vim.treesitter.foldtext()'
+
+			local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
+			parser_config.gotmpl = {
+				install_info = {
+					url = "https://github.com/ngalaiko/tree-sitter-go-template",
+					files = { "src/parser.c" }
+				},
+				filetype = "gotmpl",
+				used_by = { "gohtmltmpl", "gotexttmpl", "gotmpl", "yaml" }
+			}
 
 			-- Treesitter configuration
 			require 'nvim-treesitter.configs'.setup {
