@@ -1,6 +1,7 @@
 #!/usr/bin/env fish
 
-set -l base master
+# TODO figure out how to detect master vs main.
+set -l base main
 set -l branch HEAD
 
 if set -q argv[1]

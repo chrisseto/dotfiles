@@ -62,6 +62,10 @@
 [url "git@github.com:cockroachlabs"]
 	insteadOf = https://github.com/cockroachlabs
 
+# Always use SSH for accessing RPD GitHub.
+[url "git@github.com:redpanda-data"]
+	insteadOf = https://github.com/redpanda-data
+
 [interactive]
 	diffFilter = delta --color-only
 
