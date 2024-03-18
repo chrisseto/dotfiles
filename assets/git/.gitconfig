@@ -59,6 +59,9 @@
 [url "git@github.com:cockroachdb"]
 	insteadOf = https://github.com/cockroachdb
 
+[url "git@github.com:chrisseto"]
+	insteadOf = https://github.com/chrisseto
+
 [url "git@github.com:cockroachlabs"]
 	insteadOf = https://github.com/cockroachlabs
 
