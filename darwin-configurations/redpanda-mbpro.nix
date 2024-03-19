@@ -18,8 +18,8 @@ darwin.lib.darwinSystem {
       home-manager.extraSpecialArgs = { inherit unstable; };
       home-manager.users.chrisseto = {
         imports = [
+          ../home-modules/nvim.nix
           ../homes/common.nix
-          ../homes/darwin.nix
           ../homes/redpanda.nix
         ];
       };

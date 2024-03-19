@@ -19,7 +19,7 @@ darwin.lib.darwinSystem {
       home-manager.users.chrisseto = {
         imports = [
           ../homes/common.nix
-          ../homes/darwin.nix
+          ../home-modules/nvim.nix
           ../homes/personal-air.nix
         ];
       };

@@ -6,7 +6,6 @@
 }:
 let
   crlfmt = pkgs.callPackage ../packages/crlfmt.nix { };
-  openscad-lsp = pkgs.callPackage ../packages/openscad-lsp.nix { };
 in
 {
   # This value determines the Home Manager release that your
@@ -29,7 +28,6 @@ in
 
   home.packages = [
     crlfmt # CockroachLabs golang formatter
-    openscad-lsp # OpenSCAD LSP
     pkgs.age # age is a simple, modern and secure file encryption tool, format, and Go library.
     pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
@@ -48,7 +46,6 @@ in
     pkgs.git-revise
     pkgs.git-stack
     pkgs.go
-    pkgs.gopls # Golang LSP
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.helix # A post-modern modal text editor
     pkgs.htop
@@ -57,9 +54,7 @@ in
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available
-    pkgs.lua-language-server
     pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
-    pkgs.neovim
     pkgs.ripgrep # `rg`, better grep/ag/ack
     pkgs.skim # `sk`, Competitor of fzf
     pkgs.tmux
@@ -150,10 +145,6 @@ in
       # No Greeting when opening fish.
       set fish_greeting
 
-      # Use Neovim as EDITOR.
-      set -gx EDITOR nvim
-      set -gx VISUAL nvim
-
       # Use the new version of GCP's k8s auth.
       # https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
       set -gx USE_GKE_GCLOUD_AUTH_PLUGIN True
@@ -169,13 +160,11 @@ in
       # Add ~/.bin to $PATH for access to custom scripts and the like.
       fish_add_path $HOME/.bin
 
-      # TODO upgrade git-machete to the latest version via an overlay.
       # Config completion for git-machete
       # ${pkgs.git-machete}/bin/git-machete completion fish | source
     '';
 
     shellAliases = {
-      nv = "nvim";
       g = "git";
     };
 
@@ -222,7 +211,6 @@ in
   # would allow this type of symlinking to be acceptable..
   # See https://www.foodogsquared.one/posts/2023-03-24-managing-mutable-files-in-nixos/
   home.file.".bin".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/bin";
-  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/nvim";
   home.file.".config/helix".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/helix";
   home.file.".config/fish/functions".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/fish-functions";
 }
