@@ -26,4 +26,4 @@ darwin.lib.darwinSystem {
     }
   ];
   inputs = { inherit darwin nixpkgs; };
-};
+}

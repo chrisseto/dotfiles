@@ -84,11 +84,11 @@
 
         darwinConfigurations = {
           "redpanda-mbpro" = import ./darwin-configurations/redpanda-mbpro.nix {
-            inherit darwin home-manager nixpkgs-unstable;
+            inherit darwin nixpkgs home-manager nixpkgs-unstable;
           };
 
           "Chriss-Air" = import ./darwin-configurations/personal-air.nix {
-            inherit darwin home-manager nixpkgs-unstable;
+            inherit darwin nixpkgs home-manager nixpkgs-unstable;
           };
         };
 

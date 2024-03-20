@@ -33,8 +33,8 @@ in
 	# binary path directly into my neovim configs.
     openscad-lsp # SCAD LSP
     pkgs.lua-language-server # Lua LSP
-    pkgs.nil # Nix LSP
     unstable.gopls # Golang LSP
+    unstable.nil # Nix LSP
   ];
 
 
