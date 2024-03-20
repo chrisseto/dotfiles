@@ -88,8 +88,36 @@ end
 return {
 	-- Better version of lua_ls for neovim configuration.
 	-- TODO: Do I need lua_ls configured?
-	{ "folke/neodev.nvim",             opts = {} },
-	{ 'simrat39/symbols-outline.nvim', opts = {} },
+	{ "folke/neodev.nvim", opts = {} },
+	{
+		'hedyhli/outline.nvim',
+		opts = {},
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons"
+		},
+		keys = {
+			{ "<leader>o", ":Outline<CR>", desc = "Toggle Symbol Outline" },
+		},
+	},
+	{
+		'kevinhwang91/nvim-ufo',
+		dependencies = {
+			'kevinhwang91/promise-async',
+		},
+		config = function()
+			vim.o.foldcolumn = '1' -- '0' is not bad
+			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+			vim.o.foldlevelstart = 99
+			vim.o.foldenable = true
+
+			-- Using ufo provider need remap `zR` and `zM`.
+			vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+			vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+
+			require('ufo').setup()
+		end
+	},
 	{
 		'folke/trouble.nvim',
 		opts = {},
@@ -108,12 +136,15 @@ return {
 			{ 'hrsh7th/cmp-nvim-lsp' },
 		},
 		config = function()
-			-- error("bar")
 			-- To Debug LSP settings:
 			-- :lua print(vim.inspect(vim.lsp.get_active_clients()))
 
 			local lspconfig = require('lspconfig')
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
+			capabilities.textDocument.foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true
+			}
 
 			lspconfig.gopls.setup(gopls_config(capabilities))
 			lspconfig.lua_ls.setup(luals_config(capabilities))
@@ -124,20 +155,44 @@ return {
 			lspconfig.pyright.setup { capabilities = capabilities }
 		end
 	},
-
-	-- LSP helper (TODO Replace with simple customization and other plugins)
 	{
-		'glepnir/lspsaga.nvim',
+		"ray-x/go.nvim",
+		dependencies = { -- optional packages
+			"ray-x/guihua.lua",
+			"neovim/nvim-lspconfig",
+			"nvim-treesitter/nvim-treesitter",
+		},
 		config = function()
-			require("lspsaga").setup({
-				symbol_in_winbar = {
-					enable = false, -- Cute but very slow.
-				},
-				lightbulb = {
-					enable = false, -- lightbulb just gets in the way.
-				},
+			require("go").setup({
+				luasnip = true,
+			})
+		end,
+		event = { "CmdlineEnter" },
+		ft = { "go", 'gomod' },
+		build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+	},
+	{
+		"ray-x/guihua.lua",
+		build = 'cd lua/fzy && make',
+	},
+	{
+		'ray-x/navigator.lua',
+		dependencies = {
+			'ray-x/guihua.lua',
+			'neovim/nvim-lspconfig',
+			'nvim-treesitter/nvim-treesitter-refactor',
+		},
+		config = function()
+			require 'navigator'.setup({
+				icons = { icons = false },
+				-- diagnostic_scrollbar_sign = false,
 			})
 		end
 	},
-
+	{
+		"ray-x/lsp_signature.nvim",
+		event = "VeryLazy",
+		opts = {},
+		config = function(_, opts) require 'lsp_signature'.setup(opts) end
+	}
 }

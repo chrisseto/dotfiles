@@ -64,27 +64,36 @@ require("lazy").setup({
 	-- 	},
 	-- },
 	{
-		-- Colorscheme. Configured to load before everything else.
-		'sainnhe/everforest',
+		"neanias/everforest-nvim",
+		version = false,
 		lazy = false,
-		priority = 1000,
+		priority = 1000, -- make sure to load this before all the other start plugins
 		config = function()
-			-- See https://github.com/sainnhe/everforest/blob/master/doc/everforest.txt
-			vim.g.everforest_background = 'medium'
-			vim.g.everforest_enable_italic = 1
-			vim.g.everforest_better_performance = 1
-			vim.g.everforest_disable_italic_comment = 1
-
-			vim.cmd [[set termguicolors]]
-			vim.cmd [[colorscheme everforest]]
+			require("everforest").setup({})
+			vim.o.background = "dark";
+			vim.cmd([[colorscheme everforest]])
 		end,
+	},
+	{
+		'romgrk/barbar.nvim',
+		dependencies = {
+			'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+			'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+		},
+		init = function() vim.g.barbar_auto_setup = false end,
+		opts = {
+			-- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+			-- animation = true,
+			-- insert_at_start = true,
+			-- …etc.
+		},
+		version = '^1.0.0', -- optional: only update when a new 1.x version is released
 	},
 
 	-- Generic lua deps, defered until another plugin loads them.
 	{ 'nvim-tree/nvim-web-devicons', lazy = true },
 	{ 'nvim-lua/popup.nvim',         lazy = true },
 	{ 'nvim-lua/plenary.nvim',       lazy = true },
-	-- { 'kkharji/sqlite.lua',          lazy = true },
 
 	-- TODO: Not sure if this actually does anything?
 	{
@@ -112,8 +121,6 @@ require("lazy").setup({
 
 	-- Git diff info + blame support.
 	{ 'lewis6991/gitsigns.nvim',                    config = true },
-	-- Git conflict helper
-	-- { 'akinsho/git-conflict.nvim',                  config = true },
 	-- Delve integration
 	{ 'sebdah/vim-delve' },
 	--  Make Tmux panes not pains
@@ -135,7 +142,6 @@ require("lazy").setup({
 			require('Comment.ft').set('scad', '//%s')
 		end,
 	},
-
 	{
 		-- Support yanking to system clipboards across SSH
 		'ojroques/nvim-osc52',
@@ -179,7 +185,7 @@ require("lazy").setup({
 			})
 
 			require('luasnip.loaders.from_lua').lazy_load({
-				paths = { "./lua/snippets" },
+				paths = { "./lua/snippets", "./lua/snips" },
 			})
 		end,
 		keys = {
@@ -296,7 +302,7 @@ require("lazy").setup({
 	-- Treesitter is a better syntax highlighter for neovim.
 	{
 		'nvim-treesitter/nvim-treesitter',
-		dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring', 'nvim-treesitter/playground' },
+		dependencies = { 'nvim-treesitter/playground' },
 		build = ':TSUpdate',
 		config = function()
 			-- Configure folding to use treesitter.
@@ -331,11 +337,6 @@ require("lazy").setup({
 					-- Using this option may slow down your editor, and you may see some duplicate highlights.
 					-- Instead of true it can also be a list of languages
 					additional_vim_regex_highlighting = false,
-				},
-
-				-- Enable context-commentstring support.
-				context_commentstring = {
-					enable = true,
 				},
 
 				-- Enable TS powered indentation.
@@ -380,28 +381,6 @@ require("lazy").setup({
 					{ 'gd',        vim.lsp.buf.definition,                      description = 'Go to definition' },
 					{ 'gr',        vim.lsp.buf.references,                      description = 'Find references' },
 					{ '<leader>e', vim.lsp.diagnostic.show_line_diagnostics,    description = 'Line diagnostics' },
-
-					{
-						'<leader>o',
-						':SymbolsOutline<CR>',
-						description = 'Toggle LSP Symbol Outline',
-						mode = {
-							'n' }
-					},
-					{
-						'K',
-						':Lspsaga hover_doc<CR>',
-						description = 'Show Documentation',
-						mode = {
-							'n' }
-					},
-					{
-						'<leader>rn',
-						':Lspsaga rename ++project<CR>',
-						description = 'Rename',
-						mode = {
-							'n' },
-					},
 				},
 			})
 		end
