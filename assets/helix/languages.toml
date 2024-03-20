@@ -1,0 +1,10 @@
+[[language]]
+name = "nix"
+roots = ["flake.nix"]
+language-servers = [{name="nil"}]
+
+[language-server.nil]
+command = "nil"
+config = {
+  
+}
