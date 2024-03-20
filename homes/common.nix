@@ -47,7 +47,6 @@ in
     pkgs.git-stack
     pkgs.go
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
-    pkgs.helix # A post-modern modal text editor
     pkgs.htop
     pkgs.hub # Old (?) GitHub CLI
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
@@ -55,11 +54,15 @@ in
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available
     pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
+    pkgs.nnn # CLI file tree
     pkgs.ripgrep # `rg`, better grep/ag/ack
     pkgs.skim # `sk`, Competitor of fzf
     pkgs.tmux
     pkgs.tree # Prints a "tree" of a directory.
     pkgs.xz # LZMA compression successor, used by container tooling.
+    unstable.helix # A post-modern modal text editor
+    unstable.nil # nix LSP.
+    unstable.yazi # Yet another file manager.
     (pkgs.janet.withPackages (ps:
       with ps; [
         sh
