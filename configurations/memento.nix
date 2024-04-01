@@ -16,15 +16,15 @@
 
     age.secrets = {
       memento-deploy-key = {
-        file = ../secrets/memento-deploy-key.age;
+        file = ../assets/secrets/memento-deploy-key.age;
       };
     };
 
     # RO SSH Key to allow cloning the memento repo.
     programs.ssh.extraConfig = ''
       Host github_memento_deploy
-        Hostname github.com
-        IdentityFile=${config.age.secrets.memento-deploy-key.path}
+      	Hostname github.com
+      	IdentityFile=${config.age.secrets.memento-deploy-key.path}
     '';
 
     services.tailscale.enable = true;

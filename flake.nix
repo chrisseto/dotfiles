@@ -26,6 +26,11 @@
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    extra-container = {
+      url = "github:erikarvstedt/extra-container";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # https://nixos.wiki/wiki/Flakes
@@ -33,11 +38,12 @@
     inputs @ { self
     , agenix
     , darwin
+    , extra-container
+    , flake-parts
     , home-manager
     , nixos-apple-silicon
     , nixpkgs
     , nixpkgs-unstable
-    , flake-parts
     , ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -96,12 +102,13 @@
           asahi-mini = nixpkgs.lib.nixosSystem {
             system = "aarch64-linux";
             modules = [
+              agenix.nixosModules.default
+              home-manager.nixosModules.home-manager
               nixos-apple-silicon.nixosModules.apple-silicon-support
+              extra-container.nixosModules.default
               ./configurations/nas.nix
               ./configurations/memento.nix
               ./configurations/asahi-mini.nix
-              agenix.nixosModules.default
-              home-manager.nixosModules.home-manager
               {
                 home-manager.useUserPackages = true;
 

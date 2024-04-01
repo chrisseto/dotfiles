@@ -28,9 +28,9 @@ in
     pkgs.ripgrep # `rg`, better grep/ag/ack
 
     # LSPs
-	# Might be nice to parameterize some of this and configure neovim to only
-	# setup LSPs that it sees are executable. Would also be nice to bake the
-	# binary path directly into my neovim configs.
+    # Might be nice to parameterize some of this and configure neovim to only
+    # setup LSPs that it sees are executable. Would also be nice to bake the
+    # binary path directly into my neovim configs.
     openscad-lsp # SCAD LSP
     pkgs.lua-language-server # Lua LSP
     unstable.gopls # Golang LSP
