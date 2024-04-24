@@ -99,41 +99,53 @@
         };
 
         nixosConfigurations = {
-          asahi-mini = nixpkgs.lib.nixosSystem {
-            system = "aarch64-linux";
-            modules = [
-              agenix.nixosModules.default
-              home-manager.nixosModules.home-manager
-              nixos-apple-silicon.nixosModules.apple-silicon-support
-              extra-container.nixosModules.default
-              ./configurations/nas.nix
-              ./configurations/memento.nix
-              ./configurations/asahi-mini.nix
-              {
-                home-manager.useUserPackages = true;
+          asahi-mini =
+            let
+              system = "aarch64-linux";
+              pkgs = import nixpkgs { inherit system; };
+              unstable = import nixpkgs-unstable { inherit system; };
+            in
+            nixpkgs.lib.nixosSystem {
+              inherit system;
 
-                # Define a user account. Don't forget to set a password with ‘passwd’.
-                users.users.chrisseto = {
-                  isNormalUser = true;
-                  home = "/home/chrisseto";
-                  hashedPassword = "$6$PK.EJqps/uhJSWsM$S1HGVnVQCVIlf.xYNeHjuot2YEzjv4Xy/PLlnyBUxrXo6d/lkxsujjgt7sSnnZ5v8F/eeP.CNMOgGsTL2IN8w0";
-                  extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-                  openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIClQd+Mx8j4tLqk/a2s705FlLPfEbXbXpMeUCcuwDqZ8" ];
-                };
+              modules = [
+                agenix.nixosModules.default
+                home-manager.nixosModules.home-manager
+                nixos-apple-silicon.nixosModules.apple-silicon-support
+                extra-container.nixosModules.default
+                ./configurations/nas.nix
+                ./configurations/memento.nix
+                ./configurations/asahi-mini.nix
+                ./nixos-modules/silverbullet
+                ./nixos-modules/home-assistant.nix
+                {
+                  home-manager.useUserPackages = true;
 
-                home-manager.users.chrisseto = {
-                  imports = [
-                    ./homes/common.nix
-                    ./homes/asahi-mini.nix
-                  ];
-                };
-              }
-            ];
-            specialArgs = {
-              inherit nixpkgs;
-              inherit nixos-apple-silicon;
+                  # Define a user account. Don't forget to set a password with ‘passwd’.
+                  users.users.chrisseto = {
+                    isNormalUser = true;
+                    home = "/home/chrisseto";
+                    hashedPassword = "$6$PK.EJqps/uhJSWsM$S1HGVnVQCVIlf.xYNeHjuot2YEzjv4Xy/PLlnyBUxrXo6d/lkxsujjgt7sSnnZ5v8F/eeP.CNMOgGsTL2IN8w0";
+                    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+                    openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIClQd+Mx8j4tLqk/a2s705FlLPfEbXbXpMeUCcuwDqZ8" ];
+                  };
+
+                  home-manager.extraSpecialArgs = { inherit unstable; };
+
+                  home-manager.users.chrisseto = {
+                    imports = [
+                      ./homes/common.nix
+                      ./homes/asahi-mini.nix
+                      ./home-modules/nvim.nix
+                    ];
+                  };
+                }
+              ];
+              specialArgs = {
+                inherit nixpkgs;
+                inherit nixos-apple-silicon;
+              };
             };
-          };
         };
       };
     };

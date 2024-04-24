@@ -3,6 +3,23 @@
     allowedTCPPorts = [ 8123 ];
   };
 
+  services.traefik = {
+    enable = true;
+
+    dynamicConfigOptions = {
+      http.services.home-assistant.loadBalancer.servers = [
+        {
+          url = "http://localhost:8123";
+        }
+      ];
+
+      http.routers.to-home-assistant = {
+        rule = "Host(`ha.home.seto.xyz`)";
+        service = "home-assistant";
+      };
+    };
+  };
+
   systemd.mounts = [
     {
       description = "Home-Assistant configuration";
