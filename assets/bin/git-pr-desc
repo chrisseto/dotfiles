@@ -9,7 +9,7 @@ if set -q argv[1]
 end
 
 # Gather all PRs that $branch is based off of.
-set -l pr_refs (git --no-pager log --reverse --decorate-refs=refs/prs/ --format='%D' $base..$branch~1)
+set -l pr_refs (git --no-pager log --reverse --decorate-refs=refs/prs/ --format='%D' $base..$branch~1 | grep .)
 
 set -l bases
 set -a bases $base
