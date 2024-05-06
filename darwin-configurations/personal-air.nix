@@ -6,10 +6,32 @@ in
 darwin.lib.darwinSystem {
   inherit system;
 
+  inputs = { inherit darwin nixpkgs; };
+  specialArgs = { inherit unstable; };
+
   modules = [
     home-manager.darwinModules.home-manager
     ./default.nix
     {
+      # nix.linux-builder.enable = false;
+      # nix.settings.extra-trusted-users = [ "admin" ];
+
+      homebrew = {
+        enable = true;
+
+        onActivation = {
+          autoUpdate = true;
+        };
+
+        casks = [ "wezterm" ];
+
+        # masApps = {};
+
+        brews = [
+          "mas" # https://github.com/mas-cli/mas
+        ];
+      };
+
       users.users.chrisseto = {
         name = "chrisseto";
         home = "/Users/chrisseto";
@@ -26,5 +48,4 @@ darwin.lib.darwinSystem {
       };
     }
   ];
-  inputs = { inherit darwin nixpkgs; };
 }

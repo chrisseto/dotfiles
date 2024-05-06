@@ -17,6 +17,7 @@
     pkgs.poetry
     pkgs.pyright
     pkgs.python310
+    unstable.wezterm
     unstable.llama-cpp
     unstable.openai-whisper-cpp
   ];
