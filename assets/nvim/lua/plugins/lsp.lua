@@ -112,11 +112,15 @@ return {
 			vim.o.foldenable = true
 
 			-- Using ufo provider need remap `zR` and `zM`.
-			vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-			vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+			-- vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+			-- vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 
 			require('ufo').setup()
-		end
+		end,
+		keys = {
+			{ "zR", mode = { "n" }, function() require("ufo").openAllFolds() end,  desc = "Open All Folds" },
+			{ "zM", mode = { "n" }, function() require("ufo").closeAllFolds() end, desc = "Close All Folds" },
+		}
 	},
 	{
 		'folke/trouble.nvim',
@@ -185,9 +189,17 @@ return {
 		config = function()
 			require 'navigator'.setup({
 				icons = { icons = false },
-				-- diagnostic_scrollbar_sign = false,
+				default_mapping = false, -- Disable default keymaps. We'll bind them manually.
+				ts_fold = { enable = false }, -- Disable Treesitter folding. UFO does this.
 			})
-		end
+		end,
+		-- https://github.com/ray-x/navigator.lua/blob/master/lua/navigator/lspclient/mapping.lua#L32
+		keys = {
+			{ 'K',          mode = { 'n' }, function() vim.lsp.buf.hover() end,                  desc = 'LSP hover' },
+			{ '<leader>F',  mode = { 'n' }, function() vim.lsp.buf.format() end,                 desc = 'LSP format file' },
+			{ '<leader>F',  mode = { 'v' }, function() vim.lsp.buf.range_formatting() end,       desc = 'LSP format range' },
+			{ '<leader>rn', mode = { 'n' }, function() require('navigator.rename').rename() end, desc = 'LSP rename' },
+		},
 	},
 	{
 		"ray-x/lsp_signature.nvim",
