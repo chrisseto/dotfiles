@@ -1,10 +1,13 @@
-{ darwin, home-manager, nixpkgs-unstable, ... }:
+{ darwin, home-manager, nixpkgs, nixpkgs-unstable, ... }:
 let
   system = "aarch64-darwin";
   unstable = import nixpkgs-unstable { inherit system; };
 in
 darwin.lib.darwinSystem {
   inherit system;
+
+  inputs = { inherit darwin nixpkgs; };
+  specialArgs = { inherit unstable; };
 
   modules = [
     home-manager.darwinModules.home-manager
@@ -18,9 +21,9 @@ darwin.lib.darwinSystem {
       home-manager.extraSpecialArgs = { inherit unstable; };
       home-manager.users.chrisseto = {
         imports = [
-          ../homes/common.nix
-          ../homes/darwin.nix
+          ../home-modules/darwin.nix
           ../home-modules/nvim.nix
+          ../homes/common.nix
           ../homes/redpanda.nix
         ];
       };

@@ -163,6 +163,11 @@ in
       # Add ~/.bin to $PATH for access to custom scripts and the like.
       fish_add_path $HOME/.bin
 
+      # Homebrew's shell hook
+      if type -q "/opt/homebrew/bin/brew"
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+      end
+
       # Config completion for git-machete
       # ${pkgs.git-machete}/bin/git-machete completion fish | source
     '';

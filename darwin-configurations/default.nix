@@ -2,13 +2,10 @@
 , pkgs
 , ...
 }:
-let
-  hammerspoon = pkgs.callPackage ../packages/hammerspoon.nix { };
-in
 {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = [ hammerspoon ];
+  environment.systemPackages = [ ];
 
   # Use a custom configuration.nix location.
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
@@ -45,6 +42,8 @@ in
   system.defaults.dock.mru-spaces = false;
   system.defaults.dock.minimize-to-application = true;
   system.defaults.dock.tilesize = 48;
+  # Display App Switcher on all monitors https://superuser.com/questions/670252/cmdtab-app-switcher-is-on-the-wrong-monitor
+  system.defaults.dock.appswitcher-all-displays = true;
 
   # No more RSI.
   system.keyboard.enableKeyMapping =
@@ -72,6 +71,28 @@ in
   fonts = {
     fontDir.enable = true;
     fonts = [ (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
+  };
+
+  # Use Homebrew to install casks and mas for app store apps as they'll
+  # correctly populate ~/Applications. Nix is still struggling to find a good
+  # solution here https://github.com/LnL7/nix-darwin/issues/214
+  homebrew = {
+    enable = true;
+
+    brews = [
+      "mas" # CLI for the MacOS AppStore https://github.com/mas-cli/mas
+    ];
+
+    casks = [
+      "wezterm" # Terminal Emulator. https://wezfurlong.org/wezterm/index.html
+      "bettertouchtool" # Hotkey manager. Might be nice to replace with a fully tiling window manager. https://folivora.ai/
+      "monitorcontrol" # Allows control over external monitors with builtin buttons (Brightness, Volume, etc). https://github.com/MonitorControl/MonitorControl
+    ];
+
+    masApps = {
+      "Tailscale" = 1475387142; # VPN access. Also available as a cask. https://tailscale.com/
+      "Email Me" = 1090744587; # Cute app for quickly sending notes to an email address. https://www.emailmeapp.net/faq
+    };
   };
 
   # Nix-darwin does not link installed applications to the user environment. This means apps will not show up

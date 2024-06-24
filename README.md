@@ -5,8 +5,7 @@ chrisseto's dotfiles
 
 ## MacOS
 1. Install [nix](https://nixos.org/download.html#nix-install-macos)
-1. Install [nix-darwin](https://github.com/LnL7/nix-darwin)
-1. Install [home-manager](https://github.com/nix-community/home-manager)
+1. Install [homebrew](https://brew.sh/)
 1. Clone this repo to `~/.nixpkgs`
 1. `cd ~/.nixpkgs`
 1. Run `nix run .#nix-darwin -- switch --flake .#<profile>`

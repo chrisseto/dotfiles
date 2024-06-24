@@ -18,8 +18,8 @@ in {
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.kustomize
-    pkgs.pandoc
     pkgs.yq
     pkgs.git-machete
+    unstable.stgit
   ];
 }

@@ -16,22 +16,6 @@ darwin.lib.darwinSystem {
       # nix.linux-builder.enable = false;
       # nix.settings.extra-trusted-users = [ "admin" ];
 
-      homebrew = {
-        enable = true;
-
-        onActivation = {
-          autoUpdate = true;
-        };
-
-        casks = [ "wezterm" ];
-
-        # masApps = {};
-
-        brews = [
-          "mas" # https://github.com/mas-cli/mas
-        ];
-      };
-
       users.users.chrisseto = {
         name = "chrisseto";
         home = "/Users/chrisseto";
@@ -40,9 +24,9 @@ darwin.lib.darwinSystem {
       home-manager.extraSpecialArgs = { inherit unstable; };
       home-manager.users.chrisseto = {
         imports = [
-          ../homes/common.nix
-          ../homes/darwin.nix
+          ../home-modules/darwin.nix
           ../home-modules/nvim.nix
+          ../homes/common.nix
           ../homes/personal-air.nix
         ];
       };
