@@ -120,11 +120,24 @@ require("lazy").setup({
 	},
 
 	-- Git diff info + blame support.
-	{ 'lewis6991/gitsigns.nvim',                    config = true },
+	{ 'lewis6991/gitsigns.nvim', config = true },
 	-- Delve integration
 	{ 'sebdah/vim-delve' },
-	--  Make Tmux panes not pains
-	{ 'christoomey/vim-tmux-navigator' },
+	-- Multiplexer navigation
+	{
+		'mrjones2014/smart-splits.nvim',
+		lazy = false,
+		config = function()
+			local ss = require('smart-splits')
+
+			ss.setup {}
+
+			vim.keymap.set('n', '<C-h>', ss.move_cursor_left)
+			vim.keymap.set('n', '<C-j>', ss.move_cursor_down)
+			vim.keymap.set('n', '<C-k>', ss.move_cursor_up)
+			vim.keymap.set('n', '<C-l>', ss.move_cursor_right)
+		end
+	},
 	-- Elixir support (Mostly useful for FT detection)
 	{ 'elixir-editors/vim-elixir' },
 	-- Helper for Comment.nvim
@@ -296,7 +309,6 @@ require("lazy").setup({
 			})
 		end
 	},
-
 	-- Useful for debugging/exploring how treesitter actually parses a document.
 	{ 'nvim-treesitter/playground' },
 	-- Treesitter is a better syntax highlighter for neovim.

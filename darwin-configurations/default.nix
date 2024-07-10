@@ -69,8 +69,7 @@
   nix.settings.trusted-users = [ "root" ];
 
   fonts = {
-    fontDir.enable = true;
-    fonts = [ (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
+    packages = [ (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
   };
 
   # Use Homebrew to install casks and mas for app store apps as they'll
@@ -84,9 +83,10 @@
     ];
 
     casks = [
-      "wezterm" # Terminal Emulator. https://wezfurlong.org/wezterm/index.html
+      "firefox" # The one and only
       "bettertouchtool" # Hotkey manager. Might be nice to replace with a fully tiling window manager. https://folivora.ai/
       "monitorcontrol" # Allows control over external monitors with builtin buttons (Brightness, Volume, etc). https://github.com/MonitorControl/MonitorControl
+      "wezterm" # Terminal Emulator. https://wezfurlong.org/wezterm/index.html
     ];
 
     masApps = {
