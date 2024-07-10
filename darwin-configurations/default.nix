@@ -69,7 +69,10 @@
   nix.settings.trusted-users = [ "root" ];
 
   fonts = {
-    packages = [ (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
+    packages = [
+		pkgs.fira-code
+		(pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
+	];
   };
 
   # Use Homebrew to install casks and mas for app store apps as they'll

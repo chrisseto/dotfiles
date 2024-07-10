@@ -12,6 +12,7 @@ darwin.lib.darwinSystem {
   modules = [
     home-manager.darwinModules.home-manager
     ./default.nix
+    ./emacs
     {
       # nix.linux-builder.enable = false;
       # nix.settings.extra-trusted-users = [ "admin" ];
@@ -27,7 +28,6 @@ darwin.lib.darwinSystem {
           ../home-modules/darwin.nix
           ../home-modules/nvim.nix
           ../homes/common.nix
-          ../homes/personal-air.nix
         ];
       };
     }
