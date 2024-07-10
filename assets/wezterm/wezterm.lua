@@ -4,7 +4,7 @@ local wezterm = require 'wezterm'
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
-config.font = wezterm.font "FiraCode Nerd Font"
+-- config.font = wezterm.font "Fira Code"
 config.color_scheme = 'Everforest Dark (Gogh)'
 config.hide_tab_bar_if_only_one_tab = true -- Save space if only one tab.
 config.window_decorations = "RESIZE" -- Disables the title bar but preserves window operations.
