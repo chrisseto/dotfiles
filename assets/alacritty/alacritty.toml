@@ -1,0 +1,69 @@
+# Colors (Everforest Dark - Medium)
+# Source: https://gist.github.com/sainnhe/6432f83181c4520ea87b5211fed27950
+# Lots of additional tuning that could be done here but I'm reasonably happy
+# with these values.
+[colors.bright]
+black = "#475258"
+blue = "#7fbbb3"
+cyan = "#83c092"
+green = "#a7c080"
+magenta = "#d699b6"
+red = "#e67e80"
+white = "#d3c6aa"
+yellow = "#dbbc7f"
+
+[colors.normal]
+black = "#475258"
+blue = "#7fbbb3"
+cyan = "#83c092"
+green = "#a7c080"
+magenta = "#d699b6"
+red = "#e67e80"
+white = "#d3c6aa"
+yellow = "#dbbc7f"
+
+[colors.primary]
+background = "#2d353b"
+foreground = "#d3c6aa"
+
+[font]
+size = 12.0
+
+[font.normal]
+family = "FiraCode Nerd Font Mono"
+
+[[hints.enabled]]
+command = "open"
+hyperlinks = true
+post_processing = true
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\"\\s{-}\\^⟨⟩`]+"
+
+[hints.enabled.mouse]
+enabled = true
+mods = "Shift|Super"
+
+[[keyboard.bindings]]
+chars = "\u0000c"
+key = "T"
+mods = "Super"
+
+[[keyboard.bindings]]
+chars = "\u0000w"
+key = "W"
+mods = "Super"
+
+[[keyboard.bindings]]
+chars = "\u0000h"
+key = "Left"
+mods = "Super"
+
+[[keyboard.bindings]]
+chars = "\u0000l"
+key = "Right"
+mods = "Super"
+
+[mouse]
+hide_when_typing = true
+
+[window]
+startup_mode = "SimpleFullscreen"

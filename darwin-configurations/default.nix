@@ -70,24 +70,25 @@
 
   fonts = {
     packages = [
-		pkgs.fira-code
-		(pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
-	];
+      pkgs.fira-code
+      (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
+    ];
   };
 
   # Use Homebrew to install casks and mas for app store apps as they'll
-  # correctly populate ~/Applications. Nix is still struggling to find a good
+  # correctly populate /Applications. Nix is still struggling to find a good
   # solution here https://github.com/LnL7/nix-darwin/issues/214
   homebrew = {
     enable = true;
 
     brews = [
-      "mas" # CLI for the MacOS AppStore https://github.com/mas-cli/mas
+      "mas" # CLI to allow nix to install apps from the MacOS AppStore https://github.com/mas-cli/mas
     ];
 
     casks = [
-      "firefox" # The one and only
+      "alacritty" # Terminal Emulator. https://alacritty.org/
       "bettertouchtool" # Hotkey manager. Might be nice to replace with a fully tiling window manager. https://folivora.ai/
+      "firefox" # The one and only
       "monitorcontrol" # Allows control over external monitors with builtin buttons (Brightness, Volume, etc). https://github.com/MonitorControl/MonitorControl
       "wezterm" # Terminal Emulator. https://wezfurlong.org/wezterm/index.html
     ];
