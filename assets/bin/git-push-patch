@@ -1,0 +1,20 @@
+#!/usr/bin/env fish
+
+# git-push-patch is a helper to git-push a stacked-git patch to a brnach on the
+# given remote. It assumes that patch names are unique across all branches
+# locally.
+
+argparse -n "git-push-patch" -N 2 --ignore-unknown -- $argv
+or return
+
+set -l remote $argv[1]
+set -l patch $argv[2]
+set -l branch (git branch --show-current)
+set -l prefix "chris/p"
+
+# Remove remote and patch from the $argv so we can pass extra flags to
+# git-push.
+set -e argv[1]
+set -e argv[1]
+
+git push $remote refs/patches/$branch/$patch:refs/heads/$prefix/$patch $argv

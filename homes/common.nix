@@ -35,6 +35,7 @@ in
     pkgs.bazelisk
     pkgs.delta # Better git diff viewer
     pkgs.delve # golang debugger
+    pkgs.difftastic # Syntax aware differ
     pkgs.fastmod
     pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
     pkgs.fzf # Pluggable fuzzy finder
@@ -223,4 +224,5 @@ in
   home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/wezterm";
   home.file.".config/alacritty".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/alacritty";
   home.file.".config/fish/functions".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/fish-functions";
+  home.file.".config/fish/completions".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/fish-completions";
 }

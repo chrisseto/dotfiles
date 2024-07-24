@@ -25,6 +25,9 @@
 	unstage = reset HEAD --
 	pr-msg = log HEAD...upstream/master --pretty=format:"**%s**%n%b"
 	diff-raw = -c pager.diff='less -R' diff
+	pp = push-patch
+	dft = difftool
+	dlog = "-c diff.external=difft log -p --ext-diff"
 
 [color]
 	diff = auto
@@ -41,6 +44,9 @@
 [difftool]
 	prompt = false
 	colorMoved = default
+
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
 
 [push]
 	# See `git help config` (search for push.default)
@@ -79,3 +85,9 @@
 
 [merge]
 	conflictstyle = diff3
+
+[diff]
+	tool = difftastic
+
+[pager]
+	difftool = true
