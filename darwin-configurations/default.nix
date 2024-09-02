@@ -86,9 +86,9 @@
     ];
 
     casks = [
-      "alacritty" # Terminal Emulator. https://alacritty.org/
+      # "alacritty" # Terminal Emulator. https://alacritty.org/
       "bettertouchtool" # Hotkey manager. Might be nice to replace with a fully tiling window manager. https://folivora.ai/
-      "firefox" # The one and only
+      # "firefox" # The one and only
       "monitorcontrol" # Allows control over external monitors with builtin buttons (Brightness, Volume, etc). https://github.com/MonitorControl/MonitorControl
       "wezterm" # Terminal Emulator. https://wezfurlong.org/wezterm/index.html
     ];

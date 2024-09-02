@@ -12,7 +12,6 @@ darwin.lib.darwinSystem {
   modules = [
     home-manager.darwinModules.home-manager
     ./default.nix
-    ./emacs
     {
       # nix.linux-builder.enable = false;
       # nix.settings.extra-trusted-users = [ "admin" ];
@@ -26,7 +25,7 @@ darwin.lib.darwinSystem {
       home-manager.users.chrisseto = {
         imports = [
           ../home-modules/darwin.nix
-          ../home-modules/nvim.nix
+          ../home-modules/lazy-nvim
           ../homes/common.nix
         ];
       };

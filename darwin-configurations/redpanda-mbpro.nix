@@ -22,7 +22,7 @@ darwin.lib.darwinSystem {
       home-manager.users.chrisseto = {
         imports = [
           ../home-modules/darwin.nix
-          ../home-modules/nvim.nix
+          ../home-modules/lazy-nvim
           ../homes/common.nix
           ../homes/redpanda.nix
         ];
