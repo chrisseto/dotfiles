@@ -7,7 +7,6 @@ let
   openscad-lsp = pkgs.callPackage ../packages/openscad-lsp.nix { };
 in
 {
-
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
@@ -33,10 +32,8 @@ in
     # binary path directly into my neovim configs.
     openscad-lsp # SCAD LSP
     pkgs.lua-language-server # Lua LSP
-    unstable.gopls # Golang LSP
     unstable.nil # Nix LSP
   ];
-
 
   # Use (abuse?) a helper in home manager to symlink directly to the config
   # file within the repository. This allows programs to modify ~/.config
@@ -49,5 +46,4 @@ in
   # would allow this type of symlinking to be acceptable..
   # See https://www.foodogsquared.one/posts/2023-03-24-managing-mutable-files-in-nixos/
   home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/nvim";
-
 }
