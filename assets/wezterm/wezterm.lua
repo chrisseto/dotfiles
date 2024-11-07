@@ -23,6 +23,11 @@ config.keys = {
 		action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
 	},
 	{
+		key = ']',
+		mods = 'LEADER',
+		action = wezterm.action.ActivateCopyMode,
+	},
+	{
 		key = 'z',
 		mods = 'LEADER',
 		action = wezterm.action.TogglePaneZoomState,
