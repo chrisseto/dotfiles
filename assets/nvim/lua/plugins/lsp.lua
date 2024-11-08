@@ -152,7 +152,7 @@ return {
 
 			lspconfig.gopls.setup(gopls_config(capabilities))
 			lspconfig.lua_ls.setup(luals_config(capabilities))
-			lspconfig.tsserver.setup { capabilities = capabilities }
+			lspconfig.ts_ls.setup { capabilities = capabilities }
 			lspconfig.openscad_lsp.setup { capabilities = capabilities }
 			lspconfig.terraformls.setup { capabilities = capabilities }
 			lspconfig.zls.setup { capabilities = capabilities }

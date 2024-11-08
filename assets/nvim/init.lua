@@ -1,14 +1,17 @@
--- Bootstrap lazy.nvim ala https://github.com/folke/lazy.nvim#-installation
+-- Bootstrap lazy.nvim ala https://lazy.folke.io/installation
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
-		lazypath,
-	})
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+	if vim.v.shell_error ~= 0 then
+		vim.api.nvim_echo({
+			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+			{ out,                            "WarningMsg" },
+			{ "\nPress any key to exit..." },
+		}, true, {})
+		vim.fn.getchar()
+		os.exit(1)
+	end
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -317,14 +320,6 @@ require("lazy").setup({
 		dependencies = { 'nvim-treesitter/playground' },
 		build = ':TSUpdate',
 		config = function()
-			-- Configure folding to use treesitter.
-			vim.o.foldmethod = "expr"
-			vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-			vim.o.foldenable = false
-			-- vim.opt.foldnestmax = 3
-			-- vim.opt.foldminlines = 1
-			-- vim.o.foldtext = 'v:lua.vim.treesitter.foldtext()'
-
 			local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
 			parser_config.gotmpl = {
 				install_info = {
@@ -337,8 +332,7 @@ require("lazy").setup({
 
 			-- Treesitter configuration
 			require 'nvim-treesitter.configs'.setup {
-				-- Install all syntax modules that have maintainers.
-				ensure_installed = "all",
+				ensure_installed = { "markdown", "go", "lua", "vim", "python" },
 
 				auto_install = true,
 
@@ -351,6 +345,16 @@ require("lazy").setup({
 					additional_vim_regex_highlighting = false,
 				},
 
+				incremental_selection = {
+					enable = true,
+					keymaps = {
+						init_selection = "gnn", -- set to `false` to disable one of the mappings
+						node_incremental = "grn",
+						scope_incremental = "grc",
+						node_decremental = "grm",
+					},
+				},
+
 				-- Enable TS powered indentation.
 				indent = {
 					-- too buggy for use just yet :[
@@ -361,6 +365,27 @@ require("lazy").setup({
 					enable = true,
 				},
 			}
+		end
+	},
+
+	{
+		'kevinhwang91/nvim-ufo',
+		dependencies = { 'kevinhwang91/promise-async' },
+		config = function()
+			vim.o.foldcolumn = '1' -- '0' is not bad
+			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+			vim.o.foldlevelstart = 99
+			vim.o.foldenable = true
+
+			-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+			vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+			vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+
+			require('ufo').setup({
+				provider_selector = function(bufnr, filetype, buftype)
+					return { 'treesitter', 'indent' }
+				end
+			})
 		end
 	},
 
@@ -431,8 +456,8 @@ vim.cmd [[
 	set ignorecase
 	set smartcase
 	" Move vertically over wrapped lines
-	nmap j gj
-	nmap k gk
+	nnoremap j gj
+	nnoremap k gk
 
 	" Show line numbers
 	set number
