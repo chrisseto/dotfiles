@@ -161,6 +161,10 @@ in
       # Configure a user local installation path for jpm.
       set -gx JANET_TREE $HOME/.local/jpm_tree
 
+      # Configure `bat` as the pager for `man` https://github.com/sharkdp/bat?tab=readme-ov-file#man
+      set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
+      set -gx MANROFFOPT "-c"
+
       # Add ~/.bin to $PATH for access to custom scripts and the like.
       fish_add_path $HOME/.bin
 
@@ -175,6 +179,7 @@ in
 
     shellAliases = {
       g = "git";
+      less = "bat";
     };
 
     plugins = [
