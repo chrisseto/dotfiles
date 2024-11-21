@@ -10,6 +10,13 @@ config.hide_tab_bar_if_only_one_tab = true -- Save space if only one tab.
 config.window_decorations = "RESIZE" -- Disables the title bar but preserves window operations.
 config.audible_bell = "Disabled" -- No bells.
 
+-- All ssh domains will be connecting to unix systems.
+-- Inform wezterm of this so it can be a bit fancy.
+config.ssh_domains = wezterm.default_ssh_domains()
+for _, dom in ipairs(config.ssh_domains) do
+  dom.assume_shell = 'Posix'
+end
+
 config.leader = { key = ' ', mods = 'CTRL', timeout_milliseconds = 1000 }
 config.keys = {
 	{

@@ -4,9 +4,6 @@
 , unstable
 , ...
 }:
-let
-  crlfmt = pkgs.callPackage ../packages/crlfmt.nix { };
-in
 {
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -27,14 +24,11 @@ in
   ];
 
   home.packages = [
-    crlfmt # CockroachLabs golang formatter
     pkgs.age # age is a simple, modern and secure file encryption tool, format, and Go library.
-    pkgs.awscli # AWS ClI, for some reason split across v1 and v2. v2 doesn't want to install.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
     pkgs.bat # Better `cat` with syntax highlighting
     pkgs.bazelisk
     pkgs.delta # Better git diff viewer
-    pkgs.delve # golang debugger
     pkgs.difftastic # Syntax aware differ
     pkgs.fastmod
     pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
@@ -60,7 +54,9 @@ in
     pkgs.skim # `sk`, Competitor of fzf
     pkgs.tmux
     pkgs.tree # Prints a "tree" of a directory.
+    pkgs.unixtools.watch
     pkgs.xz # LZMA compression successor, used by container tooling.
+    unstable.delve # golang debugger
     unstable.helix # A post-modern modal text editor
     unstable.nil # nix LSP.
     unstable.yazi # Yet another file manager.

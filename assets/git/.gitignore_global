@@ -21,3 +21,6 @@ Icon
 ## autoenv ##
 .env
 .ropeproject
+
+# direnv cache directory
+.direnv/

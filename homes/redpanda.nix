@@ -12,21 +12,21 @@ in {
   };
 
   home.packages = [
-    pkgs.awscli
-    pkgs.chart-testing
+    pkgs.awscli2
     pkgs.colima
-    pkgs.cue
     pkgs.docker
     pkgs.dyff
+    pkgs.git-machete
     pkgs.go-task
     pkgs.google-cloud-sdk
+    pkgs.graphviz # Provides `dot` for go tool pprof
     pkgs.k3d
     pkgs.kind
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.kustomize
-    pkgs.yq
-    pkgs.git-machete
+    unstable.grpcurl # `curl` but for gRPC
+    unstable.lima
     unstable.stgit
   ];
 }

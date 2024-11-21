@@ -40,6 +40,7 @@ require("lazy").setup({
 			vim.o.timeout = true
 			vim.o.timeoutlen = 300
 		end,
+		tag = "v3.10.0", -- Pinned until https://github.com/folke/which-key.nvim/issues/809 is resolved.
 		opts = {
 			-- your configuration comes here
 			-- or leave it empty to use the default settings
@@ -133,7 +134,9 @@ require("lazy").setup({
 		config = function()
 			local ss = require('smart-splits')
 
-			ss.setup {}
+			ss.setup {
+				disable_multiplexer_nav_when_zoomed = false,
+			}
 
 			vim.keymap.set('n', '<C-h>', ss.move_cursor_left)
 			vim.keymap.set('n', '<C-j>', ss.move_cursor_down)

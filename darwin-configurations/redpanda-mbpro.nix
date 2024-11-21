@@ -7,7 +7,7 @@ darwin.lib.darwinSystem {
   inherit system;
 
   inputs = { inherit darwin nixpkgs; };
-  specialArgs = { inherit unstable; };
+  specialArgs = { inherit nixpkgs-unstable; inherit unstable; };
 
   modules = [
     home-manager.darwinModules.home-manager
@@ -18,11 +18,12 @@ darwin.lib.darwinSystem {
         home = "/Users/chrisseto";
       };
 
-      home-manager.extraSpecialArgs = { inherit unstable; };
+      home-manager.extraSpecialArgs = { inherit nixpkgs-unstable; inherit unstable; };
       home-manager.users.chrisseto = {
         imports = [
           ../home-modules/darwin.nix
-          ../home-modules/lazy-nvim
+          # ../home-modules/lazy-nvim # Not quite ready for prime time.
+          ../home-modules/nvim.nix
           ../homes/common.nix
           ../homes/redpanda.nix
         ];

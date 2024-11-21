@@ -46,7 +46,7 @@
     , nixpkgs-unstable
     , ...
     }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+    flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, ... }: {
       systems = [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" ];
 
       # TODO: Configure ez-configs to split up configurations.
@@ -59,33 +59,57 @@
       #   globalArgs = {inherit inputs;};
       # };
 
-      perSystem = { pkgs, ... }: {
+      perSystem = { pkgs, lib, system, inputs', ... }: {
         formatter = pkgs.nixpkgs-fmt;
+
+        packages =
+          {
+            # Packages to be available (via nix run .#<name>) on all OSes.
+          } // (lib.optionalAttrs pkgs.stdenv.isLinux {
+            # Linux will either be nixOS or home-manager only.
+            home-manager = inputs'.home-manager.packages.default;
+          }) // (lib.optionalAttrs pkgs.stdenv.isDarwin {
+            # Darwin is always nix-darwin.
+            nix-darwin = inputs'.darwin.packages.default;
+          });
       };
 
       flake = {
-        # TODO how to include these in perSystem on a case by case basis...
-        packages.aarch64-darwin.nix-darwin = darwin.packages.aarch64-darwin.default;
-        packages.x86_64-linux.home-manager = home-manager.packages.x86_64-linux.default;
-
         homeConfigurations =
-          let
-            # TODO don't hardcode system here either...
-            system = "x86_64-linux";
-            pkgs = import nixpkgs { inherit system; };
-            unstable = import nixpkgs-unstable { inherit system; };
-          in
+          # let
+          #   # TODO don't hardcode system here either...
+          #   system = "x86_64-linux";
+          #   pkgs = import nixpkgs { inherit system; };
+          #   unstable = import nixpkgs-unstable { inherit system; };
+          # in
           {
-            gceworker = home-manager.lib.homeManagerConfiguration {
-              inherit pkgs;
-              extraSpecialArgs = { inherit unstable; };
+            # gceworker = home-manager.lib.homeManagerConfiguration {
+            #   inherit pkgs;
+            #   extraSpecialArgs = { inherit unstable; };
+            #
+            #   modules = [
+            #     ./homes/common.nix
+            #     ./homes/crl.nix
+            #     ./homes/gceworker.nix
+            #   ];
+            # };
 
-              modules = [
-                ./homes/common.nix
-                ./homes/crl.nix
-                ./homes/gceworker.nix
-              ];
-            };
+            redpanda-lima-vm =
+              let
+                system = "aarch64-linux";
+                pkgs = import nixpkgs { inherit system; };
+                unstable = import nixpkgs-unstable { inherit system; };
+              in
+              home-manager.lib.homeManagerConfiguration {
+                inherit pkgs;
+                extraSpecialArgs = { inherit unstable; };
+
+                modules = [
+                  ./homes/common.nix
+                  ./home-modules/nvim.nix
+                  ./homes/redpanda-lima-vm.nix
+                ];
+              };
           };
 
         darwinConfigurations = {
@@ -148,5 +172,5 @@
             };
         };
       };
-    };
+    });
 }
