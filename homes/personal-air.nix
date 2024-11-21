@@ -6,15 +6,18 @@
 }: {
   home.packages = [
     pkgs.rclone
-    pkgs._1password
-    pkgs.lima
-    pkgs.docker
+    # pkgs._1password
+    # pkgs.lima
+    # pkgs.docker
     pkgs.ffmpeg
-    pkgs.k3d
+    # pkgs.k3d
     pkgs.mp4v2
     pkgs.poetry
     pkgs.python310
-    unstable.llama-cpp
-    unstable.openai-whisper-cpp
+    # unstable.rust-analyzer
+    # unstable.cargo
+    unstable.rustup
+    # unstable.llama-cpp
+    # unstable.openai-whisper-cpp
   ];
 }

@@ -25,8 +25,10 @@ darwin.lib.darwinSystem {
       home-manager.users.chrisseto = {
         imports = [
           ../home-modules/darwin.nix
-          ../home-modules/lazy-nvim
+          ../home-modules/nvim.nix
+            # ../home-modules/lazy-nvim
           ../homes/common.nix
+          ../homes/personal-air.nix
         ];
       };
     }
