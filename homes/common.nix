@@ -163,8 +163,12 @@
 
       # Add ~/.bin to $PATH for access to custom scripts and the like.
       fish_add_path $HOME/.bin
+
       # For `cargo install`'d deps.
       fish_add_path $HOME/.cargo/bin
+
+      # For `go install`'d deps.
+      fish_add_path $(go env GOPATH)/bin
 
       # Homebrew's shell hook
       if type -q "/opt/homebrew/bin/brew"

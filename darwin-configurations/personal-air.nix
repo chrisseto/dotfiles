@@ -26,7 +26,7 @@ darwin.lib.darwinSystem {
         imports = [
           ../home-modules/darwin.nix
           ../home-modules/nvim.nix
-            # ../home-modules/lazy-nvim
+          # ../home-modules/lazy-nvim
           ../homes/common.nix
           ../homes/personal-air.nix
         ];
