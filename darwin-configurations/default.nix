@@ -22,7 +22,6 @@
   programs.fish.enable = true;
 
   environment.shells = [ pkgs.fish ];
-  environment.loginShell = "/run/current-system/sw/bin/fish";
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
@@ -64,14 +63,15 @@
   '';
 
   # Automatically clean up the nix store to save diskspace.
-  nix.settings.auto-optimise-store = true;
+  nix.optimise.automatic = true;
+
   # Allow my user to run remote builds.
   nix.settings.trusted-users = [ "root" ];
 
   fonts = {
     packages = [
       pkgs.fira-code
-      (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
+      pkgs.nerd-fonts.fira-code
     ];
   };
 

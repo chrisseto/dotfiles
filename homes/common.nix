@@ -39,7 +39,6 @@
     pkgs.git-absorb
     pkgs.git-dive
     pkgs.git-revise
-    pkgs.git-stack
     pkgs.go
     pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop

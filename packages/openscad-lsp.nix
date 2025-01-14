@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
-,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "openscad-lsp";

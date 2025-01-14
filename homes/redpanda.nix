@@ -4,13 +4,6 @@
 }:
 let
 in {
-
-  programs.fish = {
-    interactiveShellInit = ''
-      fish_add_path $HOME/.rd/bin
-    '';
-  };
-
   home.packages = [
     pkgs.awscli2
     pkgs.colima
