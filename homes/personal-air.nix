@@ -3,8 +3,13 @@
 , lib
 , unstable
 , ...
-}: {
+}:
+let
+  cooklang-chef = pkgs.callPackage ../packages/chef.nix { };
+in
+{
   home.packages = [
+    cooklang-chef
     pkgs.rclone
     # pkgs._1password
     # pkgs.lima
