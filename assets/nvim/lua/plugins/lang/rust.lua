@@ -1,7 +1,11 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		opts = { ensure_installed = { "rust", "ron" } },
+		opts = { ensure_installed = { "rust", "ron", "toml" } },
+	},
+	{
+		"williamboman/mason.nvim",
+		opts = { ensure_installed = { "rust-analyzer" } },
 	},
 	{
 		'neovim/nvim-lspconfig',

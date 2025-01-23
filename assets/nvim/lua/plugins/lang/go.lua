@@ -68,24 +68,30 @@ return {
 	},
 	{
 		'neovim/nvim-lspconfig',
-		cmd = "LSPInfo",
-		event = { 'BufReadPre', 'BufNewFile' },
-		dependencies = {
-			{ 'hrsh7th/cmp-nvim-lsp' },
+		opts = {
+			servers = {
+				gopls = {
+				},
+			},
 		},
-		config = function()
-			-- To Debug LSP settings:
-			-- :lua print(vim.inspect(vim.lsp.get_active_clients()))
-
-			local lspconfig = require('lspconfig')
-			local capabilities = require('cmp_nvim_lsp').default_capabilities()
-			capabilities.textDocument.foldingRange = {
-				dynamicRegistration = false,
-				lineFoldingOnly = true
-			}
-
-			lspconfig.gopls.setup(gopls_config(capabilities))
-		end
+	-- 	cmd = "LSPInfo",
+	-- 	event = { 'BufReadPre', 'BufNewFile' },
+	-- 	dependencies = {
+	-- 		{ 'hrsh7th/cmp-nvim-lsp' },
+	-- 	},
+	-- 	config = function()
+	-- 		-- To Debug LSP settings:
+	-- 		-- :lua print(vim.inspect(vim.lsp.get_active_clients()))
+	--
+	-- 		local lspconfig = require('lspconfig')
+	-- 		local capabilities = require('cmp_nvim_lsp').default_capabilities()
+	-- 		capabilities.textDocument.foldingRange = {
+	-- 			dynamicRegistration = false,
+	-- 			lineFoldingOnly = true
+	-- 		}
+	--
+	-- 		lspconfig.gopls.setup(gopls_config(capabilities))
+	-- 	end
 	},
 	{
 		"ray-x/go.nvim",

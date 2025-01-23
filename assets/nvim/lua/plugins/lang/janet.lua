@@ -2,6 +2,7 @@ return {
 	{'gpanders/nvim-parinfer'},
 	{
 		'Olical/conjure',
+		lazy = true,
 		-- janet -e "(import spork/netrepl) (netrepl/server)"
 		ft = { "janet" },
 		config = function(_, opts)
@@ -10,7 +11,7 @@ return {
 		end,
 		init = function()
 			-- Set configuration options here
-			vim.g["conjure#debug"] = true
+			-- vim.g["conjure#debug"] = true
 		end,
 	},
 }

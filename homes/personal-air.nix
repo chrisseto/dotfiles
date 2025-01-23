@@ -14,8 +14,6 @@
     pkgs.mp4v2
     pkgs.poetry
     pkgs.python310
-    # unstable.rust-analyzer
-    # unstable.cargo
     unstable.rustup
     # unstable.llama-cpp
     # unstable.openai-whisper-cpp
