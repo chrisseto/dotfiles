@@ -26,7 +26,6 @@ return {
 			"nvim-treesitter/nvim-treesitter",
 			"williamboman/mason-lspconfig.nvim",
 			"williamboman/mason.nvim",
-			'hrsh7th/cmp-nvim-lsp'
 		},
 		opts = {
 			server = {

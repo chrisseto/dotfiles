@@ -10,8 +10,52 @@ return {
 			{ "<leader>o", ":Outline<CR>", desc = "Toggle Symbol Outline" },
 		},
 	},
-	-- Borrowed from https://www.lazyvim.org/plugins/lsp#nvim-lspconfig
-	-- / https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/lsp/init.lua
+	{
+		'saghen/blink.cmp',
+		-- optional: provides snippets for the snippet source
+		dependencies = 'rafamadriz/friendly-snippets',
+		-- use a release tag to download pre-built binaries
+		version = '*',
+		opts = {
+			keymap = {
+				preset = "none",
+				['<Tab>'] = { 'select_next', 'fallback' },
+				['<S-Tab>'] = { 'select_prev', 'fallback' },
+				['<CR>'] = { 'accept', 'fallback' },
+
+				cmdline = {
+					-- When completing in cmdline
+					['<CR>'] = { function(cmp)
+						cmp.accept({ callback = function() vim.api.nvim_feedkeys('\n', 'n', true) end })
+					end, 'fallback' },
+				},
+			},
+			sources = {
+				default = { 'lsp', 'path', 'snippets', 'buffer' },
+			},
+			appearance = {
+				highlight_ns = vim.api.nvim_create_namespace('blink_cmp'),
+				-- Sets the fallback highlight groups to nvim-cmp's highlight groups
+				-- Useful for when your theme doesn't support blink.cmp
+				-- Will be removed in a future release
+				use_nvim_cmp_as_default = true,
+			},
+			completion = {
+				documentation = {
+					auto_show = true,
+					auto_show_delay_ms = 500,
+				},
+				list = {
+					selection = {
+						preselect = false,
+					},
+				},
+			},
+			signature = { enabled = true }
+		},
+	},
+	-- -- Borrowed from https://www.lazyvim.org/plugins/lsp#nvim-lspconfig
+	-- -- / https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/lsp/init.lua
 	{
 		'neovim/nvim-lspconfig',
 		-- event = "LazyFile", See https://github.com/LazyVim/LazyVim/discussions/1583
@@ -23,7 +67,6 @@ return {
 				config = function()
 				end
 			},
-			'hrsh7th/cmp-nvim-lsp',
 		},
 		opts = function(_, _opts)
 			return {
@@ -32,13 +75,12 @@ return {
 		end,
 		config = function(_, opts)
 			local servers = opts.servers
-			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 			local capabilities = vim.tbl_deep_extend(
 				"force",
 				{},
 				vim.lsp.protocol.make_client_capabilities(),
-				cmp_nvim_lsp.default_capabilities(),
+				require('blink.cmp').get_lsp_capabilities(),
 				opts.capabilities or {}
 			)
 
@@ -119,13 +161,10 @@ return {
 			vim.o.foldlevelstart = 99
 			vim.o.foldenable = true
 
-			-- Using ufo provider need remap `zR` and `zM`.
-			-- vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-			-- vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
-
 			require('ufo').setup()
 		end,
 		keys = {
+			-- Using ufo provider need remap `zR` and `zM`.
 			{ "zR", mode = { "n" }, function() require("ufo").openAllFolds() end,  desc = "Open All Folds" },
 			{ "zM", mode = { "n" }, function() require("ufo").closeAllFolds() end, desc = "Close All Folds" },
 		}
@@ -166,107 +205,5 @@ return {
 			},
 			{ '<leader>rn', mode = { 'n' }, function() require('navigator.rename').rename() end, desc = 'LSP rename' },
 		},
-	},
-	{
-		"ray-x/lsp_signature.nvim",
-		event = "VeryLazy",
-		opts = {},
-		config = function(_, opts) require 'lsp_signature'.setup(opts) end
-	},
-	-- Autocompletion, recommended by neovim's LSP
-	{ 'hrsh7th/cmp-buffer' },
-	{ 'hrsh7th/cmp-cmdline' },
-	{ 'hrsh7th/cmp-nvim-lsp' },
-	{ 'hrsh7th/cmp-nvim-lsp-signature-help' },
-	{ 'hrsh7th/cmp-path' },
-	{ 'saadparwaiz1/cmp_luasnip' },
-	{
-		-- TODO setup blink.
-		-- https://github.com/Saghen/blink.cmp
-		'hrsh7th/nvim-cmp',
-		dependencies = {
-			'hrsh7th/cmp-buffer',
-			'hrsh7th/cmp-nvim-lsp',
-			'hrsh7th/cmp-nvim-lsp-signature-help',
-			'hrsh7th/cmp-path',
-			-- 'PaterJason/cmp-conjure',
-			'saadparwaiz1/cmp_luasnip',
-		},
-		config = function()
-			local cmp = require('cmp')
-			local luasnip = require('luasnip')
-
-			local has_words_before = function()
-				unpack = unpack or table.unpack
-				local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-				return col ~= 0 and
-					vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-			end
-
-			cmp.setup({
-				preselect = cmp.PreselectMode.None, -- Don't preselect items.
-				snippet = {
-					expand = function(args)
-						luasnip.lsp_expand(args.body)
-					end
-				},
-				mapping = {
-					["<Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_next_item()
-							-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-							-- they way you will only jump inside the snippet region
-						elseif luasnip.expand_or_jumpable() then
-							luasnip.expand_or_jump()
-						elseif has_words_before() then
-							cmp.complete()
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-					["<S-Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item()
-						elseif luasnip.jumpable(-1) then
-							luasnip.jump(-1)
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-					["<CR>"] = cmp.mapping.confirm({ select = false }),
-					-- ["<CR>"] = cmp.mapping({
-					-- 	i = function(fallback)
-					-- 		if cmp.visible() and cmp.get_active_entry() then
-					-- 			cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-					-- 		else
-					-- 			fallback()
-					-- 		end
-					-- 	end,
-					-- 	s = cmp.mapping.confirm({ select = true }),
-					-- 	c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-					-- }),
-				},
-				sources = cmp.config.sources({
-					-- { name = 'conjure' },
-					{ name = 'luasnip' },
-					{ name = 'nvim_lsp' },
-					{ name = 'nvim_lsp_signature_help' },
-				}, {
-					{ name = 'buffer' },
-				}),
-			})
-
-			-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-			cmp.setup.cmdline(':', {
-				mapping = cmp.mapping.preset.cmdline {
-					['<CR>'] = cmp.config.disable, -- TODO mappings for : don't seem to override globally specified mappings?
-				},
-				sources = cmp.config.sources({
-					{ name = 'path' }
-				}, {
-					{ name = 'cmdline' }
-				})
-			})
-		end
 	},
 }

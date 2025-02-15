@@ -12,10 +12,10 @@ return {
 						['nil'] = {
 							nix = {
 								flake = {
-						autoArchive = true,
+									autoArchive = true,
 								},
 							},
-					},
+						},
 					},
 				},
 			},
