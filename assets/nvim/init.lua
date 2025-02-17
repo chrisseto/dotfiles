@@ -238,6 +238,15 @@ require("lazy").setup({
 				used_by = { "gohtmltmpl", "gotexttmpl", "gotmpl", "yaml" }
 			}
 
+			parser_config.minizinc = {
+				install_info = {
+					url = "https://github.com/shackle-rs/shackle",
+					branch = "develop",
+					files = { "parsers/tree-sitter-minizinc/src/parser.c" }
+				},
+				filetype = "minizinc",
+			}
+
 			-- Treesitter configuration
 			require 'nvim-treesitter.configs'.setup {
 				ensure_installed = { "markdown", "go", "lua", "vim", "python" },
