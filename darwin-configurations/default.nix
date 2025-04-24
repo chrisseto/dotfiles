@@ -66,7 +66,7 @@
   nix.optimise.automatic = true;
 
   # Allow my user to run remote builds.
-  nix.settings.trusted-users = [ "root" ];
+  nix.settings.trusted-users = [ "root" "chrisseto" ];
 
   fonts = {
     packages = [

@@ -1,15 +1,12 @@
 { pkgs
 , unstable
 , ...
-}:
-let
-in {
+}: {
   home.packages = [
+    pkgs.rustup
     pkgs.awscli2
-    pkgs.colima
     pkgs.docker
     pkgs.dyff
-    pkgs.git-machete
     pkgs.go-task
     pkgs.google-cloud-sdk
     pkgs.graphviz # Provides `dot` for go tool pprof
@@ -18,8 +15,12 @@ in {
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.kustomize
-    unstable.grpcurl # `curl` but for gRPC
-    unstable.lima
+    pkgs.nodejs_23 # For copilot in nvim
+    unstable.stern # Kubernetes log tailer
+    unstable.jira-cli-go # Jira CLI...
+    unstable.grpcurl
     unstable.stgit
+    unstable.teleport # tsh and friends
+    unstable.yq-go
   ];
 }
