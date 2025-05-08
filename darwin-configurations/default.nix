@@ -1,5 +1,6 @@
 { config
 , pkgs
+, unstable
 , ...
 }:
 {
@@ -71,7 +72,7 @@
   fonts = {
     packages = [
       pkgs.fira-code
-      pkgs.nerd-fonts.fira-code
+      unstable.nerd-fonts.fira-code
     ];
   };
 
