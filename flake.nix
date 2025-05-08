@@ -93,23 +93,6 @@
             #     ./homes/gceworker.nix
             #   ];
             # };
-
-            redpanda-lima-vm =
-              let
-                system = "aarch64-linux";
-                pkgs = import nixpkgs { inherit system; };
-                unstable = import nixpkgs-unstable { inherit system; };
-              in
-              home-manager.lib.homeManagerConfiguration {
-                inherit pkgs;
-                extraSpecialArgs = { inherit unstable; };
-
-                modules = [
-                  ./homes/common.nix
-                  ./home-modules/nvim.nix
-                  ./homes/redpanda-lima-vm.nix
-                ];
-              };
           };
 
         darwinConfigurations = {
