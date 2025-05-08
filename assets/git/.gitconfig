@@ -91,3 +91,6 @@
 
 [pager]
 	difftool = true
+
+[rerere]
+	enable = true

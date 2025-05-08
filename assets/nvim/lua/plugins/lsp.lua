@@ -10,6 +10,41 @@ return {
 			{ "<leader>o", ":Outline<CR>", desc = "Toggle Symbol Outline" },
 		},
 	},
+{
+  "zbirenbaum/copilot.lua",
+  cmd = "Copilot",
+  event = "InsertEnter",
+  config = function()
+    require("copilot").setup({
+  filetypes = {
+    ["*"] = false, -- disable by default on all files types, I'll opt in as desired.
+  },
+	})
+
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "BlinkCmpMenuOpen",
+  callback = function()
+    vim.b.copilot_suggestion_hidden = true
+  end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "BlinkCmpMenuClose",
+  callback = function()
+    vim.b.copilot_suggestion_hidden = false
+  end,
+})
+  end,
+  -- opts = {
+  --   -- suggestion = { enabled = false },
+  --   -- panel = { enabled = false },
+  --   -- filetypes = {
+  --   --   markdown = true,
+  --   --   help = true,
+  --   -- },
+  -- },
+},
 	{
 		'saghen/blink.cmp',
 		-- optional: provides snippets for the snippet source
