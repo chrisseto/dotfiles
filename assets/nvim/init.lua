@@ -47,6 +47,7 @@ require("lazy").setup({
 			-- refer to the configuration section below
 		},
 	},
+
 	-- Movement helpers
 	-- {
 	-- 	"folke/flash.nvim",
@@ -306,6 +307,67 @@ require("lazy").setup({
 				end,
 			})
 		end,
+	},
+	{
+		-- Easily open a file on GitHub for sharing. Defaults to the branch and falls back to the commit.
+		-- Kinda slow but better than manually searching.
+		"almo7aya/openingh.nvim",
+		keys = {
+			{ "gog", "<cmd>OpenInGHFile<cr>", mode = "n", desc = "Open In GitHub" },
+			{ "gog", "<cmd>OpenInGHFileLines<cr>", mode = "v", desc = "Open In GitHub" },
+		},
+	},
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({
+				filetypes = {
+					["*"] = false, -- disable by default on all files types, I'll opt in as desired.
+				},
+			})
+
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "BlinkCmpMenuOpen",
+				callback = function()
+					vim.b.copilot_suggestion_hidden = true
+				end,
+			})
+
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "BlinkCmpMenuClose",
+				callback = function()
+					vim.b.copilot_suggestion_hidden = false
+				end,
+			})
+		end,
+		-- opts = {
+		--   -- suggestion = { enabled = false },
+		--   -- panel = { enabled = false },
+		--   -- filetypes = {
+		--   --   markdown = true,
+		--   --   help = true,
+		--   -- },
+		-- },
+	},
+	{
+		"CopilotC-Nvim/CopilotChat.nvim",
+		dependencies = {
+			{ "zbirenbaum/copilot.lua" },
+			{ "nvim-lua/plenary.nvim" },
+		},
+		build = "make tiktoken", -- Only on MacOS or Linux
+		opts = {
+			mappings = {
+				reset = {
+					-- The default keybind here is ctrl-l which conflicts with
+					-- window movement.
+					normal = "",
+					insert = "",
+				},
+			},
+		},
 	},
 
 	-- TODO switch to which-key.nvim instead.
