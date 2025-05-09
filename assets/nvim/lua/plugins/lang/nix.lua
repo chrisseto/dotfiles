@@ -9,7 +9,7 @@ return {
 			servers = {
 				nil_ls = {
 					settings = {
-						['nil'] = {
+						["nil"] = {
 							nix = {
 								flake = {
 									autoArchive = true,
@@ -24,5 +24,5 @@ return {
 	{
 		"williamboman/mason.nvim",
 		opts = { ensure_installed = { "nil" } },
-	}
+	},
 }

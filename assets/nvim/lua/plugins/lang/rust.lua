@@ -8,28 +8,28 @@ return {
 		opts = { ensure_installed = { "rust-analyzer" } },
 	},
 	{
-		'neovim/nvim-lspconfig',
+		"neovim/nvim-lspconfig",
 		opts = {
 			setup = {
-					["rust-analyzer"] = {
-						cargo = {
-							allFeatures = true,
-							loadOutDirsFromCheck = true,
-							buildScripts = {
-								enable = true,
-							},
-						},
-						-- Add clippy lints for Rust.
-						checkOnSave = true,
-						procMacro = {
+				["rust-analyzer"] = {
+					cargo = {
+						allFeatures = true,
+						loadOutDirsFromCheck = true,
+						buildScripts = {
 							enable = true,
-							ignored = {
-								["async-trait"] = { "async_trait" },
-								["napi-derive"] = { "napi" },
-								["async-recursion"] = { "async_recursion" },
-							},
 						},
 					},
+					-- Add clippy lints for Rust.
+					checkOnSave = true,
+					procMacro = {
+						enable = true,
+						ignored = {
+							["async-trait"] = { "async_trait" },
+							["napi-derive"] = { "napi" },
+							["async-recursion"] = { "async_recursion" },
+						},
+					},
+				},
 			},
 		},
 	},

@@ -1,7 +1,7 @@
 return {
-	{'gpanders/nvim-parinfer'},
+	{ "gpanders/nvim-parinfer" },
 	{
-		'Olical/conjure',
+		"Olical/conjure",
 		lazy = true,
 		-- janet -e "(import spork/netrepl) (netrepl/server)"
 		ft = { "janet" },
