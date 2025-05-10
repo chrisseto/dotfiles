@@ -1,5 +1,6 @@
 { pkgs
 , lib
+, config
 , ...
 }: {
   config = {
@@ -94,7 +95,16 @@
       #   "d /var/lib/sonarr 0700 sonarr nasdaemons - -"
     ];
 
+    services.tailscale.enable = true;
+
+    environment.systemPackages = [
+      pkgs.tailscale
+    ];
+
     networking.firewall = {
+      # Allow tailscale to connect freely.
+      trustedInterfaces = [ "tailscale0" ];
+
       allowedTCPPorts = [
         80 # traefik
         8096 # jellyfin
@@ -111,6 +121,7 @@
       allowedUDPPorts = [
         1900 # jelyyfin - service discovery
         7359 # jellyfin - service discovery
+        config.services.tailscale.port # tailscale
       ];
     };
 
@@ -143,7 +154,7 @@
         ];
 
         http.routers.to-jellyfin = {
-          rule = "Host(`jellfin.home.seto.xyz`)";
+          rule = "Host(`jellyfin.home.seto.xyz`)";
           service = "jellyfin";
         };
 

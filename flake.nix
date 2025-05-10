@@ -13,7 +13,7 @@
     };
 
     nixos-apple-silicon = {
-      url = "github:tpwrules/nixos-apple-silicon";
+      url = "github:tpwrules/nixos-apple-silicon/releasep2-2024-12-25";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -121,9 +121,7 @@
                 nixos-apple-silicon.nixosModules.apple-silicon-support
                 extra-container.nixosModules.default
                 ./configurations/nas.nix
-                ./configurations/memento.nix
                 ./configurations/asahi-mini.nix
-                ./nixos-modules/silverbullet
                 ./nixos-modules/home-assistant.nix
                 {
                   home-manager.useUserPackages = true;
