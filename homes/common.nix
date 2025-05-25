@@ -39,8 +39,6 @@
     pkgs.git-absorb
     pkgs.git-dive
     pkgs.git-revise
-    pkgs.go
-    pkgs.gotools # Provides A LOT of packages. Added because I want godoc.
     pkgs.htop
     pkgs.hub # Old (?) GitHub CLI
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
@@ -56,8 +54,11 @@
     pkgs.unixtools.watch
     pkgs.xz # LZMA compression successor, used by container tooling.
     unstable.delve # golang debugger
+    unstable.go
+    unstable.gotools # Provides A LOT of packages. Added because I want godoc.
     unstable.helix # A post-modern modal text editor
     unstable.nil # nix LSP.
+    unstable.stgit # stacked-git, my preferred alternative to branches.
     unstable.yazi # Yet another file manager.
     (pkgs.janet.withPackages (ps:
       with ps; [

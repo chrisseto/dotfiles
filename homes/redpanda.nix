@@ -16,10 +16,9 @@
     pkgs.kubernetes-helm
     pkgs.kustomize
     pkgs.nodejs_23 # For copilot in nvim
-    unstable.stern # Kubernetes log tailer
-    unstable.jira-cli-go # Jira CLI...
     unstable.grpcurl
-    unstable.stgit
+    unstable.jira-cli-go # Jira CLI...
+    unstable.stern # Kubernetes log tailer
     unstable.teleport # tsh and friends
     unstable.yq-go
   ];
