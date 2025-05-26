@@ -13,9 +13,21 @@
   # environment.darwinConfig = "$HOME/.config/nixpkgs/darwin/configuration.nix";
 
   # Auto upgrade nix package and the daemon service.
-  nix.enable = true;
-  nix.channel.enable = false;
-  nix.gc.automatic = true;
+  nix.enable = false;
+  # Allow my user to run remote builds.
+  nix.settings.trusted-users = [ "root" "chrisseto" ];
+  # nix.enable = true;
+  # nix.channel.enable = false;
+  # Automatically clean up the nix store to save diskspace.
+  # nix.optimise.automatic = true;
+  # nix.gc.automatic = true;
+
+  # Extra configs to make nix nicer to use.
+  nix.extraOptions = ''
+    extra-platforms = aarch64-darwin x86_64-darwin
+    experimental-features = nix-command flakes
+  '';
+
   nixpkgs.config.allowUnfree = true;
 
   # Create /etc/zshrc that loads the nix-darwin environment.
@@ -58,18 +70,6 @@
   system.defaults.NSGlobalDomain."com.apple.swipescrolldirection" =
     false; # No natural scrolling.
 
-  # Extra configs to make nix nicer to use.
-  nix.extraOptions = ''
-    extra-platforms = aarch64-darwin x86_64-darwin
-    experimental-features = nix-command flakes
-  '';
-
-  # Automatically clean up the nix store to save diskspace.
-  nix.optimise.automatic = true;
-
-  # Allow my user to run remote builds.
-  nix.settings.trusted-users = [ "root" "chrisseto" ];
-
   fonts = {
     packages = [
       pkgs.fira-code
@@ -88,10 +88,13 @@
     ];
 
     casks = [
-      # "alacritty" # Terminal Emulator. https://alacritty.org/
       "bettertouchtool" # Hotkey manager. Might be nice to replace with a fully tiling window manager. https://folivora.ai/
-      # "firefox" # The one and only
+      "brave-browser" # Browser of choice.
+      "logseq" # Note App of choice.
       "monitorcontrol" # Allows control over external monitors with builtin buttons (Brightness, Volume, etc). https://github.com/MonitorControl/MonitorControl
+      "nikitabobko/tap/aerospace" # i3 like tiling window manager for macOS.
+      "spotify"
+      "todoist"
       "wezterm" # Terminal Emulator. https://wezfurlong.org/wezterm/index.html
     ];
 
