@@ -76,23 +76,23 @@
 
       flake = {
         homeConfigurations =
-          # let
-          #   # TODO don't hardcode system here either...
-          #   system = "x86_64-linux";
-          #   pkgs = import nixpkgs { inherit system; };
-          #   unstable = import nixpkgs-unstable { inherit system; };
-          # in
+           let
+             # TODO don't hardcode system here either...
+             system = "x86_64-linux";
+             pkgs = import nixpkgs { inherit system; };
+             unstable = import nixpkgs-unstable { inherit system; };
+           in
           {
-            # gceworker = home-manager.lib.homeManagerConfiguration {
-            #   inherit pkgs;
-            #   extraSpecialArgs = { inherit unstable; };
-            #
-            #   modules = [
-            #     ./homes/common.nix
-            #     ./homes/crl.nix
-            #     ./homes/gceworker.nix
-            #   ];
-            # };
+             redpanda-aws-vm = home-manager.lib.homeManagerConfiguration {
+               inherit pkgs;
+               extraSpecialArgs = { inherit unstable; };
+
+               modules = [
+                 ./homes/common.nix
+                 ./home-modules/nvim.nix
+                 ./homes/redpanda-aws-vm.nix
+               ];
+             };
           };
 
         darwinConfigurations = {

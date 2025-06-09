@@ -1,6 +1,5 @@
 { config
 , pkgs
-, lib
 , unstable
 , ...
 }:
@@ -136,6 +135,7 @@
       };
     };
   };
+
 
   # Fish configuration. See also https://nixos.wiki/wiki/Fish.
   programs.fish = {
