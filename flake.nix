@@ -132,7 +132,10 @@
                     home = "/home/chrisseto";
                     hashedPassword = "$6$PK.EJqps/uhJSWsM$S1HGVnVQCVIlf.xYNeHjuot2YEzjv4Xy/PLlnyBUxrXo6d/lkxsujjgt7sSnnZ5v8F/eeP.CNMOgGsTL2IN8w0";
                     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-                    openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIClQd+Mx8j4tLqk/a2s705FlLPfEbXbXpMeUCcuwDqZ8" ];
+                    openssh.authorizedKeys.keys = [
+                      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIClQd+Mx8j4tLqk/a2s705FlLPfEbXbXpMeUCcuwDqZ8"
+                      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKn3yk0zGVSxD+S7xjvWD+GNhP938kp21dHgUPNknTN2"
+                    ];
                   };
 
                   home-manager.extraSpecialArgs = { inherit unstable; };
