@@ -1,7 +1,13 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		opts = { ensure_installed = { "rust", "ron", "toml" } },
+		opts = {
+			ensure_installed = {
+				rust = true,
+				ron = true,
+				toml = true
+			}
+		},
 	},
 	{
 		"williamboman/mason.nvim",

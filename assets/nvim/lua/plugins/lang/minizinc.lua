@@ -4,4 +4,23 @@ vim.filetype.add({
 	},
 })
 
-return {}
+return {
+	{
+		"nvim-treesitter/nvim-treesitter",
+		opts = {
+			ensure_installed = {
+				minizinc = true
+			},
+			parser_config = {
+				minizinc = {
+					install_info = {
+						url = "https://github.com/shackle-rs/shackle",
+						branch = "develop",
+						files = { "parsers/tree-sitter-minizinc/src/parser.c" }
+					},
+					filetype = "minizinc",
+				}
+			},
+		},
+	},
+}

@@ -1,7 +1,7 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		opts = { ensure_installed = { "nix" } },
+		opts = { ensure_installed = { nix = true } },
 	},
 	{
 		"neovim/nvim-lspconfig",

@@ -1,7 +1,24 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		opts = { ensure_installed = { "go", "gomod", "gosum", "gowork" } },
+		opts = {
+			ensure_installed = {
+				["go"] = true,
+				["gomod"] = true,
+				["gosum"] = true,
+				["gowork"] = true,
+			},
+			parser_config = {
+				gotmpl = {
+					install_info = {
+						url = "https://github.com/ngalaiko/tree-sitter-go-template",
+						files = { "src/parser.c" },
+					},
+					filetype = "gotmpl",
+					used_by = { "gohtmltmpl", "gotexttmpl", "gotmpl", "yaml" },
+				}
+			}
+		},
 	},
 	{
 		"neovim/nvim-lspconfig",

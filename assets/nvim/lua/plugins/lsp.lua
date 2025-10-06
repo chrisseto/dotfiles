@@ -35,14 +35,19 @@ return {
 				end,
 			})
 		end,
-		-- opts = {
+		opts = {
+			suggestion = {
+keymap = {
+	-- accept = "<M-,>",
+},
+			},
 		--   -- suggestion = { enabled = false },
 		--   -- panel = { enabled = false },
 		--   -- filetypes = {
 		--   --   markdown = true,
 		--   --   help = true,
 		--   -- },
-		-- },
+		},
 	},
 	{
 		"saghen/blink.cmp",

@@ -230,29 +230,20 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		dependencies = { "nvim-treesitter/playground" },
 		build = ":TSUpdate",
-		config = function()
+		config = function(_plug, opts)
 			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-			parser_config.gotmpl = {
-				install_info = {
-					url = "https://github.com/ngalaiko/tree-sitter-go-template",
-					files = { "src/parser.c" },
-				},
-				filetype = "gotmpl",
-				used_by = { "gohtmltmpl", "gotexttmpl", "gotmpl", "yaml" },
-			}
 
-			parser_config.minizinc = {
-				install_info = {
-					url = "https://github.com/shackle-rs/shackle",
-					branch = "develop",
-					files = { "parsers/tree-sitter-minizinc/src/parser.c" }
-				},
-				filetype = "minizinc",
-			}
+			-- Apply any parser_configs from plugin modules
+			for k, v in pairs(opts.parser_config) do
+				parser_config[k] = v
+			end
 
 			-- Treesitter configuration
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "markdown", "go", "lua", "vim", "python" },
+				ensure_installed = vim.list_extend(
+					{ "markdown", "lua", "vim", "python" },
+					vim.tbl_keys(opts.ensure_installed)
+				),
 
 				auto_install = true,
 
