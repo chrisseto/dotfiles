@@ -11,80 +11,28 @@ return {
 		},
 	},
 	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = function()
-			require("copilot").setup({
-				filetypes = {
-					["*"] = false, -- disable by default on all files types, I'll opt in as desired.
-				},
-			})
-
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "BlinkCmpMenuOpen",
-				callback = function()
-					vim.b.copilot_suggestion_hidden = true
-				end,
-			})
-
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "BlinkCmpMenuClose",
-				callback = function()
-					vim.b.copilot_suggestion_hidden = false
-				end,
-			})
-		end,
-		opts = {
-			suggestion = {
-keymap = {
-	-- accept = "<M-,>",
-},
-			},
-		--   -- suggestion = { enabled = false },
-		--   -- panel = { enabled = false },
-		--   -- filetypes = {
-		--   --   markdown = true,
-		--   --   help = true,
-		--   -- },
-		},
-	},
-	{
 		"saghen/blink.cmp",
 		-- optional: provides snippets for the snippet source
-		dependencies = "rafamadriz/friendly-snippets",
+		dependencies = { "rafamadriz/friendly-snippets", },
 		-- use a release tag to download pre-built binaries
-		version = "*",
+		version = "1.*",
 		opts = {
 			keymap = {
 				preset = "none",
 				["<Tab>"] = { "select_next", "fallback" },
 				["<S-Tab>"] = { "select_prev", "fallback" },
 				["<CR>"] = { "accept", "fallback" },
-
-				cmdline = {
-					-- When completing in cmdline
-					["<CR>"] = {
-						function(cmp)
-							cmp.accept({
-								callback = function()
-									vim.api.nvim_feedkeys("\n", "n", true)
-								end,
-							})
-						end,
-						"fallback",
-					},
-				},
 			},
 			sources = {
 				default = { "lsp", "path", "snippets", "buffer" },
 			},
 			appearance = {
-				highlight_ns = vim.api.nvim_create_namespace("blink_cmp"),
-				-- Sets the fallback highlight groups to nvim-cmp's highlight groups
-				-- Useful for when your theme doesn't support blink.cmp
-				-- Will be removed in a future release
-				use_nvim_cmp_as_default = true,
+				-- highlight_ns = vim.api.nvim_create_namespace("blink_cmp"),
+				-- -- Sets the fallback highlight groups to nvim-cmp's highlight groups
+				-- -- Useful for when your theme doesn't support blink.cmp
+				-- -- Will be removed in a future release
+				-- use_nvim_cmp_as_default = true,
+				nerd_font_variant = 'mono'
 			},
 			completion = {
 				documentation = {
@@ -96,6 +44,7 @@ keymap = {
 						preselect = false,
 					},
 				},
+				ghost_text = { enabled = true },
 			},
 			signature = { enabled = true },
 		},
@@ -119,40 +68,32 @@ keymap = {
 			}
 		end,
 		config = function(_, opts)
-			local servers = opts.servers
+			-- For verbose logs.
+			-- vim.lsp.set_log_level 'trace'
+			-- require('vim.lsp.log').set_format_func(vim.inspect)
 
-			local capabilities = vim.tbl_deep_extend(
-				"force",
-				{},
-				vim.lsp.protocol.make_client_capabilities(),
-				require("blink.cmp").get_lsp_capabilities(),
-				opts.capabilities or {}
-			)
+			-- Set capabilities for all servers.
+			vim.lsp.config('*', {
+				capabilities = require("blink.cmp").get_lsp_capabilities({}),
+			})
 
-			local function setup(server)
-				local server_opts = vim.tbl_deep_extend("force", {
-					capabilities = vim.deepcopy(capabilities),
-				}, servers[server] or {})
-				if server_opts.enabled == false then
-					return
-				end
+			vim.api.nvim_create_autocmd('LspAttach', {
+			  callback = function(args)
+				local bufnr = args.buf
+				local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-				if opts.setup[server] then
-					if opts.setup[server](server, server_opts) then
-						return
-					end
-				elseif opts.setup["*"] then
-					if opts.setup["*"](server, server_opts) then
-						return
-					end
-				end
-				require("lspconfig")[server].setup(server_opts)
-			end
-
-			for server, server_opts in pairs(servers) do
-				setup(server)
-			end
-		end,
+				vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = "Go to definition" })
+				vim.keymap.set('n', 'gD', vim.lsp.buf.type_definition, { buffer = bufnr, desc = "Go to type definition" })
+				vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr, desc = "Get implementations" })
+				vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover documentation" })
+				vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename symbol" })
+				vim.keymap.set('n', '<leader>F', vim.lsp.buf.format, { buffer = bufnr, desc = "LSP format file" })
+				vim.keymap.set('v', '<leader>F', vim.lsp.buf.format, { buffer = bufnr, desc = "LSP format selection" })
+				vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = "Show references"})
+				vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr })
+			  end,
+		  })
+	  end,
 	},
 	{
 		"williamboman/mason-lspconfig.nvim",
@@ -231,59 +172,5 @@ keymap = {
 		"folke/trouble.nvim",
 		opts = {},
 		dependencies = { "nvim-tree/nvim-web-devicons" },
-	},
-	{
-		"ray-x/guihua.lua",
-		build = "cd lua/fzy && make",
-	},
-	{
-		"ray-x/navigator.lua",
-		dependencies = {
-			"ray-x/guihua.lua",
-			"neovim/nvim-lspconfig",
-			"nvim-treesitter/nvim-treesitter-refactor",
-		},
-		config = function()
-			require("navigator").setup({
-				icons = { icons = false },
-				default_mapping = false, -- Disable default keymaps. We'll bind them manually.
-				ts_fold = { enable = false }, -- Disable Treesitter folding. UFO does this.
-			})
-		end,
-		-- https://github.com/ray-x/navigator.lua/blob/master/lua/navigator/lspclient/mapping.lua#L32
-		keys = {
-			{
-				"K",
-				mode = { "n" },
-				function()
-					vim.lsp.buf.hover()
-				end,
-				desc = "LSP hover",
-			},
-			{
-				"<leader>F",
-				mode = { "n" },
-				function()
-					vim.lsp.buf.format()
-				end,
-				desc = "LSP format file",
-			},
-			{
-				"<leader>F",
-				mode = { "v" },
-				function()
-					vim.lsp.buf.range_formatting()
-				end,
-				desc = "LSP format range",
-			},
-			{
-				"<leader>rn",
-				mode = { "n" },
-				function()
-					require("navigator.rename").rename()
-				end,
-				desc = "LSP rename",
-			},
-		},
 	},
 }

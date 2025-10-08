@@ -6,7 +6,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	if vim.v.shell_error ~= 0 then
 		vim.api.nvim_echo({
 			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-			{ out, "WarningMsg" },
+			{ out,                            "WarningMsg" },
 			{ "\nPress any key to exit..." },
 		}, true, {})
 		vim.fn.getchar()
@@ -96,40 +96,21 @@ require("lazy").setup({
 		},
 		version = "^1.0.0", -- optional: only update when a new 1.x version is released
 	},
-
-	-- Generic lua deps, defered until another plugin loads them.
-	{ "nvim-tree/nvim-web-devicons", lazy = true },
-	{ "nvim-lua/popup.nvim", lazy = true },
-	{ "nvim-lua/plenary.nvim", lazy = true },
-
-	-- TODO: Not sure if this actually does anything?
-	{
-		"stevearc/dressing.nvim",
-		config = function()
-			require("dressing").setup({
-				select = {
-					backend = { "fzf_lua", "fzf", "builtin", "nui" },
-				},
-			})
-		end,
-	},
-
-	-- TODO Delve into the possible configuration options here.
-	-- Really need a way to doll it up but it's much snappier than telescope.
 	{
 		"ibhagwan/fzf-lua",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
-			require("fzf-lua").setup({
-				-- 'skim'
-			})
+			local fzf_lua = require('fzf-lua')
+
+			fzf_lua.setup({})
+
+			vim.keymap.set('n', '<C-p>', fzf_lua.files, { desc = "Files" })
+			vim.keymap.set('n', '<leader>f', fzf_lua.live_grep, { desc = "Live Search" })
+			vim.keymap.set('n', '<leader>g', fzf_lua.git_status, { desc = "Modified Files" })
 		end,
 	},
-
 	-- Git diff info + blame support.
 	{ "lewis6991/gitsigns.nvim", config = true },
-	-- Delve integration
-	{ "sebdah/vim-delve" },
 	-- Multiplexer navigation
 	{
 		"mrjones2014/smart-splits.nvim",
@@ -192,6 +173,11 @@ require("lazy").setup({
 		config = function()
 			vim.cmd([[ let g:NERDTreeRepsectWildIgnore = 1 ]])
 		end,
+		lazy = false,
+		keys = {
+			{ "<leader>d", ":NERDTreeToggle<CR>", desc = "Toggle File Tree" },
+			{ "<leader>D", ":NERDTreeFind<CR>",   desc = "Find in File Tree" },
+		},
 	},
 
 	{
@@ -221,14 +207,11 @@ require("lazy").setup({
 			},
 		},
 	},
-
-	-- { 'PaterJason/cmp-conjure' },
 	-- Useful for debugging/exploring how treesitter actually parses a document.
 	{ "nvim-treesitter/playground" },
 	-- Treesitter is a better syntax highlighter for neovim.
 	{
 		"nvim-treesitter/nvim-treesitter",
-		dependencies = { "nvim-treesitter/playground" },
 		build = ":TSUpdate",
 		config = function(_plug, opts)
 			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -304,75 +287,18 @@ require("lazy").setup({
 		-- Kinda slow but better than manually searching.
 		"almo7aya/openingh.nvim",
 		keys = {
-			{ "gog", "<cmd>OpenInGHFile<cr>", mode = "n", desc = "Open In GitHub" },
+			{ "gog", "<cmd>OpenInGHFile<cr>",      mode = "n", desc = "Open In GitHub" },
 			{ "gog", "<cmd>OpenInGHFileLines<cr>", mode = "v", desc = "Open In GitHub" },
 		},
 	},
 	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = function()
-			require("copilot").setup({
-				filetypes = {
-					["*"] = false, -- disable by default on all files types, I'll opt in as desired.
-				},
-			})
-
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "BlinkCmpMenuOpen",
-				callback = function()
-					vim.b.copilot_suggestion_hidden = true
-				end,
-			})
-
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "BlinkCmpMenuClose",
-				callback = function()
-					vim.b.copilot_suggestion_hidden = false
-				end,
-			})
-		end,
-		-- opts = {
-		--   -- suggestion = { enabled = false },
-		--   -- panel = { enabled = false },
-		--   -- filetypes = {
-		--   --   markdown = true,
-		--   --   help = true,
-		--   -- },
-		-- },
-	},
-	{
-		"CopilotC-Nvim/CopilotChat.nvim",
+		"NeogitOrg/neogit",
 		dependencies = {
-			{ "zbirenbaum/copilot.lua" },
-			{ "nvim-lua/plenary.nvim" },
-		},
-		build = "make tiktoken", -- Only on MacOS or Linux
-		opts = {
-			mappings = {
-				reset = {
-					-- The default keybind here is ctrl-l which conflicts with
-					-- window movement.
-					normal = "",
-					insert = "",
-				},
-			},
+			"nvim-lua/plenary.nvim", -- required
+			"sindrets/diffview.nvim", -- optional - Diff integration
+			"ibhagwan/fzf-lua", -- optional
 		},
 	},
-{
-  "NeogitOrg/neogit",
-  dependencies = {
-    "nvim-lua/plenary.nvim",         -- required
-    "sindrets/diffview.nvim",        -- optional - Diff integration
-
-    -- Only one of these is needed.
-    "nvim-telescope/telescope.nvim", -- optional
-    "ibhagwan/fzf-lua",              -- optional
-    "echasnovski/mini.pick",         -- optional
-    "folke/snacks.nvim",             -- optional
-  },
-},
 
 	-- TODO switch to which-key.nvim instead.
 	{
@@ -391,18 +317,8 @@ require("lazy").setup({
 						description = "Toggle Comment",
 						opts = { remap = true },
 					},
-					{ "<C-p>", h.lazy_required_fn("fzf-lua", "files"), description = "Files" },
-					{ "<leader>f", h.lazy_required_fn("fzf-lua", "live_grep"), description = "Live Search" },
-					{ "<leader>g", h.lazy_required_fn("fzf-lua", "git_status"), description = "Modified Files" },
-					{ "<leader>d", ":NERDTreeToggle<CR>", description = "Toggle File Tree" },
-					{ "<leader>t", ":Trouble<CR>", description = "Toggle Trouble List" },
-					{ "<leader>D", ":NERDTreeFind<CR>", description = "Find in File Tree" },
-					{ "<leader>l", ":Legendary<CR>", description = "Legendary" },
-					{ "<leader>F", vim.lsp.buf.format, description = "LSP Format" },
-					{ "gD", vim.lsp.buf.type_definition, description = "Go to type definition" },
-					{ "gd", vim.lsp.buf.definition, description = "Go to definition" },
-					{ "gr", vim.lsp.buf.references, description = "Find references" },
-					{ "<leader>e", vim.lsp.diagnostic.show_line_diagnostics, description = "Line diagnostics" },
+					{ "<leader>t", ":Trouble<CR>",                           description = "Toggle Trouble List" },
+					{ "<leader>l", ":Legendary<CR>",                         description = "Legendary" },
 				},
 			})
 		end,
