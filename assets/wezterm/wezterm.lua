@@ -69,6 +69,8 @@ config.keys = {
 		mods = "SUPER",
 		action = wezterm.action.ActivateTabRelative(-1),
 	},
+	-- For claude code.
+  {key="Enter", mods="SHIFT", action=wezterm.action{SendString="\x1b\r"}},
 }
 
 -- Smart splits integration to allow navigating vim panes and wezterm panes.

@@ -88,14 +88,13 @@
     ];
 
     casks = [
-      "bettertouchtool" # Hotkey manager. Might be nice to replace with a fully tiling window manager. https://folivora.ai/
       "brave-browser" # Browser of choice.
       "logseq" # Note App of choice.
       "monitorcontrol" # Allows control over external monitors with builtin buttons (Brightness, Volume, etc). https://github.com/MonitorControl/MonitorControl
       "nikitabobko/tap/aerospace" # i3 like tiling window manager for macOS.
       "spotify"
-      "todoist"
       "wezterm" # Terminal Emulator. https://wezfurlong.org/wezterm/index.html
+      "zotero@beta"
     ];
 
     masApps = {
