@@ -26,11 +26,6 @@
       url = "github:lnl7/nix-darwin/nix-darwin-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    extra-container = {
-      url = "github:erikarvstedt/extra-container";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   # https://nixos.wiki/wiki/Flakes
@@ -38,7 +33,6 @@
     inputs @ { self
     , agenix
     , darwin
-    , extra-container
     , flake-parts
     , home-manager
     , nixos-apple-silicon
@@ -119,10 +113,8 @@
                 agenix.nixosModules.default
                 home-manager.nixosModules.home-manager
                 nixos-apple-silicon.nixosModules.apple-silicon-support
-                extra-container.nixosModules.default
                 ./configurations/nas.nix
                 ./configurations/asahi-mini.nix
-                ./nixos-modules/home-assistant.nix
                 {
                   home-manager.useUserPackages = true;
 
