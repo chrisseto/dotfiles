@@ -1,7 +1,11 @@
 { pkgs
-, unstable
+, inputs
 , ...
-}: {
+}:
+let
+  unstable = import inputs.nixpkgs-unstable { inherit (pkgs) system; };
+in
+{
   home.packages = [
     pkgs.rustup
     pkgs.awscli2

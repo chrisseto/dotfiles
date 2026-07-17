@@ -1,9 +1,14 @@
 { config
 , pkgs
-, unstable
+, ezModules
+, inputs
 , ...
 }:
+let
+  unstable = import inputs.nixpkgs-unstable { inherit (pkgs) system; };
+in
 {
+
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
@@ -56,14 +61,13 @@
     unstable.go
     unstable.gotools # Provides A LOT of packages. Added because I want godoc.
     unstable.helix # A post-modern modal text editor
-    unstable.nil # nix LSP.
     unstable.stgit # stacked-git, my preferred alternative to branches.
     unstable.yazi # Yet another file manager.
-    (pkgs.janet.withPackages (ps:
-      with ps; [
-        sh
-        spork
-      ])) # A pretty neat lisp implementation
+    # (pkgs.janet.withPackages (ps:
+    #   with ps; [
+    #     sh
+    #     spork
+    #   ])) # A pretty neat lisp implementation
   ];
 
   # Zoxide provides the "z" command for faster cd'ing around.
@@ -221,7 +225,6 @@
   home.file.".config/aerospace".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/aerospace";
   home.file.".config/helix".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/helix";
   home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/wezterm";
-  home.file.".config/alacritty".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/alacritty";
   home.file.".config/fish/functions".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/fish-functions";
   home.file.".config/fish/completions".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/fish-completions";
 }

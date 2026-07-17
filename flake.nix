@@ -43,17 +43,33 @@
     flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, ... }: {
       systems = [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" ];
 
-      # TODO: Configure ez-configs to split up configurations.
-      # imports = [
-      #   inputs.ez-configs.flakeModule
-      # ];
-      #
-      # ezConfigs = {
-      #   root = ./.;
-      #   globalArgs = {inherit inputs;};
-      # };
+      imports = [
+        inputs.ez-configs.flakeModule
+      ];
 
-      perSystem = { pkgs, lib, system, inputs', ... }: {
+      ezConfigs = {
+        root = builtins.path { path = ./.; name = "source"; };
+
+        globalArgs = { inherit inputs; };
+
+        darwin.hosts = {
+          personal-air.userHomeModules = {
+            chrisseto = "personal-air";
+          };
+
+          redpanda-mbpro.userHomeModules = {
+            chrisseto = "redpanda";
+          };
+        };
+
+        nixos.hosts.asahi-mini.userHomeModules = {
+          chrisseto = "ssh";
+        };
+      };
+
+      flake = { };
+
+      perSystem = { pkgs, lib, system, inputs, inputs', ... }: {
         formatter = pkgs.nixpkgs-fmt;
 
         packages =
@@ -68,85 +84,5 @@
           });
       };
 
-      flake = {
-        homeConfigurations =
-          let
-            # TODO don't hardcode system here either...
-            system = "x86_64-linux";
-            pkgs = import nixpkgs { inherit system; };
-            unstable = import nixpkgs-unstable { inherit system; };
-          in
-          {
-            redpanda-aws-vm = home-manager.lib.homeManagerConfiguration {
-              inherit pkgs;
-              extraSpecialArgs = { inherit unstable; };
-
-              modules = [
-                ./homes/common.nix
-                ./home-modules/nvim.nix
-                ./homes/redpanda-aws-vm.nix
-              ];
-            };
-          };
-
-        darwinConfigurations = {
-          "redpanda-mbpro" = import ./darwin-configurations/redpanda-mbpro.nix {
-            inherit darwin nixpkgs home-manager nixpkgs-unstable;
-          };
-
-          "Chriss-Air" = import ./darwin-configurations/personal-air.nix {
-            inherit darwin nixpkgs home-manager nixpkgs-unstable;
-          };
-        };
-
-        nixosConfigurations = {
-          asahi-mini =
-            let
-              system = "aarch64-linux";
-              pkgs = import nixpkgs { inherit system; };
-              unstable = import nixpkgs-unstable { inherit system; };
-            in
-            nixpkgs.lib.nixosSystem {
-              inherit system;
-
-              modules = [
-                agenix.nixosModules.default
-                home-manager.nixosModules.home-manager
-                nixos-apple-silicon.nixosModules.apple-silicon-support
-                ./configurations/nas.nix
-                ./configurations/asahi-mini.nix
-                {
-                  home-manager.useUserPackages = true;
-
-                  # Define a user account. Don't forget to set a password with ‘passwd’.
-                  users.users.chrisseto = {
-                    isNormalUser = true;
-                    home = "/home/chrisseto";
-                    hashedPassword = "$6$PK.EJqps/uhJSWsM$S1HGVnVQCVIlf.xYNeHjuot2YEzjv4Xy/PLlnyBUxrXo6d/lkxsujjgt7sSnnZ5v8F/eeP.CNMOgGsTL2IN8w0";
-                    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-                    openssh.authorizedKeys.keys = [
-                      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIClQd+Mx8j4tLqk/a2s705FlLPfEbXbXpMeUCcuwDqZ8"
-                      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKn3yk0zGVSxD+S7xjvWD+GNhP938kp21dHgUPNknTN2"
-                    ];
-                  };
-
-                  home-manager.extraSpecialArgs = { inherit unstable; };
-
-                  home-manager.users.chrisseto = {
-                    imports = [
-                      ./homes/common.nix
-                      ./homes/asahi-mini.nix
-                      ./home-modules/nvim.nix
-                    ];
-                  };
-                }
-              ];
-              specialArgs = {
-                inherit nixpkgs;
-                inherit nixos-apple-silicon;
-              };
-            };
-        };
-      };
     });
 }

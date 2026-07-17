@@ -1,10 +1,10 @@
 { config
 , pkgs
-, unstable
+, inputs
 , ...
 }:
 let
-  openscad-lsp = pkgs.callPackage ../packages/openscad-lsp.nix { };
+  unstable = import inputs.nixpkgs-unstable { inherit (pkgs) system; };
 in
 {
   home.sessionVariables = {
@@ -25,14 +25,6 @@ in
     pkgs.bat # Better `cat` with syntax highlighting
     pkgs.git
     pkgs.ripgrep # `rg`, better grep/ag/ack
-
-    # LSPs
-    # Might be nice to parameterize some of this and configure neovim to only
-    # setup LSPs that it sees are executable. Would also be nice to bake the
-    # binary path directly into my neovim configs.
-    openscad-lsp # SCAD LSP
-    pkgs.lua-language-server # Lua LSP
-    unstable.nil # Nix LSP
   ];
 
   # Use (abuse?) a helper in home manager to symlink directly to the config

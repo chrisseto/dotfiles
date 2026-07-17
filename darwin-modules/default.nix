@@ -1,8 +1,11 @@
 { config
 , pkgs
-, unstable
+, inputs
 , ...
 }:
+let
+  unstable = import inputs.nixpkgs-unstable { inherit (pkgs) system; };
+in
 {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
