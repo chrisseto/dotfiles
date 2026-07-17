@@ -6,7 +6,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	if vim.v.shell_error ~= 0 then
 		vim.api.nvim_echo({
 			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-			{ out,                            "WarningMsg" },
+			{ out, "WarningMsg" },
 			{ "\nPress any key to exit..." },
 		}, true, {})
 		vim.fn.getchar()
@@ -47,27 +47,6 @@ require("lazy").setup({
 			-- refer to the configuration section below
 		},
 	},
-
-	-- Movement helpers
-	-- {
-	-- 	"folke/flash.nvim",
-	-- 	event = "VeryLazy",
-	-- 	---@type Flash.Config
-	-- 	opts = {},
-	-- 	-- stylua: ignore
-	-- 	keys = {
-	-- 		{ "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-	-- 		{ "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc =
-	-- 		"Flash Treesitter" },
-	-- 		{ "r",     mode = "o",               function() require("flash").remote() end,            desc =
-	-- 		"Remote Flash" },
-	-- 		{ "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end,
-	-- 			                                                                                          desc =
-	-- 			"Treesitter Search" },
-	-- 		{ "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc =
-	-- 		"Toggle Flash Search" },
-	-- 	},
-	-- },
 	{
 		"neanias/everforest-nvim",
 		version = false,
@@ -100,13 +79,13 @@ require("lazy").setup({
 		"ibhagwan/fzf-lua",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
-			local fzf_lua = require('fzf-lua')
+			local fzf_lua = require("fzf-lua")
 
 			fzf_lua.setup({})
 
-			vim.keymap.set('n', '<C-p>', fzf_lua.files, { desc = "Files" })
-			vim.keymap.set('n', '<leader>f', fzf_lua.live_grep, { desc = "Live Search" })
-			vim.keymap.set('n', '<leader>g', fzf_lua.git_status, { desc = "Modified Files" })
+			vim.keymap.set("n", "<C-p>", fzf_lua.files, { desc = "Files" })
+			vim.keymap.set("n", "<leader>f", fzf_lua.live_grep, { desc = "Live Search" })
+			vim.keymap.set("n", "<leader>g", fzf_lua.git_status, { desc = "Modified Files" })
 		end,
 	},
 	-- Git diff info + blame support.
@@ -176,7 +155,7 @@ require("lazy").setup({
 		lazy = false,
 		keys = {
 			{ "<leader>d", ":NERDTreeToggle<CR>", desc = "Toggle File Tree" },
-			{ "<leader>D", ":NERDTreeFind<CR>",   desc = "Find in File Tree" },
+			{ "<leader>D", ":NERDTreeFind<CR>", desc = "Find in File Tree" },
 		},
 	},
 
@@ -213,55 +192,47 @@ require("lazy").setup({
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		config = function(_plug, opts)
-			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+		opts_extend = { "ensure_installed" },
+		opts = {
+			auto_install = true,
+			ensure_installed = {
+				"lua",
+				"markdown",
+				"python",
+				"terraform",
+				"vim",
+			},
 
-			-- Apply any parser_configs from plugin modules
-			for k, v in pairs(opts.parser_config) do
-				parser_config[k] = v
-			end
+			highlight = {
+				enable = true,
+				-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+				-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+				-- Using this option may slow down your editor, and you may see some duplicate highlights.
+				-- Instead of true it can also be a list of languages
+				additional_vim_regex_highlighting = false,
+			},
 
-			-- Treesitter configuration
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = vim.list_extend(
-					{ "markdown", "lua", "vim", "python" },
-					vim.tbl_keys(opts.ensure_installed)
-				),
-
-				auto_install = true,
-
-				highlight = {
-					enable = true,
-					-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-					-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-					-- Using this option may slow down your editor, and you may see some duplicate highlights.
-					-- Instead of true it can also be a list of languages
-					additional_vim_regex_highlighting = false,
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "gnn", -- set to `false` to disable one of the mappings
+					node_incremental = "grn",
+					scope_incremental = "grc",
+					node_decremental = "grm",
 				},
+			},
 
-				incremental_selection = {
-					enable = true,
-					keymaps = {
-						init_selection = "gnn", -- set to `false` to disable one of the mappings
-						node_incremental = "grn",
-						scope_incremental = "grc",
-						node_decremental = "grm",
-					},
-				},
+			-- Enable TS powered indentation.
+			indent = {
+				-- too buggy for use just yet :[
+				-- enable = true
+			},
 
-				-- Enable TS powered indentation.
-				indent = {
-					-- too buggy for use just yet :[
-					-- enable = true
-				},
-
-				playground = {
-					enable = true,
-				},
-			})
-		end,
+			playground = {
+				enable = true,
+			},
+		},
 	},
-
 	{
 		"kevinhwang91/nvim-ufo",
 		dependencies = { "kevinhwang91/promise-async" },
@@ -287,7 +258,7 @@ require("lazy").setup({
 		-- Kinda slow but better than manually searching.
 		"almo7aya/openingh.nvim",
 		keys = {
-			{ "gog", "<cmd>OpenInGHFile<cr>",      mode = "n", desc = "Open In GitHub" },
+			{ "gog", "<cmd>OpenInGHFile<cr>", mode = "n", desc = "Open In GitHub" },
 			{ "gog", "<cmd>OpenInGHFileLines<cr>", mode = "v", desc = "Open In GitHub" },
 		},
 	},
@@ -317,8 +288,8 @@ require("lazy").setup({
 						description = "Toggle Comment",
 						opts = { remap = true },
 					},
-					{ "<leader>t", ":Trouble<CR>",                           description = "Toggle Trouble List" },
-					{ "<leader>l", ":Legendary<CR>",                         description = "Legendary" },
+					{ "<leader>t", ":Trouble<CR>", description = "Toggle Trouble List" },
+					{ "<leader>l", ":Legendary<CR>", description = "Legendary" },
 				},
 			})
 		end,

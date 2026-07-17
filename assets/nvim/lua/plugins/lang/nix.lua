@@ -1,9 +1,9 @@
-vim.lsp.enable({"nil"})
+vim.lsp.enable({ "nil" })
 
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		opts = { ensure_installed = { nix = true } },
+		opts = { ensure_installed = { "nix" } },
 	},
 	{
 		"williamboman/mason.nvim",

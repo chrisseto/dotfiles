@@ -1,83 +1,18 @@
+vim.lsp.enable({ "rust-analyzer" })
+
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		opts = {
 			ensure_installed = {
-				rust = true,
-				ron = true,
-				toml = true
-			}
-		},
-	},
-	{
-		"williamboman/mason.nvim",
-		opts = { ensure_installed = { "rust-analyzer" } },
-	},
-	{
-		"neovim/nvim-lspconfig",
-		opts = {
-			setup = {
-				["rust-analyzer"] = {
-					cargo = {
-						allFeatures = true,
-						loadOutDirsFromCheck = true,
-						buildScripts = {
-							enable = true,
-						},
-					},
-					-- Add clippy lints for Rust.
-					checkOnSave = true,
-					procMacro = {
-						enable = true,
-						ignored = {
-							["async-trait"] = { "async_trait" },
-							["napi-derive"] = { "napi" },
-							["async-recursion"] = { "async_recursion" },
-						},
-					},
-				},
+				"rust",
+				"ron",
+				"toml",
 			},
 		},
 	},
-	-- Conceptually a nice plugin but stable configuration has been nearly impossible as it conflicts with every other plugin.
-	-- {
-	-- 	'mrcjkb/rustaceanvim',
-	-- 	version = '^5', -- Recommended
-	-- 	lazy = false, -- This plugin is already lazy
-	-- 	ft = { "rust" },
-	-- 	dependencies = {
-	-- 		"nvim-treesitter/nvim-treesitter",
-	-- 		"williamboman/mason-lspconfig.nvim",
-	-- 		"williamboman/mason.nvim",
-	-- 	},
-	-- 	opts = {
-	-- 		server = {
-	-- 			default_settings = {
-	-- 				-- rust-analyzer language server configuration
-	-- 				["rust-analyzer"] = {
-	-- 					cargo = {
-	-- 						allFeatures = true,
-	-- 						loadOutDirsFromCheck = true,
-	-- 						buildScripts = {
-	-- 							enable = true,
-	-- 						},
-	-- 					},
-	-- 					-- Add clippy lints for Rust.
-	-- 					checkOnSave = true,
-	-- 					procMacro = {
-	-- 						enable = true,
-	-- 						ignored = {
-	-- 							["async-trait"] = { "async_trait" },
-	-- 							["napi-derive"] = { "napi" },
-	-- 							["async-recursion"] = { "async_recursion" },
-	-- 						},
-	-- 					},
-	-- 				},
-	-- 			},
-	-- 		},
-	-- 	},
-	-- 	config = function(_, opts)
-	-- 		vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, opts or {})
-	-- 	end
-	-- },
+	{
+		"mason-org/mason.nvim",
+		opts = { ensure_installed = { "rust-analyzer" } },
+	},
 }

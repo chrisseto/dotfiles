@@ -1,3 +1,5 @@
+vim.lsp.enable({ "stylua" })
+
 return {
 	{
 		"folke/lazydev.nvim",
@@ -10,6 +12,10 @@ return {
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 			},
 		},
+	},
+	{
+		"mason-org/mason.nvim",
+		opts = { ensure_installed = { "stylua" } },
 	},
 	{ -- optional blink completion source for require statements and module annotations
 		"saghen/blink.cmp",
