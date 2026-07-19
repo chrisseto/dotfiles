@@ -5,7 +5,13 @@
 }: {
   config = {
     # Create a shared group for all NAS services
-    users.groups.nasdaemons = { };
+    users.groups.nasdaemons = { gid = 995; };
+    users.users = {
+      jellyfin = { isSystemUser = true; uid = 994; group = "nasdaemons"; };
+      radarr = { isSystemUser = true; uid = 275; group = "nasdaemons"; };
+      sabnzbd = { isSystemUser = true; uid = 38; group = "nasdaemons"; };
+      sonarr = { isSystemUser = true; uid = 274; group = "nasdaemons"; };
+    };
 
     systemd.mounts = [
       {
@@ -14,8 +20,6 @@
         where = "/external";
         options = "noatime";
         type = "btrfs";
-        wantedBy = [ "sabnzbd.service" "radarr.service" "sonarr.service" ];
-        partOf = [ "sabnzbd.service" "radarr.service" "sonarr.service" ];
       }
       {
         description = "Bazarr configuration";
@@ -23,8 +27,6 @@
         where = "/var/lib/bazarr";
         options = "subvol=configs/bazarr";
         type = "btrfs";
-        partOf = [ "bazarr.service" ];
-        wantedBy = [ "bazarr.service" ];
       }
       {
         description = "Jellyfin configuration";
@@ -32,8 +34,6 @@
         where = "/var/lib/jellyfin";
         options = "subvol=configs/jellyfin";
         type = "btrfs";
-        partOf = [ "jellyfin.service" ];
-        wantedBy = [ "jellyfin.service" ];
       }
       {
         description = "Radarr configuration";
@@ -41,8 +41,6 @@
         where = "/var/lib/radarr";
         options = "subvol=configs/radarr";
         type = "btrfs";
-        partOf = [ "radarr.service" ];
-        wantedBy = [ "radarr.service" ];
       }
       {
         description = "Sabnzbd configuration";
@@ -50,8 +48,6 @@
         where = "/var/lib/sabnzbd";
         options = "subvol=configs/sabnzbd";
         type = "btrfs";
-        wantedBy = [ "sabnzbd.service" ];
-        partOf = [ "sabnzbd.service" ];
       }
       {
         description = "Sonarr configuration";
@@ -59,41 +55,72 @@
         where = "/var/lib/sonarr";
         options = "subvol=configs/sonarr";
         type = "btrfs";
-        partOf = [ "sonarr.service" ];
-        wantedBy = [ "sonarr.service" ];
       }
     ];
 
-    # The override here was taken from jellyfin's config. It causes systemd to
-    # automatically chown these directories. Not sure how effective this actually is.
-
-    systemd.services.radarr.serviceConfig.StateDirectory = "radarr";
-    systemd.services.radarr.serviceConfig.StateDirectoryMode = "0700";
-
-    systemd.services.sabnzbd.serviceConfig.StateDirectory = "sabnzbd";
-    systemd.services.sabnzbd.serviceConfig.StateDirectoryMode = "0700";
-
-    systemd.services.sonarr.serviceConfig.StateDirectory = "sonarr";
-    systemd.services.sonarr.serviceConfig.StateDirectoryMode = "0700";
-
-    systemd.services.bazarr.serviceConfig.StateDirectory = "bazarr";
-    systemd.services.bazarr.serviceConfig.StateDirectoryMode = "0700";
-
-    # TODO: systemd has this build into the serviceConfig. See Jellyfin's
-    # config.
+    # TODO It might be possible / better to do this with systemd units if
+    # possible?
     systemd.tmpfiles.rules = [
-      "d /external/media/movies 0775 root nasdaemons - -"
-      "d /external/media/tv-shows 0775 root nasdaemons - -"
       "d /external/downloads/complete 0775 root nasdaemons - -"
       "d /external/downloads/incomplete 0775 root nasdaemons - -"
-      #   "d /external/data/downloads/complete 0775 sabnzbd nasdaemons - -"
-      #   "d /external/data/downloads/incomplete 0775 sabnzbd nasdaemons - -"
-      #   "d /external/data/movies 0775 root nasdaemons - -"
-      #   "d /external/data/shows 0775 root nasdaemons - -"
-      #   "d /var/lib/prowlarr 0700 prowlarr nasdaemons - -"
-      #   "d /var/lib/radarr 0700 radarr nasdaemons - -"
-      #   "d /var/lib/sonarr 0700 sonarr nasdaemons - -"
+      "d /external/media/movies 0775 root nasdaemons - -"
+      "d /external/media/tv-shows 0775 root nasdaemons - -"
+      "d /var/lib/radarr 0770 radarr nasdaemons - -"
+      "d /var/lib/sabnzbd/ 0770 sabnzbd nasdaemons - -"
+      "d /var/lib/sonarr 0770 sonarr nasdaemons - -"
     ];
+
+    # Make podman services require any mounts they use.
+    systemd.services = {
+      podman-radarr = {
+        after = [
+          "external.mount"
+          "var-lib-radarr.mount"
+          "systemd-tmpfiles-setup.service"
+        ];
+        requires = [
+          "external.mount"
+          "var-lib-radarr.mount"
+          "systemd-tmpfiles-setup.service"
+        ];
+      };
+      podman-sonarr = {
+        after = [
+          "external.mount"
+          "var-lib-sonarr.mount"
+          "systemd-tmpfiles-setup.service"
+        ];
+        requires = [
+          "external.mount"
+          "var-lib-sonarr.mount"
+          "systemd-tmpfiles-setup.service"
+        ];
+      };
+      podman-sabnzbd = {
+        after = [
+          "external.mount"
+          "var-lib-sabnzbd.mount"
+          "systemd-tmpfiles-setup.service"
+        ];
+        requires = [
+          "external.mount"
+          "var-lib-sabnzbd.mount"
+          "systemd-tmpfiles-setup.service"
+        ];
+      };
+      podman-jellyfin = {
+        after = [
+          "external.mount"
+          "var-lib-jellyfin.mount"
+          "systemd-tmpfiles-setup.service"
+        ];
+        requires = [
+          "external.mount"
+          "var-lib-jellyfin.mount"
+          "systemd-tmpfiles-setup.service"
+        ];
+      };
+    };
 
     services.tailscale.enable = true;
 
@@ -180,48 +207,102 @@
       };
     };
 
-    # Web service serving open whisper (AI subtitle generator).
     virtualisation.oci-containers.containers = {
-      whisper = {
-        image = "onerahmet/openai-whisper-asr-webservice:latest";
-        ports = [ "127.0.0.1:9000:9000" ];
+      # TODO ?
+      # Web service serving open whisper (AI subtitle generator).
+      # whisper = {
+      #   image = "onerahmet/openai-whisper-asr-webservice:latest";
+      #   ports = [ "127.0.0.1:9000:9000" ];
+      #   environment = {
+      #     ASR_MODEL = "base.en";
+      #   };
+      # };
+
+      sonarr = {
+        autoStart = true;
+        image = "ghcr.io/hotio/sonarr:release-4.0.14.2939";
+        ports = [
+          "8989:8989"
+        ];
+
+        volumes = [
+          "/var/lib/sonarr/.config/NzbDrone:/config"
+          "/external/media/tv-shows:/external/media/tv-shows"
+          "/external/downloads/complete:/external/downloads/complete"
+        ];
+
         environment = {
-          ASR_MODEL = "base.en";
+          TZ = "America/New_York";
+          PUID = toString config.users.users.sonarr.uid;
+          PGID = toString config.users.groups.nasdaemons.gid;
+        };
+      };
+
+      radarr = {
+        autoStart = true;
+        image = "ghcr.io/hotio/radarr:release-5.21.1.9799";
+        ports = [
+          "7878:7878"
+        ];
+
+        volumes = [
+          "/var/lib/radarr/.config/Radarr:/config"
+          "/external/media/movies:/external/media/movies"
+          "/external/downloads/complete:/external/downloads/complete"
+        ];
+
+        environment = {
+          TZ = "America/New_York";
+          PUID = toString config.users.users.radarr.uid;
+          PGID = toString config.users.groups.nasdaemons.gid;
+        };
+      };
+
+      jellyfin = {
+        autoStart = true;
+        image = "ghcr.io/hotio/jellyfin:release-10.10.7";
+        ports = [
+          "8096:8096"
+          "1900:1900/udp"
+          "7359:7359/udp"
+        ];
+
+        volumes = [
+          "/var/lib/jellyfin/:/config"
+          "/external/media:/external/media"
+        ];
+
+        environment = {
+          TZ = "America/New_York";
+          PUID = toString config.users.users.jellyfin.uid;
+          PGID = toString config.users.groups.nasdaemons.gid;
+        };
+      };
+
+      sabnzbd = {
+        autoStart = true;
+        image = "docker.io/linuxserver/sabnzbd:3.5.3";
+        ports = [
+          "8080:8080"
+        ];
+
+        volumes = [
+          "/var/lib/sabnzbd:/config"
+          "/external/downloads:/external/downloads"
+        ];
+
+        environment = {
+          TZ = "America/New_York";
+          PUID = toString config.users.users.sabnzbd.uid;
+          PGID = toString config.users.groups.nasdaemons.gid;
         };
       };
     };
 
-    services.jellyfin = {
-      enable = true;
-      group = "nasdaemons";
-    };
-
-    services.sabnzbd = {
-      enable = true;
-      group = "nasdaemons";
-    };
-
-    services.sonarr = {
-      enable = true;
-      group = "nasdaemons";
-    };
-
-    services.radarr = {
-      enable = true;
-      group = "nasdaemons";
-    };
-
-    services.bazarr = {
-      enable = true;
-      group = "nasdaemons";
-    };
-
-    users.users = {
-      prowlarr = {
-        isSystemUser = true;
-        group = "nasdaemons";
-        home = "/var/lib/prowlarr";
-      };
-    };
+    # TODO
+    # services.bazarr = {
+    #   enable = true;
+    #   group = "nasdaemons";
+    # };
   };
 }
