@@ -1,11 +1,15 @@
 { pkgs
 , inputs
+, ezModules
 , ...
 }:
 let
   unstable = import inputs.nixpkgs-unstable { inherit (pkgs) system; };
 in
 {
+  imports = [
+    ezModules.nvim
+  ];
   home.packages = [
     pkgs.rustup
     pkgs.awscli2
