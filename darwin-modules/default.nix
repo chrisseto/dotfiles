@@ -1,5 +1,4 @@
-{ config
-, pkgs
+{ pkgs
 , inputs
 , ...
 }:
@@ -16,7 +15,6 @@ in
   # environment.darwinConfig = "$HOME/.config/nixpkgs/darwin/configuration.nix";
 
   # Auto upgrade nix package and the daemon service.
-  nix.enable = false;
   # Allow my user to run remote builds.
   nix.settings.trusted-users = [ "root" "chrisseto" ];
   # nix.enable = true;
@@ -33,8 +31,8 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  # Create /etc/zshrc that loads the nix-darwin environment.
-  programs.zsh.enable = true;
+  # Explicitly disable zsh to avoid conflicts with builtin files.
+  programs.zsh.enable = false;
   programs.bash.enable = true;
   programs.fish.enable = true;
 
