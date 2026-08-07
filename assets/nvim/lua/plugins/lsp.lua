@@ -84,27 +84,12 @@ return {
 					local client = vim.lsp.get_client_by_id(args.data.client_id)
 
 					vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = bufnr, desc = "Go to definition" })
-					vim.keymap.set(
-						"n",
-						"gD",
-						vim.lsp.buf.type_definition,
-						{ buffer = bufnr, desc = "Go to type definition" }
-					)
-					vim.keymap.set(
-						"n",
-						"gi",
-						vim.lsp.buf.implementation,
-						{ buffer = bufnr, desc = "Get implementations" }
-					)
+					vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, { buffer = bufnr, desc = "Go to type definition" })
+					vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = bufnr, desc = "Get implementations" })
 					vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Hover documentation" })
 					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename symbol" })
 					vim.keymap.set("n", "<leader>F", vim.lsp.buf.format, { buffer = bufnr, desc = "LSP format file" })
-					vim.keymap.set(
-						"v",
-						"<leader>F",
-						vim.lsp.buf.format,
-						{ buffer = bufnr, desc = "LSP format selection" }
-					)
+					vim.keymap.set("v", "<leader>F", vim.lsp.buf.format, { buffer = bufnr, desc = "LSP format selection" })
 					vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = bufnr, desc = "Show references" })
 					vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = bufnr })
 				end,
@@ -112,14 +97,18 @@ return {
 		end,
 	},
 	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/nvim-web-devicons" },
+		---@module 'render-markdown'
+		---@type render.md.UserConfig
+		opts = {},
+	},
+	{
 		"mason-org/mason.nvim",
 		opts_extend = { "ensure_installed" },
 		opts = {
 			ensure_installed = { "shfmt" },
 		},
-		-- config = function(_, opts)
-		-- 	print(vim.inspect(opts))
-		-- end,
 	},
 	{
 		"mason-org/mason-lspconfig.nvim",
@@ -127,39 +116,6 @@ return {
 		dependencies = {
 			{ "mason-org/mason.nvim", opts = {} },
 			"neovim/nvim-lspconfig",
-		},
-	},
-	{
-		"kevinhwang91/nvim-ufo",
-		dependencies = {
-			"kevinhwang91/promise-async",
-		},
-		config = function()
-			vim.o.foldcolumn = "1" -- '0' is not bad
-			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-			vim.o.foldlevelstart = 99
-			vim.o.foldenable = true
-
-			require("ufo").setup()
-		end,
-		keys = {
-			-- Using ufo provider need remap `zR` and `zM`.
-			{
-				"zR",
-				mode = { "n" },
-				function()
-					require("ufo").openAllFolds()
-				end,
-				desc = "Open All Folds",
-			},
-			{
-				"zM",
-				mode = { "n" },
-				function()
-					require("ufo").closeAllFolds()
-				end,
-				desc = "Close All Folds",
-			},
 		},
 	},
 	{

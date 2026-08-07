@@ -85,11 +85,16 @@ require("lazy").setup({
 
 			vim.keymap.set("n", "<C-p>", fzf_lua.files, { desc = "Files" })
 			vim.keymap.set("n", "<leader>f", fzf_lua.live_grep, { desc = "Live Search" })
-			vim.keymap.set("n", "<leader>g", fzf_lua.git_status, { desc = "Modified Files" })
 		end,
 	},
 	-- Git diff info + blame support.
-	{ "lewis6991/gitsigns.nvim", config = true },
+	{
+		"lewis6991/gitsigns.nvim",
+		config = true,
+		keys = {
+			{ "<leader>gb", "<Cmd>Gitsigns blame<CR>", mode = "n", desc = "Git Blame" },
+		},
+	},
 	-- Multiplexer navigation
 	{
 		"mrjones2014/smart-splits.nvim",
@@ -107,21 +112,19 @@ require("lazy").setup({
 			vim.keymap.set("n", "<C-l>", ss.move_cursor_right)
 		end,
 	},
-	-- Elixir support (Mostly useful for FT detection)
-	{ "elixir-editors/vim-elixir" },
-	-- Helper for Comment.nvim
-	{ "JoosepAlviste/nvim-ts-context-commentstring" },
-
 	{
 		-- Comment toggler powered by treesitter and friends
 		"numToStr/Comment.nvim",
 		dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+		keys = {
+			{ "<leader>/", "<Plug>(comment_toggle_linewise_current)", mode = "n", desc = "Comment toggle current line" },
+			{ "<leader>/", "<Plug>(comment_toggle_linewise_visual)", mode = "v", desc = "Comment toggle current line" },
+		},
 		config = function()
 			require("Comment").setup({
+				mappings = false,
 				pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
 			})
-
-			require("Comment.ft").set("scad", "//%s")
 		end,
 	},
 	{
@@ -186,52 +189,54 @@ require("lazy").setup({
 			},
 		},
 	},
-	-- Useful for debugging/exploring how treesitter actually parses a document.
-	{ "nvim-treesitter/playground" },
 	-- Treesitter is a better syntax highlighter for neovim.
 	{
 		"nvim-treesitter/nvim-treesitter",
+		branch = "main",
+		lazy = false,
 		build = ":TSUpdate",
 		opts_extend = { "ensure_installed" },
 		opts = {
-			auto_install = true,
 			ensure_installed = {
 				"lua",
-				"markdown",
-				"python",
-				"terraform",
 				"vim",
-			},
-
-			highlight = {
-				enable = true,
-				-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-				-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-				-- Using this option may slow down your editor, and you may see some duplicate highlights.
-				-- Instead of true it can also be a list of languages
-				additional_vim_regex_highlighting = false,
-			},
-
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = "gnn", -- set to `false` to disable one of the mappings
-					node_incremental = "grn",
-					scope_incremental = "grc",
-					node_decremental = "grm",
-				},
-			},
-
-			-- Enable TS powered indentation.
-			indent = {
-				-- too buggy for use just yet :[
-				-- enable = true
-			},
-
-			playground = {
-				enable = true,
+				"vimdoc",
+				"markdown",
+				"markdown_inline",
+				"query",
+				"regex",
+				"bash",
+				"json",
+				"yaml",
+				"toml",
 			},
 		},
+		config = function(_, opts)
+			local ts = require("nvim-treesitter")
+			ts.setup({ install_dir = vim.fn.stdpath("data") .. "/site" })
+
+			-- Configure any custom parsers from parser_config
+			for name, config in pairs(opts.parser_config) do
+				require("nvim-treesitter.parsers")[name] = config
+			end
+
+			-- install from the accumulated opts.ensure_installed
+			ts.install(opts.ensure_installed or {})
+
+			-- Indentation (experimental)
+			vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+			-- TS folding
+			vim.opt.foldmethod = "expr"
+			vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+			-- TS highlighting for all files.
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function()
+					pcall(vim.treesitter.start)
+				end,
+			})
+		end,
 	},
 	{
 		"kevinhwang91/nvim-ufo",
@@ -269,30 +274,6 @@ require("lazy").setup({
 			"sindrets/diffview.nvim", -- optional - Diff integration
 			"ibhagwan/fzf-lua", -- optional
 		},
-	},
-
-	-- TODO switch to which-key.nvim instead.
-	{
-		"mrjones2014/legendary.nvim",
-		dependencies = { "kkharji/sqlite.lua" },
-		config = function()
-			local h = require("legendary.toolbox")
-
-			-- TODO write a custom formatter. Works great but looks like trash and feels backwards.
-			-- TODO Might be worth to just switch to which-key.nvim and then look for something to bolt on top. Then I get to use lazy's keymapping features.
-			require("legendary").setup({
-				keymaps = {
-					{
-						"<leader>/",
-						{ n = "gcc", v = "gc" },
-						description = "Toggle Comment",
-						opts = { remap = true },
-					},
-					{ "<leader>t", ":Trouble<CR>", description = "Toggle Trouble List" },
-					{ "<leader>l", ":Legendary<CR>", description = "Legendary" },
-				},
-			})
-		end,
 	},
 }, {
 	change_detection = {
