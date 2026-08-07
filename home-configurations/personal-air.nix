@@ -21,7 +21,6 @@ in
     # unstable.llama-cpp
     # unstable.openai-whisper-cpp
     unstable.bun
-    unstable.nodejs_24 # For claude-code
     unstable.rustup
     unstable.uv
     unstable.zig # For cargo-zigbuild

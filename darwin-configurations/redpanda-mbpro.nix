@@ -1,5 +1,7 @@
 { config, ... }: {
 
+  system.primaryUser = "chrisseto";
+
   nix.enable = true;
   nix.optimise.automatic = true;
   nix.gc.automatic = true;

@@ -23,7 +23,6 @@ in
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.kustomize
-    pkgs.nodejs_23 # For copilot in nvim
     unstable.grpcurl
     unstable.jira-cli-go # Jira CLI...
     unstable.stern # Kubernetes log tailer

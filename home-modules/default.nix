@@ -1,11 +1,10 @@
 { config
 , pkgs
-, ezModules
 , inputs
 , ...
 }:
 let
-  unstable = import inputs.nixpkgs-unstable { inherit (pkgs) system; };
+  unstable = import inputs.nixpkgs-unstable { inherit (pkgs.stdenv.hostPlatform) system; };
 in
 {
 
@@ -31,7 +30,6 @@ in
     pkgs.age # age is a simple, modern and secure file encryption tool, format, and Go library.
     pkgs.bash # Install bash to ensure that shell scripts use nix binaries, not system binaries.
     pkgs.bat # Better `cat` with syntax highlighting
-    pkgs.bazelisk
     pkgs.delta # Better git diff viewer
     pkgs.difftastic # Syntax aware differ
     pkgs.fastmod
@@ -50,10 +48,8 @@ in
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available
     pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
-    pkgs.nnn # CLI file tree
     pkgs.ripgrep # `rg`, better grep/ag/ack
     pkgs.skim # `sk`, Competitor of fzf
-    pkgs.tmux
     pkgs.tree # Prints a "tree" of a directory.
     pkgs.unixtools.watch
     pkgs.xz # LZMA compression successor, used by container tooling.
