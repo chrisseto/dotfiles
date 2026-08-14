@@ -14,7 +14,7 @@ return {
 					install_info = {
 						url = "https://github.com/shackle-rs/shackle",
 						branch = "develop",
-						files = { "parsers/tree-sitter-minizinc/src/parser.c" },
+						location = "parsers/tree-sitter-minizinc",
 					},
 					filetype = "minizinc",
 				},

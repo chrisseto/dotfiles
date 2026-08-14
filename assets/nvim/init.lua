@@ -212,13 +212,18 @@ require("lazy").setup({
 			},
 		},
 		config = function(_, opts)
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "TSUpdate",
+				callback = function()
+					-- Configure any custom parsers from parser_config
+					for name, config in pairs(opts.parser_config) do
+						require("nvim-treesitter.parsers")[name] = config
+					end
+				end,
+			})
+
 			local ts = require("nvim-treesitter")
 			ts.setup({ install_dir = vim.fn.stdpath("data") .. "/site" })
-
-			-- Configure any custom parsers from parser_config
-			for name, config in pairs(opts.parser_config) do
-				require("nvim-treesitter.parsers")[name] = config
-			end
 
 			-- install from the accumulated opts.ensure_installed
 			ts.install(opts.ensure_installed or {})
@@ -227,8 +232,8 @@ require("lazy").setup({
 			vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
 			-- TS folding
-			vim.opt.foldmethod = "expr"
-			vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+			-- vim.opt.foldmethod = "expr"
+			-- vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
 			-- TS highlighting for all files.
 			vim.api.nvim_create_autocmd("FileType", {
@@ -238,26 +243,27 @@ require("lazy").setup({
 			})
 		end,
 	},
-	{
-		"kevinhwang91/nvim-ufo",
-		dependencies = { "kevinhwang91/promise-async" },
-		config = function()
-			vim.o.foldcolumn = "1" -- '0' is not bad
-			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-			vim.o.foldlevelstart = 99
-			vim.o.foldenable = true
-
-			-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
-			vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-			vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
-
-			require("ufo").setup({
-				provider_selector = function(bufnr, filetype, buftype)
-					return { "treesitter", "indent" }
-				end,
-			})
-		end,
-	},
+	-- Disabled for now. Causes a strange painting issue.
+	-- {
+	-- 	"kevinhwang91/nvim-ufo",
+	-- 	dependencies = { "kevinhwang91/promise-async" },
+	-- 	config = function()
+	-- 		vim.o.foldcolumn = "1" -- '0' is not bad
+	-- 		vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+	-- 		vim.o.foldlevelstart = 99
+	-- 		vim.o.foldenable = true
+	--
+	-- 		-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+	-- 		vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+	-- 		vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+	--
+	-- 		require("ufo").setup({
+	-- 			provider_selector = function(bufnr, filetype, buftype)
+	-- 				return { "treesitter", "indent" }
+	-- 			end,
+	-- 		})
+	-- 	end,
+	-- },
 	{
 		-- Easily open a file on GitHub for sharing. Defaults to the branch and falls back to the commit.
 		-- Kinda slow but better than manually searching.
