@@ -14,10 +14,13 @@
 
   # Diable firmware extract for now.
   # hardware.asahi.peripheralFirmwareDirectory = ./firmware;
+  hardware.asahi.enable = true;
   hardware.asahi.extractPeripheralFirmware = false;
 
   # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.configurationLimit = 3;
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.graceful = true;
   boot.loader.efi.canTouchEfiVariables = false;
   boot.extraModulePackages = [ ];
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" ];
@@ -57,17 +60,18 @@
   system.stateVersion = "23.05"; # Did you read the comment?
 
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    zfs
-    wget
-    git
     bash
-    zsh
+    btrfs-progs
     fish
     gcc
     gccStdenv
+    git
     smartmontools
-    btrfs-progs
+    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    wezterm
+    wget
+    zfs
+    zsh
   ];
 
   # Create /etc/zshrc that loads the nix-darwin environment.

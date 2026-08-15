@@ -134,6 +134,10 @@ in
       nix_shell = {
         symbol = " ";
       };
+
+      username = {
+        detect_env_vars = [ "WEZTERM_UNIX_SOCKET" ];
+      };
     };
   };
 
