@@ -24,3 +24,8 @@ Icon
 
 # direnv cache directory
 .direnv/
+
+# Claude code
+.claude/settings.local.json
+.claude/worktrees/
+CLAUDE.local.md
