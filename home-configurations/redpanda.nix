@@ -11,7 +11,6 @@ in
     ezModules.nvim
   ];
   home.packages = [
-    pkgs.rustup
     pkgs.awscli2
     pkgs.docker
     pkgs.dyff
@@ -23,6 +22,8 @@ in
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.kustomize
+    pkgs.rustup
+    unstable.git-machete
     unstable.grpcurl
     unstable.jira-cli-go # Jira CLI...
     unstable.stern # Kubernetes log tailer

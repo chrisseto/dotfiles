@@ -40,6 +40,7 @@ in
     pkgs.git
     pkgs.git-absorb
     pkgs.git-dive
+    pkgs.git-machete
     pkgs.git-revise
     pkgs.htop
     pkgs.hub # Old (?) GitHub CLI

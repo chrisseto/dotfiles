@@ -19,7 +19,7 @@
   launchd.user.agents.reap-envtest = {
     serviceConfig = {
       RunAtLoad = true;
-      StartInterval = 60; # Seconds.
+      StartInterval = 30; # Seconds.
       ProcessType = "Background";
       # launchd does not expand ~ or $HOME, so the path has to be absolute.
       StandardOutPath = "${config.users.users.chrisseto.home}/Library/Logs/reap-envtest.log";
@@ -27,7 +27,7 @@
     };
 
     script = ''
-      max=90 # Seconds.
+      max=60 # Seconds.
       now=$(/bin/date +%s)
 
       for name in etcd kube-apiserver; do
