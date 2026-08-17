@@ -118,9 +118,4 @@ return {
 			"neovim/nvim-lspconfig",
 		},
 	},
-	{
-		"folke/trouble.nvim",
-		opts = {},
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-	},
 }
