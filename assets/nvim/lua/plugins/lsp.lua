@@ -27,11 +27,6 @@ return {
 				default = { "lsp", "path", "snippets", "buffer" },
 			},
 			appearance = {
-				-- highlight_ns = vim.api.nvim_create_namespace("blink_cmp"),
-				-- -- Sets the fallback highlight groups to nvim-cmp's highlight groups
-				-- -- Useful for when your theme doesn't support blink.cmp
-				-- -- Will be removed in a future release
-				-- use_nvim_cmp_as_default = true,
 				nerd_font_variant = "mono",
 			},
 			completion = {
@@ -47,6 +42,13 @@ return {
 				ghost_text = { enabled = true },
 			},
 			signature = { enabled = true },
+		},
+		cmdline = {
+			enabled = true,
+			keymap = {
+				preset = "inherit",
+				["<CR>"] = { "accept_and_enter", "fallback" },
+			},
 		},
 	},
 	-- -- Borrowed from https://www.lazyvim.org/plugins/lsp#nvim-lspconfig
@@ -101,7 +103,11 @@ return {
 		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/nvim-web-devicons" },
 		---@module 'render-markdown'
 		---@type render.md.UserConfig
-		opts = {},
+		opts = {
+			heading = {
+				sign = false,
+			},
+		},
 	},
 	{
 		"mason-org/mason.nvim",

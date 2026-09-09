@@ -81,7 +81,9 @@ require("lazy").setup({
 		config = function()
 			local fzf_lua = require("fzf-lua")
 
-			fzf_lua.setup({})
+			fzf_lua.setup({
+				ui_select = {},
+			})
 
 			vim.keymap.set("n", "<C-p>", fzf_lua.files, { desc = "Files" })
 			vim.keymap.set("n", "<leader>f", fzf_lua.live_grep, { desc = "Live Search" })
@@ -274,26 +276,81 @@ require("lazy").setup({
 		},
 	},
 	{
-		"NeogitOrg/neogit",
-		dependencies = {
-			"nvim-lua/plenary.nvim", -- required
-			"sindrets/diffview.nvim", -- optional - Diff integration
-			"ibhagwan/fzf-lua", -- optional
+		"sindrets/diffview.nvim",
+		opts = {
+			enhanced_diff_hl = true,
+			git_cmd = { "git", "-c", "diff.external=difft" },
 		},
 	},
 	{
-		"ldelossa/gh.nvim",
+		"NeogitOrg/neogit",
 		dependencies = {
-			{
-				"ldelossa/litee.nvim",
-				config = function()
-					require("litee.lib").setup()
-				end,
+			"nvim-lua/plenary.nvim",
+			"sindrets/diffview.nvim",
+			-- "esmuellert/codediff.nvim",
+			"ibhagwan/fzf-lua",
+		},
+		opts = {
+			treesitter_diff_highlight = true,
+			word_diff_highlight = true,
+			-- kind = "floating",
+			-- floating = {
+			-- 	relative = "editor",
+			-- 	width = 0.9,
+			-- 	height = 0.9,
+			-- 	style = "minimal",
+			-- 	border = "rounded",
+			-- },
+		},
+		keys = {
+			{ "<leader>gg", "<cmd>Neogit<cr>", mode = "n", desc = "Open Neogit" },
+		},
+	},
+	{
+		"pwntester/octo.nvim",
+		cmd = "Octo",
+		opts = {
+			picker = "fzf-lua",
+			enable_builtin = true,
+			use_local_fs = true,
+			ui = {
+				use_signcolumn = true,
 			},
 		},
-		config = function()
-			require("litee.gh").setup()
-		end,
+		keys = {
+			{
+				"<leader>oi",
+				"<CMD>Octo issue list<CR>",
+				desc = "List GitHub Issues",
+			},
+			{
+				"<leader>op",
+				"<CMD>Octo pr list<CR>",
+				desc = "List GitHub PullRequests",
+			},
+			{
+				"<leader>od",
+				"<CMD>Octo discussion list<CR>",
+				desc = "List GitHub Discussions",
+			},
+			{
+				"<leader>on",
+				"<CMD>Octo notification list<CR>",
+				desc = "List GitHub Notifications",
+			},
+			{
+				"<leader>os",
+				function()
+					require("octo.utils").create_base_search_command({ include_current_repo = true })
+				end,
+				desc = "Search GitHub",
+			},
+		},
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"ibhagwan/fzf-lua",
+			"nvim-tree/nvim-web-devicons",
+		},
 	},
 }, {
 	change_detection = {
