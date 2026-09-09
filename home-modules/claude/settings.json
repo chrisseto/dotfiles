@@ -1,0 +1,63 @@
+{
+  "worktree": {
+    "baseRef": "fresh"
+  },
+  "alwaysThinkingEnabled": true,
+  "editorMode": "vim",
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionURL": false
+  },
+  "permissions": {
+    "deny": [
+      "Bash(git push:*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/setup-direnv.sh"
+          }
+        ]
+      }
+    ],
+    "UserPromptExpansion": [
+      {
+        "matcher": "open",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/skills/open/open.sh"
+          }
+        ]
+      }
+    ],
+    "CwdChanged": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/setup-direnv.sh"
+          }
+        ]
+      }
+    ],
+    "FileChanged": [
+      {
+        "matcher": ".envrc|flake.nix",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/setup-direnv.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
