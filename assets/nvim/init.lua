@@ -283,16 +283,27 @@ require("lazy").setup({
 		},
 	},
 	{
+		"m00qek/baleia.nvim",
+		config = function()
+			-- For some reason neogit expects baleia to be on vim.g rather than requiring it?
+			vim.g.baleia = require("baleia").setup({})
+		end,
+	},
+	{
 		"NeogitOrg/neogit",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"sindrets/diffview.nvim",
+			"m00qek/baleia.nvim",
 			-- "esmuellert/codediff.nvim",
 			"ibhagwan/fzf-lua",
 		},
 		opts = {
 			treesitter_diff_highlight = true,
 			word_diff_highlight = true,
+			graph_style = "ascii",
+			log_pager = { "delta", "--width", "117" },
+			diff_viewer = "diffview", -- codediff is cool but diffview works better with neogit.
 			-- kind = "floating",
 			-- floating = {
 			-- 	relative = "editor",
