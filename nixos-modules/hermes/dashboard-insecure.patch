@@ -1,0 +1,36 @@
+--- a/hermes_cli/web_server.py	2026-09-07 17:15:26.619506330 +0000
++++ b/hermes_cli/web_server.py	2026-09-07 17:15:26.627576385 +0000
+@@ -18893,7 +18893,7 @@
+     # injection / WS-auth paths can branch on it consistently.  Phase 3.5
+     # uses this to decide whether to refuse the bind, log the gate-on
+     # banner, and enable uvicorn proxy_headers.
+-    app.state.auth_required = should_require_auth(host)
++    app.state.auth_required = should_require_auth(host) and not allow_public
+ 
+     # ``--insecure`` no longer disables the auth gate (June 2026 hardening:
+     # the hermes-0day MCP-persistence campaign abused unauthenticated public
+--- a/docker/s6-rc.d/dashboard/run	2026-09-07 17:15:26.635400778 +0000
++++ b/docker/s6-rc.d/dashboard/run	2026-09-07 17:15:26.657531482 +0000
+@@ -41,16 +41,16 @@
+ # unauthenticated public dashboards were the entry point for the MCP-config
+ # persistence campaign). It is accepted but ignored; warn if set so operators
+ # migrate to a real provider.
++insecure_flag=""
+ case "${HERMES_DASHBOARD_INSECURE:-}" in
+     1|true|TRUE|True|yes|YES|Yes)
+-        echo "[dashboard] HERMES_DASHBOARD_INSECURE no longer disables the auth gate." >&2
+-        echo "[dashboard] A non-loopback dashboard requires an auth provider:" >&2
+-        echo "[dashboard]   set HERMES_DASHBOARD_BASIC_AUTH_USERNAME + _PASSWORD (password)" >&2
+-        echo "[dashboard]   or HERMES_DASHBOARD_OAUTH_CLIENT_ID (OAuth)." >&2
++        echo "[dashboard] HERMES_DASHBOARD_INSECURE set - binding WITHOUT auth (operator opt-in)." >&2
++        echo "[dashboard] Ensure network-layer access control (tailnet/VPN/firewall)." >&2
++        insecure_flag="--insecure"
+         ;;
+ esac
+ 
+ # Skip the drop when already non-root.
+-[ "$(id -u)" = 0 ] || exec hermes dashboard --host "$dash_host" --port "$dash_port" --no-open
++[ "$(id -u)" = 0 ] || exec hermes dashboard --host "$dash_host" --port "$dash_port" $insecure_flag --no-open
+ exec s6-setuidgid hermes hermes dashboard \
+-    --host "$dash_host" --port "$dash_port" --no-open
++    --host "$dash_host" --port "$dash_port" $insecure_flag --no-open

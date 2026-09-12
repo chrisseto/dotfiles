@@ -8,6 +8,8 @@
 }: {
   imports = [
     ezModules.nas
+    ezModules.hermes
+    inputs.quadlet-nix.nixosModules.default
     inputs.nixos-apple-silicon.nixosModules.apple-silicon-support
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
@@ -97,6 +99,10 @@
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
   # system.copySystemConfiguration = true;
+
+  services.hermes = {
+    enable = true;
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.chrisseto = {

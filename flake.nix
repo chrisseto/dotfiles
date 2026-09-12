@@ -26,6 +26,12 @@
       url = "github:lnl7/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    quadlet-nix = {
+      url = "github:mirkolenz/quadlet-nix/v1";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
   };
 
   # https://nixos.wiki/wiki/Flakes

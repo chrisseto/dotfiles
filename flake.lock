@@ -225,6 +225,30 @@
         "type": "github"
       }
     },
+    "quadlet-nix": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788380820,
+        "narHash": "sha256-sVjYSZdWWxx89adpQyHgSE24c9frgu/RjGq3cwzw2IU=",
+        "owner": "mirkolenz",
+        "repo": "quadlet-nix",
+        "rev": "96160d00e9e4e95a2641cfa8dc9a99760969c92e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mirkolenz",
+        "ref": "v1",
+        "repo": "quadlet-nix",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -234,7 +258,8 @@
         "home-manager": "home-manager",
         "nixos-apple-silicon": "nixos-apple-silicon",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "quadlet-nix": "quadlet-nix"
       }
     },
     "systems": {
