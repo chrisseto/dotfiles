@@ -220,7 +220,7 @@
 
       sonarr = {
         autoStart = true;
-        image = "ghcr.io/hotio/sonarr:release-4.0.14.2939";
+        image = "ghcr.io/hotio/sonarr:release-4.0.19.2979";
         ports = [
           "8989:8989"
         ];
@@ -260,7 +260,7 @@
 
       jellyfin = {
         autoStart = true;
-        image = "ghcr.io/hotio/jellyfin:release-10.10.7";
+        image = "ghcr.io/hotio/jellyfin:release-10.11.11";
         ports = [
           "8096:8096"
           "1900:1900/udp"
@@ -281,7 +281,7 @@
 
       sabnzbd = {
         autoStart = true;
-        image = "docker.io/linuxserver/sabnzbd:3.5.3";
+        image = "docker.io/linuxserver/sabnzbd:5.1.1";
         ports = [
           "8080:8080"
         ];
