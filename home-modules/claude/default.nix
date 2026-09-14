@@ -16,8 +16,8 @@ in
   home.file = {
     ".claude/CLAUDE.md".source = symlink "${basePath}/CLAUDE.md";
     ".claude/settings.json".source = symlink "${basePath}/settings.json";
-  # Hooks and skills have individual files linked so home-manager doesn't
-  # clobber anything that was installed by claude.
+    # Hooks and skills have individual files linked so home-manager doesn't
+    # clobber anything that was installed by claude.
   } // lib.concatMapAttrs
     (path: _type: {
       ".claude/skills/${path}".source = symlink "${basePath}/skills/${path}";

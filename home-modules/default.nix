@@ -40,7 +40,6 @@ in
     pkgs.git
     pkgs.git-absorb
     pkgs.git-dive
-    pkgs.git-machete
     pkgs.git-revise
     pkgs.htop
     pkgs.hub # Old (?) GitHub CLI
@@ -179,9 +178,6 @@ in
       if type -q "/opt/homebrew/bin/brew"
         eval "$(/opt/homebrew/bin/brew shellenv)"
       end
-
-      # Config completion for git-machete
-      # ${pkgs.git-machete}/bin/git-machete completion fish | source
     '';
 
     shellAliases = {
@@ -223,7 +219,6 @@ in
   # would allow this type of symlinking to be acceptable..
   # See https://www.foodogsquared.one/posts/2023-03-24-managing-mutable-files-in-nixos/
   home.file.".bin".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/bin";
-  home.file.".config/aerospace".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/aerospace";
   home.file.".config/helix".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/helix";
   home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/wezterm";
   home.file.".config/fish/functions".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/fish-functions";

@@ -68,12 +68,15 @@
           };
         };
 
-        nixos.hosts.asahi-mini.userHomeModules = {
-          chrisseto = "ssh";
+        nixos.hosts = {
+          asahi-mini.userHomeModules = {
+            chrisseto = "ssh";
+          };
+          redpanda-devbox.userHomeModules = {
+            chrisseto = "redpanda-devbox";
+          };
         };
       };
-
-      flake = { };
 
       perSystem = { pkgs, lib, system, inputs, inputs', ... }: {
         formatter = pkgs.nixpkgs-fmt;
