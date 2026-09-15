@@ -20,6 +20,12 @@
 
   programs.fish.enable = true;
 
+  environment.systemPackages = with pkgs; [
+    gcc
+    tmux
+    wezterm
+  ];
+
   users.users.chrisseto = {
     shell = pkgs.fish;
     isNormalUser = true;
@@ -38,7 +44,7 @@
     enable = true;
     settings = {
       PasswordAuthentication = false;
-      PermitRootLogin = "prohibit-password";
+      PermitRootLogin = lib.mkForce "no";
     };
   };
 
@@ -64,7 +70,7 @@
   nix.optimise.automatic = true;
 
   system.stateVersion = "26.05";
-  nixpkgs.hostPlatform = "x86_64-linux";
+  nixpkgs.hostPlatform = "aarch64-linux";
   networking.hostName = lib.mkForce "redpanda-devbox";
 
   systemd.services.seed-dotfiles =
