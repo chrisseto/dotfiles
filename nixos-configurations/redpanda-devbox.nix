@@ -1,9 +1,19 @@
 { lib
+, inputs
 , pkgs
 , modulesPath
 , ...
 }:
+let
+  unstable = import inputs.nixpkgs-unstable {
+    inherit (pkgs) system;
+  };
+in
 {
+  system.stateVersion = "26.05";
+
+  networking.hostName = lib.mkForce "redpanda-devbox";
+
   imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
 
   # Disables cloud init, which indicates that bootstrapping succeeded.
@@ -21,9 +31,9 @@
   programs.fish.enable = true;
 
   environment.systemPackages = with pkgs; [
-    gcc
-    tmux
-    wezterm
+    tmux # Required for running daemons easily
+    gcc # Required for treesitter builds.
+    unstable.wezterm
   ];
 
   users.users.chrisseto = {
@@ -39,6 +49,9 @@
   };
 
   security.sudo.wheelNeedsPassword = false;
+
+  # SSH Access without needing ingress.
+  services.amazon-ssm-agent.enable = true;
 
   services.openssh = {
     enable = true;
@@ -69,9 +82,8 @@
 
   nix.optimise.automatic = true;
 
-  system.stateVersion = "26.05";
+  nixpkgs.config.allowUnfree = true;
   nixpkgs.hostPlatform = "aarch64-linux";
-  networking.hostName = lib.mkForce "redpanda-devbox";
 
   systemd.services.seed-dotfiles =
     let user = "chrisseto"; in
@@ -107,7 +119,7 @@
 
       script = ''
         git clone --branch master https://github.com/chrisseto/dotfiles.git /home/${user}/.nixpkgs
-        git -C /home/${user}/.nixpkgs remote set-url origin git@github.com:chriseto/dotfiles.git
+        git -C /home/${user}/.nixpkgs remote set-url origin git@github.com:chrisseto/dotfiles.git
       '';
 
     };
