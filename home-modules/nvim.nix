@@ -19,6 +19,7 @@ in
 
   home.packages = [
     unstable.neovim # Gotta use the bleeding edge.
+    unstable.rustup # Many LSPs install via rust
     unstable.tree-sitter # required by nvim-treesitter.
     pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
 

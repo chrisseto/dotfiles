@@ -1,16 +1,23 @@
 { pkgs
 , lib
 , config
+, inputs
+, ezModules
 , ...
 }:
 let
   basePath = "${config.home.homeDirectory}/.nixpkgs/home-modules/claude";
   symlink = config.lib.file.mkOutOfStoreSymlink;
+  unstable = import inputs.nixpkgs-unstable {
+    inherit (pkgs.stdenv.hostPlatform) system;
+    config.allowUnfree = true;
+  };
 in
 {
 
   home.packages = [
     pkgs.jq
+    unstable.claude-code
   ];
 
   home.file = {

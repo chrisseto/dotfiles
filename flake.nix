@@ -5,6 +5,11 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     ez-configs.url = "github:ehllie/ez-configs";
 
+    ledecky = {
+      url = "github:chrisseto/ledecky";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     agenix = {
       url = "github:ryantm/agenix";
       inputs.darwin.follows = "darwin";
@@ -70,7 +75,7 @@
 
         nixos.hosts = {
           asahi-mini.userHomeModules = {
-            chrisseto = "ssh";
+            chrisseto = "asahi-mini";
           };
           redpanda-devbox.userHomeModules = {
             chrisseto = "redpanda-devbox";
