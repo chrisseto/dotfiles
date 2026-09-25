@@ -139,6 +139,26 @@
         "type": "github"
       }
     },
+    "git-branchless": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784111352,
+        "narHash": "sha256-ZD5rVOwatueu5/LnOMpIjGjPlBtviF3ltib9myrWwQg=",
+        "owner": "arxanas",
+        "repo": "git-branchless",
+        "rev": "03d6ab8dc1a2ff8a2bc44709b93ea6a9038147eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arxanas",
+        "repo": "git-branchless",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -163,16 +183,14 @@
     "ledecky": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": [
-          "nixpkgs-unstable"
-        ]
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1789956425,
-        "narHash": "sha256-JyEjnvhGtpHFKV3QcLAfamy568WMKPBBIM47QARjNeQ=",
+        "lastModified": 1790102988,
+        "narHash": "sha256-U1Qxtji8Ze+m9zPBi8ib6B3FnlWGWfIM8YSTgT561Eg=",
         "owner": "chrisseto",
         "repo": "ledecky",
-        "rev": "73731a66a080e246b609b7d01fba47189d58b68d",
+        "rev": "3f2de1b4079973524f0866f245c70a39f3e2daf1",
         "type": "github"
       },
       "original": {
@@ -250,6 +268,22 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1789785513,
+        "narHash": "sha256-B44WL6h0XoLjJ41bUPJk0X5SDinLCII//6EcBLXKiJ0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "20b1ddd1aa5ace70c9468305030aa4f9ef79671b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1785989512,
         "narHash": "sha256-HFQhkQcl5D1hUNoen3SGHCSFCt2Bg6uP+HgbrnA3InQ=",
         "owner": "NixOS",
@@ -294,10 +328,11 @@
         "darwin": "darwin",
         "ez-configs": "ez-configs",
         "flake-parts": "flake-parts_2",
+        "git-branchless": "git-branchless",
         "home-manager": "home-manager",
         "ledecky": "ledecky",
         "nixos-apple-silicon": "nixos-apple-silicon",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "quadlet-nix": "quadlet-nix"
       }

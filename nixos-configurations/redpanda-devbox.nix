@@ -38,6 +38,7 @@ in
 
   users.users.chrisseto = {
     shell = pkgs.fish;
+    linger = true; # Make the user session linger to keep ledecky running even if the user session is killed.
     isNormalUser = true;
     extraGroups = [
       "wheel"

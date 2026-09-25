@@ -7,7 +7,6 @@
 
     ledecky = {
       url = "github:chrisseto/ledecky";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     agenix = {
@@ -36,6 +35,11 @@
       url = "github:mirkolenz/quadlet-nix/v1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
+    };
+
+    git-branchless = {
+      url = "github:arxanas/git-branchless";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
 

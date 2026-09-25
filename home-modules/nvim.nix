@@ -4,7 +4,7 @@
 , ...
 }:
 let
-  unstable = import inputs.nixpkgs-unstable { inherit (pkgs) system; };
+  unstable = import inputs.nixpkgs-unstable { inherit (pkgs.stdenv.hostPlatform) system; };
 in
 {
   home.sessionVariables = {

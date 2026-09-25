@@ -94,3 +94,6 @@
 
 [rerere]
 	enable = true
+
+[branchless "smartlog"]
+	showWorktrees = true

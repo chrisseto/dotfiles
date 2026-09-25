@@ -10,7 +10,14 @@ in
   imports = [
     ezModules.nvim
     ezModules.claude
+    inputs.ledecky.homeManagerModules.default
   ];
+
+  services.ledecky.enable = true;
+
+  home.shellAliases = {
+    git = "git-branchless wrap --";
+  };
 
   home.packages = [
     pkgs.kubectl
@@ -18,10 +25,9 @@ in
     pkgs.kustomize
     pkgs.nodejs
     pkgs.pnpm
-    pkgs.rustup
     pkgs.tmux
     unstable.claude-code
     unstable.cloc # LoC counting and delta computation
-    unstable.git-branchless
+    inputs.git-branchless.packages.${pkgs.system}.git-branchless
   ];
 }
