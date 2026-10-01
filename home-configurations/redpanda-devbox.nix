@@ -30,4 +30,12 @@ in
     unstable.cloc # LoC counting and delta computation
     inputs.git-branchless.packages.${pkgs.system}.git-branchless
   ];
+
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      # Claude (and plenty other programs) install themselves here.
+      fish_add_path $HOME/.local/bin/
+    '';
+  };
 }

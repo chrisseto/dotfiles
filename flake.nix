@@ -38,7 +38,7 @@
     };
 
     git-branchless = {
-      url = "github:arxanas/git-branchless";
+      url = "github:chrisseto/git-branchless";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };

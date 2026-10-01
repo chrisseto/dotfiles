@@ -146,15 +146,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1784111352,
-        "narHash": "sha256-ZD5rVOwatueu5/LnOMpIjGjPlBtviF3ltib9myrWwQg=",
-        "owner": "arxanas",
+        "lastModified": 1790356960,
+        "narHash": "sha256-5WHEExANTrbQEQDnYRkyae97DJ4eWRJKPfZV2hX3LsM=",
+        "owner": "chrisseto",
         "repo": "git-branchless",
-        "rev": "03d6ab8dc1a2ff8a2bc44709b93ea6a9038147eb",
+        "rev": "adf0d0f825c68ac55ea334454098bac5d68cb2bd",
         "type": "github"
       },
       "original": {
-        "owner": "arxanas",
+        "owner": "chrisseto",
         "repo": "git-branchless",
         "type": "github"
       }
@@ -186,11 +186,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1790102988,
-        "narHash": "sha256-U1Qxtji8Ze+m9zPBi8ib6B3FnlWGWfIM8YSTgT561Eg=",
+        "lastModified": 1790695377,
+        "narHash": "sha256-ylCsh+XRfydGbyVk8+vWDVjnpkywUcg4rDMj0DlqF7w=",
         "owner": "chrisseto",
         "repo": "ledecky",
-        "rev": "3f2de1b4079973524f0866f245c70a39f3e2daf1",
+        "rev": "60ff31fef641750e4936ef345478adde4817eaab",
         "type": "github"
       },
       "original": {

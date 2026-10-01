@@ -19,6 +19,15 @@ in
   # Disables cloud init, which indicates that bootstrapping succeeded.
   virtualisation.amazon-init.enable = false;
 
+  virtualisation.docker = {
+    enable = true;
+  };
+
+  boot.kernel.sysctl = {
+    "fs.aio-max-nr" = 20971520;
+  };
+
+
   fileSystems."/home" = {
     # Must match device name from the volume attachment resource.
     device = "/dev/sdf";

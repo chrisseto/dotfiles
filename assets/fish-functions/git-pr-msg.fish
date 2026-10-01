@@ -24,5 +24,5 @@ function git-pr-msg
 
 	set -l forkpoint (git merge-base --fork-point $target $base)
 
-	git log "$base...$forkpoint" --pretty=format:"**%s**%n%b"
+	git log "$forkpoint..$base" --reverse --pretty=format:"**%s**%n%b"
 end
