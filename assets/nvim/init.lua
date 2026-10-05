@@ -23,6 +23,7 @@ vim.g.maplocalleader = ","
 
 -- Meta table hack to make defining keys binds in lazy less annoying.
 -- plugins.foo.bar -> function(...) require('foo').bar(...) end.
+-- Use brackets for submodules: plugins["foo.baz"].bar.
 local plugins = setmetatable({}, {
 	__index = function(t, mod)
 		-- Build and cache a proxy for this module name
@@ -200,7 +201,7 @@ require("lazy").setup({
 		keys = {
 			{
 				"<leader>es",
-				plugins.luasnip.loaders.edit_snippet_files,
+				plugins["luasnip.loaders"].edit_snippet_files,
 				"n",
 				desc = "Edit Snippets",
 			},
