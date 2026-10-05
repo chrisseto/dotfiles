@@ -42,12 +42,22 @@ return {
 				ghost_text = { enabled = true },
 			},
 			signature = { enabled = true },
-		},
-		cmdline = {
-			enabled = true,
-			keymap = {
-				preset = "inherit",
-				["<CR>"] = { "accept_and_enter", "fallback" },
+			cmdline = {
+				enabled = true,
+				keymap = {
+					preset = "inherit",
+					["<CR>"] = { "accept_and_enter", "fallback" },
+					["<Tab>"] = { "show_and_insert_or_accept_single", "select_next" },
+					["<S-Tab>"] = { "show_and_insert_or_accept_single", "select_prev" },
+				},
+				completion = {
+					list = {
+						selection = {
+							preselect = false,
+						},
+					},
+					ghost_text = { enabled = true },
+				},
 			},
 		},
 	},
@@ -71,6 +81,12 @@ return {
 			-- Set capabilities for all servers.
 			vim.lsp.config("*", {
 				capabilities = require("blink.cmp").get_lsp_capabilities({
+					textDocument = {
+						foldingRange = {
+							dynamicRegistration = false,
+							lineFoldingOnly = true,
+						},
+					},
 					-- TODO: This doesn't work. Not sure why and there's not much documentation available.
 					-- workspace = {
 					-- 	didChangeWatchedFiles = {

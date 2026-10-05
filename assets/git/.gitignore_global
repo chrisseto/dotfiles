@@ -28,4 +28,5 @@ Icon
 # Claude code
 .claude/settings.local.json
 .claude/worktrees/
+.worktreeinclude
 CLAUDE.local.md

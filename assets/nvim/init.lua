@@ -21,6 +21,23 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+-- Meta table hack to make defining keys binds in lazy less annoying.
+-- plugins.foo.bar -> function(...) require('foo').bar(...) end.
+local plugins = setmetatable({}, {
+	__index = function(t, mod)
+		-- Build and cache a proxy for this module name
+		local proxy = setmetatable({}, {
+			__index = function(_, fn)
+				return function(...)
+					require(mod)[fn](...)
+				end
+			end,
+		})
+		rawset(t, mod, proxy) -- cache: next access hits the table directly, not __index
+		return proxy
+	end,
+})
+
 -- TODO continue "borrowing" plugins from https://www.lazyvim.org/plugins/coding
 -- Flit or Leap seem worthwhile https://www.lazyvim.org/plugins/editor#flitnvim
 -- https://github.com/folke/trouble.nvim
@@ -183,9 +200,7 @@ require("lazy").setup({
 		keys = {
 			{
 				"<leader>es",
-				function()
-					require("luasnip.loaders").edit_snippet_files()
-				end,
+				plugins.luasnip.loaders.edit_snippet_files,
 				"n",
 				desc = "Edit Snippets",
 			},
@@ -245,27 +260,27 @@ require("lazy").setup({
 			})
 		end,
 	},
-	-- Disabled for now. Causes a strange painting issue.
-	-- {
-	-- 	"kevinhwang91/nvim-ufo",
-	-- 	dependencies = { "kevinhwang91/promise-async" },
-	-- 	config = function()
-	-- 		vim.o.foldcolumn = "1" -- '0' is not bad
-	-- 		vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-	-- 		vim.o.foldlevelstart = 99
-	-- 		vim.o.foldenable = true
-	--
-	-- 		-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
-	-- 		vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-	-- 		vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
-	--
-	-- 		require("ufo").setup({
-	-- 			provider_selector = function(bufnr, filetype, buftype)
-	-- 				return { "treesitter", "indent" }
-	-- 			end,
-	-- 		})
-	-- 	end,
-	-- },
+	{
+		"kevinhwang91/nvim-ufo",
+		dependencies = { "kevinhwang91/promise-async" },
+		keys = {
+			{ "zR", plugins.ufo.openAllFolds, mode = "n" },
+			{ "zM", plugins.ufo.closeAllFolds, mode = "n" },
+		},
+		config = function()
+			vim.o.foldcolumn = "1" -- '0' is not bad
+			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+			vim.o.foldlevelstart = 99
+			vim.o.foldenable = true
+			vim.o.fillchars = "eob: ,fold: ,foldopen:,foldsep: ,foldinner: ,foldclose:"
+
+			require("ufo").setup({
+				provider_selector = function(bufnr, filetype, buftype)
+					return { "lsp", "treesitter", "indent" }
+				end,
+			})
+		end,
+	},
 	{
 		-- Easily open a file on GitHub for sharing. Defaults to the branch and falls back to the commit.
 		-- Kinda slow but better than manually searching.
@@ -419,4 +434,6 @@ vim.cmd([[
 
 	" No Bells
 	set noerrorbells visualbell t_vb=
+
+	cnoreabbrev Q qall
 ]])

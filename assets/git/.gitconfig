@@ -3,9 +3,6 @@
 	editor = nvim
 	pager = delta
 
-[hub]
-	protocol = https
-
 [user]
 	name = Chris Seto
 	email = chriskseto@gmail.com
@@ -18,12 +15,13 @@
 	st = status
 	co = checkout
 	ci = commit
+	rb = rebase
+	wt = worktree
 	df = diff
 	dfs = diff --staged
 	br = branch --sort=-committerdate
 	logg = log --graph --decorate --oneline --abbrev-commit --all
 	unstage = reset HEAD --
-	pr-msg = log HEAD...upstream/master --pretty=format:"**%s**%n%b"
 	diff-raw = -c pager.diff='less -R' diff
 	pp = push-patch
 	dft = difftool
@@ -40,10 +38,12 @@
 
 [mergetool]
 	keepBackup = false
+	conflictstyle = diff3
 
 [difftool]
-	prompt = false
 	colorMoved = default
+	prompt = false
+	tool = difftastic
 
 [difftool "difftastic"]
 	cmd = difft "$LOCAL" "$REMOTE"
@@ -57,6 +57,10 @@
 
 [pull]
 	ff = only
+
+[rebase]
+	autoSquash = true
+	updateRefs = true
 
 [init]
 	defaultBranch = master
@@ -83,17 +87,15 @@
 	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 	true-color = always
 
-[merge]
-	conflictstyle = diff3
-
-[diff]
-	tool = difftastic
-
 [pager]
 	difftool = true
 
 [rerere]
 	enable = true
 
+[fetch]
+	prune = true # Always --prune on fetch
+
 [branchless "smartlog"]
 	showWorktrees = true
+

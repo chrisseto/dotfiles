@@ -1,0 +1,13 @@
+#!/usr/bin/env fish
+
+# Interactive git rebase using fzf to select the commit.
+
+set -l commit (git log --oneline -n 250 --color=always | fzf --ansi --preview-window=right,60% --preview 'git show --color=always {+1}' | awk '{print $1}')
+
+if test -z "$commit"
+  exit 1
+end
+
+echo "$commit"
+
+git rebase -i "$commit^" $argv

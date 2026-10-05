@@ -1,0 +1,9 @@
+#!/usr/bin/env fish
+
+# git-spill dumps the current commit's changes into the index and restores the
+# commit as empty with the previous message.
+#
+# This is useful if one wants to review a commit hunk by hunk, possibly making
+# changes along the way while preserving the original commit message.
+
+git reset HEAD~1 --mixed && git commit --allow-empty --reuse-message 'HEAD@{1}'
