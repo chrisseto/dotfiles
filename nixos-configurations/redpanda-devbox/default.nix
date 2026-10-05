@@ -53,6 +53,7 @@ in
       "wheel"
       "docker"
     ];
+
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKn3yk0zGVSxD+S7xjvWD+GNhP938kp21dHgUPNknTN2"
     ];
@@ -65,6 +66,7 @@ in
 
   services.openssh = {
     enable = true;
+
     settings = {
       PasswordAuthentication = false;
       PermitRootLogin = lib.mkForce "no";

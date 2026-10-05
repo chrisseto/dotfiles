@@ -3,3 +3,9 @@ nvim/.config/nvim/plugged/
 fish/.config/fish/conf.d/local.fish
 
 result
+
+*.tfstate
+*.tfstate.backup
+*.auto.tfvars
+.terraform
+.terraform.lock.hcl
