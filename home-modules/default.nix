@@ -48,6 +48,7 @@ in
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available
     pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
+    pkgs.rclone
     pkgs.ripgrep # `rg`, better grep/ag/ack
     pkgs.skim # `sk`, Competitor of fzf
     pkgs.tree # Prints a "tree" of a directory.
@@ -56,7 +57,9 @@ in
     unstable.delve # golang debugger
     unstable.go
     unstable.gotools # Provides A LOT of packages. Added because I want godoc.
+    unstable.gum # Make shellscripts cutsie.
     unstable.helix # A post-modern modal text editor
+    unstable.jujutsu # git branchless like DVCS
     unstable.stgit # stacked-git, my preferred alternative to branches.
     unstable.yazi # Yet another file manager.
     # (pkgs.janet.withPackages (ps:
@@ -183,6 +186,7 @@ in
     shellAliases = {
       g = "git";
       less = "bat";
+      tf = "terraform";
     };
 
     plugins = [

@@ -9,7 +9,9 @@ in
 {
   imports = [
     ezModules.nvim
+    ezModules.claude
   ];
+
   home.packages = [
     pkgs.awscli2
     pkgs.docker
@@ -23,9 +25,12 @@ in
     pkgs.kubernetes-helm
     pkgs.kustomize
     pkgs.rustup
-    unstable.git-machete
+    pkgs.terraform
+    unstable.cloc # LoC counting and delta computation
+    unstable.git-branchless
     unstable.grpcurl
     unstable.jira-cli-go # Jira CLI...
+    unstable.ssm-session-manager-plugin
     unstable.stern # Kubernetes log tailer
     unstable.teleport # tsh and friends
     unstable.yq-go

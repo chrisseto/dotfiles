@@ -56,6 +56,7 @@ in
   system.defaults.dock.mru-spaces = false;
   system.defaults.dock.minimize-to-application = true;
   system.defaults.dock.tilesize = 48;
+  system.defaults.dock.orientation = "left";
   # Display App Switcher on all monitors https://superuser.com/questions/670252/cmdtab-app-switcher-is-on-the-wrong-monitor
   system.defaults.dock.appswitcher-all-displays = true;
 
@@ -84,18 +85,24 @@ in
   homebrew = {
     enable = true;
 
+    taps = [
+      { name = "FelixKratz/formulae"; trusted = true; }
+      { name = "nikitabobko/tap"; trusted = true; }
+    ];
+
     brews = [
       "mas" # CLI to allow nix to install apps from the MacOS AppStore https://github.com/mas-cli/mas
+      { name = "FelixKratz/formulae/sketchybar"; trusted = true; } # Customizable titlebar replacement.
     ];
 
     casks = [
       "brave-browser" # Browser of choice.
       "logseq" # Note App of choice.
       "monitorcontrol" # Allows control over external monitors with builtin buttons (Brightness, Volume, etc). https://github.com/MonitorControl/MonitorControl
-      "nikitabobko/tap/aerospace" # i3 like tiling window manager for macOS.
       "spotify"
-      "wezterm" # Terminal Emulator. https://wezfurlong.org/wezterm/index.html
+      "wezterm@nightly" # Terminal Emulator. https://wezfurlong.org/wezterm/index.html
       "zotero@beta"
+      { name = "nikitabobko/tap/aerospace"; greedy = true; trusted = true; } # i3 like tiling window manager for macOS.
     ];
 
     masApps = {
