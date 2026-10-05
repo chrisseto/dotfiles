@@ -484,10 +484,8 @@ output "machines" {
   }
 }
 
-# Add `Include ~/.ssh/config_devbox` to ~/.ssh/config.
-# Run: terraform output -raw ssh_config > ~/.ssh/config_devbox
-output "ssh_config" {
-  value = join("\n", [
+locals {
+  ssh_config = join("\n", [
     for k, m in local.machines : <<-EOT
       Host ${join(".", compact(["devbox", m.region, m.suffix]))}
       	User ${var.ssh_user}
@@ -495,4 +493,21 @@ output "ssh_config" {
       	ProxyCommand aws ssm start-session --profile ${var.aws_profile} --region ${m.region} --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p
     EOT
   ])
+}
+
+# Requires `Include ~/.ssh/config_devbox` at the top of ~/.ssh/config.
+resource "terraform_data" "ssh_config" {
+  triggers_replace = local.ssh_config
+
+  provisioner "local-exec" {
+    command = "printf '%s' \"$SSH_CONFIG\" > ~/.ssh/config_devbox"
+
+    environment = {
+      SSH_CONFIG = local.ssh_config
+    }
+  }
+}
+
+output "ssh_config" {
+  value = local.ssh_config
 }

@@ -24,7 +24,6 @@ in
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.kustomize
-    pkgs.rustup
     pkgs.terraform
     unstable.cloc # LoC counting and delta computation
     unstable.git-branchless

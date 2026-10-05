@@ -4,10 +4,8 @@
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     ez-configs.url = "github:ehllie/ez-configs";
-
-    ledecky = {
-      url = "github:chrisseto/ledecky";
-    };
+    llm-agents.url = "github:numtide/llm-agents.nix";
+    ledecky.url =  "github:chrisseto/ledecky";
 
     agenix = {
       url = "github:ryantm/agenix";

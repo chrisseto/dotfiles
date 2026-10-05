@@ -1,5 +1,6 @@
 { pkgs, lib, inputs, ezModules, ... }:
 let
+  llm-agents = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
   unstable = import inputs.nixpkgs-unstable {
     inherit (pkgs) system;
     config.allowUnfree = true;
@@ -26,16 +27,8 @@ in
     pkgs.nodejs
     pkgs.pnpm
     pkgs.tmux
-    unstable.claude-code
     unstable.cloc # LoC counting and delta computation
+    llm-agents.claude-code
     inputs.git-branchless.packages.${pkgs.system}.git-branchless
   ];
-
-  programs.fish = {
-    enable = true;
-    interactiveShellInit = ''
-      # Claude (and plenty other programs) install themselves here.
-      fish_add_path $HOME/.local/bin/
-    '';
-  };
 }
