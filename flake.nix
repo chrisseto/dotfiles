@@ -5,7 +5,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     ez-configs.url = "github:ehllie/ez-configs";
     llm-agents.url = "github:numtide/llm-agents.nix";
-    ledecky.url =  "github:chrisseto/ledecky";
+    ledecky.url = "github:chrisseto/ledecky";
 
     agenix = {
       url = "github:ryantm/agenix";
@@ -33,11 +33,6 @@
       url = "github:mirkolenz/quadlet-nix/v1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
-    };
-
-    git-branchless = {
-      url = "github:chrisseto/git-branchless";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
 

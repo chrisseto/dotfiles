@@ -18,12 +18,4 @@ in
   ];
 
   services.ledecky.enable = true;
-
-  home.shellAliases = {
-    git = "git-branchless wrap --";
-  };
-
-  home.packages = [
-    unstable.git-branchless
-  ];
 }

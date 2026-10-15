@@ -16,10 +16,6 @@ in
 
   services.ledecky.enable = true;
 
-  home.shellAliases = {
-    git = "git-branchless wrap --";
-  };
-
   home.packages = [
     pkgs.kubectl
     pkgs.kubernetes-helm
@@ -29,6 +25,5 @@ in
     pkgs.tmux
     unstable.cloc # LoC counting and delta computation
     llm-agents.claude-code
-    inputs.git-branchless.packages.${pkgs.system}.git-branchless
   ];
 }

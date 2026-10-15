@@ -26,7 +26,6 @@ in
     pkgs.kustomize
     pkgs.terraform
     unstable.cloc # LoC counting and delta computation
-    unstable.git-branchless
     unstable.grpcurl
     unstable.jira-cli-go # Jira CLI...
     unstable.ssm-session-manager-plugin
