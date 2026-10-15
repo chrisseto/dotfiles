@@ -70,6 +70,7 @@ in
     settings = {
       PasswordAuthentication = false;
       PermitRootLogin = lib.mkForce "no";
+      AcceptEnv = [ "TERM_PROGRAM" "TERM_PROGRAM_VERSION" "COLORTERM" "WEZTERM_*" ];
     };
   };
 
