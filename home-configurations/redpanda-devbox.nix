@@ -1,10 +1,7 @@
 { pkgs, lib, inputs, ezModules, ... }:
 let
   llm-agents = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
-  unstable = import inputs.nixpkgs-unstable {
-    inherit (pkgs) system;
-    config.allowUnfree = true;
-  };
+  unstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 {
 
@@ -15,6 +12,9 @@ in
   ];
 
   services.ledecky.enable = true;
+
+  # Only used by `apropos`; rebuilt on every change to home.packages.
+  programs.man.generateCaches = false;
 
   home.packages = [
     pkgs.kubectl

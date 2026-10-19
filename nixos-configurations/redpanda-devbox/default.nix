@@ -5,9 +5,7 @@
 , ...
 }:
 let
-  unstable = import inputs.nixpkgs-unstable {
-    inherit (pkgs) system;
-  };
+  unstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   system.stateVersion = "26.05";
@@ -84,6 +82,9 @@ in
       "@wheel"
     ];
     max-jobs = "auto";
+    # Prebuilt llm-agents packages (claude-code is unfree, so absent from cache.nixos.org).
+    extra-substituters = [ "https://cache.numtide.com" ];
+    extra-trusted-public-keys = [ "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=" ];
   };
 
   # It is a build box on a finite root volume; keep the store from filling it.

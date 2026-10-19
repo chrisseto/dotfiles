@@ -3,7 +3,7 @@
 , ...
 }:
 let
-  unstable = import inputs.nixpkgs-unstable { inherit (pkgs.stdenv.hostPlatform) system; };
+  unstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   # List packages installed in system profile. To search by name, run:
