@@ -27,6 +27,7 @@ in
     pkgs.bat # Better `cat` with syntax highlighting
     pkgs.git
     pkgs.ripgrep # `rg`, better grep/ag/ack
+    pkgs.unzip # For mason
   ];
 
   # Use (abuse?) a helper in home manager to symlink directly to the config

@@ -117,14 +117,22 @@ require("lazy").setup({
 	},
 	-- Multiplexer navigation
 	{
-		"mrjones2014/smart-splits.nvim",
+		"smart-splits-nvim/smart-splits.nvim",
 		lazy = false,
+		keys = {
+			{ "<C-h>", plugins["smart-splits"].move_cursor_left, mode = "n" },
+		},
 		config = function()
 			local ss = require("smart-splits")
+			local mux_utils = require("smart-splits.mux.utils")
 
 			ss.setup({
+				multiplexer_integration = "wezterm",
 				disable_multiplexer_nav_when_zoomed = false,
+				log_level = "trace",
 			})
+
+			-- mux_utils.startup()
 
 			vim.keymap.set("n", "<C-h>", ss.move_cursor_left)
 			vim.keymap.set("n", "<C-j>", ss.move_cursor_down)
@@ -292,10 +300,26 @@ require("lazy").setup({
 		},
 	},
 	{
-		"sindrets/diffview.nvim",
+		"rickhowe/diffchar.vim",
+		config = function()
+			-- Use bold/underline on adjacent chars instead of virtual blank columns.
+			vim.g.DiffDelPosVisible = 1
+
+			-- Disable diffchar default keymaps.
+			-- See: https://github.com/rickhowe/diffchar.vim/issues/21
+			vim.cmd([[
+      nmap <leader>g <Nop>
+      nmap <leader>p <Nop>
+    ]])
+		end,
+	},
+	{
+		"dlyongemallo/diffview-plus.nvim",
 		opts = {
+			preferred_adapter = "jj",
 			enhanced_diff_hl = true,
 			git_cmd = { "git", "-c", "diff.external=difft" },
+			diffopt = { algorithm = "histogram" },
 		},
 	},
 	{
@@ -309,7 +333,7 @@ require("lazy").setup({
 		"NeogitOrg/neogit",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
-			"sindrets/diffview.nvim",
+			"dlyongemallo/diffview.nvim",
 			"m00qek/baleia.nvim",
 			-- "esmuellert/codediff.nvim",
 			"ibhagwan/fzf-lua",
@@ -331,6 +355,29 @@ require("lazy").setup({
 		},
 		keys = {
 			{ "<leader>gg", "<cmd>Neogit<cr>", mode = "n", desc = "Open Neogit" },
+		},
+	},
+	{
+		"NicholasZolton/neojj",
+		version = "^1.0.0", -- recommended: track 1.x releases (see Versioning below)
+		lazy = true,
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+
+			"dlyongemallo/diffview.nvim",
+
+			"ibhagwan/fzf-lua",
+		},
+		cmd = "Neojj",
+		keys = {
+			{ "<leader>jj", "<cmd>Neojj<cr>", desc = "Show Neojj UI" },
+		},
+		opts = {
+			treesitter_diff_highlight = true,
+			word_diff_highlight = true,
+			graph_style = "ascii",
+			log_pager = { "delta", "--width", "117" },
+			diff_viewer = "diffview", -- codediff is cool but diffview works better with neogit.
 		},
 	},
 	{
@@ -389,6 +436,9 @@ require("lazy").setup({
 -- TODO use persitent.nvim?
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
 vim.opt.undofile = true
+
+vim.opt.diffopt:append({ "algorithm:histogram" })
+vim.opt.fillchars:append({ diff = "╱" })
 
 -- TODO convert to lua.
 vim.cmd([[

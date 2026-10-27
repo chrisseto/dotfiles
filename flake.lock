@@ -221,11 +221,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1791507093,
-        "narHash": "sha256-N9BT94w1Mi9LZNiOkw9q8G9ALLQUY7CNHiRKC4DLJ/c=",
+        "lastModified": 1793022284,
+        "narHash": "sha256-eR2f8gOvLhhvXoJ2UpcCMGfjWPMrFo9yPqPaoUjyDmQ=",
         "owner": "chrisseto",
         "repo": "ledecky",
-        "rev": "d54886021d10ef49b13342b1ab31adcac0bf9dea",
+        "rev": "65cee043f6146e6fbc3238e86d37496be1f52969",
         "type": "github"
       },
       "original": {
