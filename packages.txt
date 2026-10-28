@@ -3,4 +3,10 @@ stow
 zsh
 tmux
 vim
-fasd
+neovim
+zoxide
+fzf
+the_silver_searcher
+ripgrep
+jq
+gh

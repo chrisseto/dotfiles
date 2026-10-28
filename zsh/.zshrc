@@ -1,13 +1,17 @@
-#!/usr/bin/env zsh
+#!/bin/zsh
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+fi
 # shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/.dotfiles
 export ANSIBLE_NOCOWS=1
 export PATH=$PATH:~/scripts:~/.cabal/bin:~/bin
-export SHELL='/usr/bin/zsh'
+export SHELL='/bin/zsh'
 export EDITOR='vim'
 export OSF=~/code/cos/osf.io
 export SCRAPI=~/code/cos/scrapi
 export GOPATH=$HOME/go
+export GOBIN=$HOME/go/bin
 export PATH=$PATH:$GOPATH/bin
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python
 alias ansalon='telnet ansalonmud.net 8679'
@@ -19,11 +23,12 @@ fpath=(~/.zsh/oc $fpath)
 # Disable caps lock
 # setxkbmap -option caps:swapescape
 
-source ~/dotfiles/tmux/tmuxinator.zsh
+# source ~/dotfiles/tmux/tmuxinator.zsh
 
 
 alias g='git'
 command -v vimx >/dev/null 2>&1 && alias vim='vimx'
+command -v nvim >/dev/null 2>&1 && alias vim='nvim'
 alias gssh='SSH_AUTH_SOCK=~/.gnupg/S.gpg-agent.ssh && ssh'
 alias c='clear'
 alias mkpasswd='python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"'
@@ -146,7 +151,8 @@ export PATH=$PATH:~/.bin
 # Go Lang things
 export GOPATH=$HOME/Go
 export PATH=$PATH:$GOPATH/bin
-# export GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
+# GOROOT not needed for homebrew go - it figures it out automatically
+# export GOVERSION=$(brew list go | tail -n 1 | cut -d '/' -f 6)
 # export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
 
 export EDITOR=vim  # Screw nano
@@ -293,34 +299,34 @@ fi
 # added by travis gem
 [ -f /home/fabian/.travis/travis.sh ] && source /home/fabian/.travis/travis.sh
 
-export NVM_DIR="/home/fabian/.nvm"
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
-# FASD configuration
-eval "$(fasd --init auto)"
-# Aliases: 
-alias a='fasd -a'        # any
-alias s='fasd -si'       # show / search / select
-alias d='fasd -d'        # directory
-alias f='fasd -f'        # file
-alias sd='fasd -sid'     # interactive directory selection
-alias sf='fasd -sif'     # interactive file selection
-alias z='fasd_cd -d'     # cd, same functionality as j in autojump
-alias j='fasd_cd -d'     # cd, same functionality as j in autojump
-alias zz='fasd_cd -d -i' # cd with interactive selection
-alias v='f -t -e vim -b viminfo'  # open file most recently edited in vim
-alias vv='f -i -t -e vim'  # open file in vim
-alias todo='todo -G'
-export GOBIN=/home/fabian/Go/bin
-export GOROOT=/usr/local/go
-export PATH=$PATH:$GOROOT/bin
+# zoxide - the fasd/autojump replacement.
+# z <partial dir>  jump to best match     zi <partial>  fzf picker
+# z foo bar        match on multiple bits  z -          previous dir
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+# export GOBIN=/home/fabian/Go/bin
+# export GOROOT=/usr/local/go
+# export PATH=$PATH:$GOROOT/bin
 
 if [[ -s "$(command -v oc)" ]]; then
   source <(oc completion zsh)
 fi
 
-alias pbcopy='xclip -selection clipboard'
+if [[ "$OSTYPE" == linux* ]] && command -v wl-copy >/dev/null 2>&1; then
+  alias pbcopy='wl-copy'
+  alias pbpaste='wl-paste'
+fi
 function kubesecret {
   secret_name="${1}"
   kubectl get secret ${secret_name} -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
 }
+if [[ -d /opt/homebrew/opt/openjdk ]]; then
+  export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+  export JAVA_HOME="/opt/homebrew/opt/openjdk"
+fi
+
+[[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"

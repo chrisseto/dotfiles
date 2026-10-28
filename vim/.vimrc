@@ -39,7 +39,7 @@ Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'tpope/vim-sensible'
 Plug 'rstacruz/vim-opinion'
-Plug 'ervandew/supertab'
+Plug 'ervandew/supertab', { 'branch': 'main' }
 Plug 'ctrlpvim/ctrlp.vim'
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -65,11 +65,10 @@ vmap <leader>/ gc
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'matchit.zip'
 " Buffers
 Plug 'moll/vim-bbye'
 nnoremap X :Bdelete<CR>
-Plug 'BufOnly.vim'
+Plug 'vim-scripts/BufOnly.vim'
 
 Plug 'scrooloose/nerdtree'
 nnoremap <leader>d :NERDTreeToggle<CR>
@@ -81,19 +80,19 @@ let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 
 Plug 'tpope/vim-obsession'
 
-Plug 'scrooloose/syntastic'
-nnoremap <leader>s :SyntasticCheck<CR>
+" Plug 'scrooloose/syntastic'
+" nnoremap <leader>s :SyntasticCheck<CR>
 " NOTE: Don't use syntastic with python; we use khuno for that
 " let g:syntastic_mode_map = { 'mode': 'active',
 "  \ 'active_filetypes': ['ruby'],
 "  \ 'passive_filetypes': [ 'html', 'rst', 'md', 'python'] }
-let g:syntastic_python_checkers = ['flake8', 'python']
-let g:syntastic_ruby_checkers = ['rubylint', 'mri']
+" let g:syntastic_python_checkers = ['flake8', 'python']
+" let g:syntastic_ruby_checkers = ['rubylint', 'mri']
 " let g:syntastic_javascript_checkers = ['jsxhint', 'jshint']
 " autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['jsxhint']
 " Disable some features to make syntastic faster
-let g:syntastic_enable_signs = 0
-let g:syntastic_enable_balloons = 0
+" let g:syntastic_enable_signs = 0
+" let g:syntastic_enable_balloons = 0
 " Non-blocking python checking
 Plug 'alfredodeza/khuno.vim'
 
@@ -111,9 +110,9 @@ Plug 'alfredodeza/khuno.vim'
 " let g:airline#extensions#csv#enabled = 0
 Plug 'christoomey/vim-tmux-navigator'
 
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+" Plug 'SirVer/ultisnips'
+" let g:UltiSnipsJumpForwardTrigger="<c-j>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 Plug 'honza/vim-snippets'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'rafaelfranca/rtf_pygmentize', {'on': 'RTFPygmentize'}
@@ -148,7 +147,7 @@ let g:scratch_height = 20
 nnoremap <silent> <leader><tab> :Scratch<cr>:set ft=python<cr>
 
 " GIT
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter', { 'branch': 'main' }
 " Set gitgutter's bindings manually to avoid clashes
 let g:gitgutter_map_keys = 0
 nmap <leader>gh <Plug>(GitGutterStageHunk)
@@ -213,11 +212,11 @@ let g:vim_markdown_folding_disabled=1
 " Idris stuff
 Plug 'idris-hackers/idris-vim'
 
-Plug 'ZoomWin'
+Plug 'vim-scripts/ZoomWin'
 Plug 'terryma/vim-multiple-cursors'
 " For previewing markdown, rst ,etc
 Plug 'greyblake/vim-preview'
-Plug 'matchit.zip'
+Plug 'vim-scripts/matchit.zip'
 Plug 'duff/vim-scratch'
 " Open scratch buffer with space-tab
 command! ScratchToggle call ScratchToggle()
@@ -398,7 +397,7 @@ nnoremap <silent> <Right> :bnext<CR>
 nnoremap <silent> <Left> :bprev<CR>
 " Remove trailing whitespace on <space><space>w
 nnoremap <leader><leader>w :%s/\s\+$//<cr>:let @/=''<CR>
-set pastetoggle=<leader>z  " toggle paste mode
+" set pastetoggle=<leader>z  " toggle paste mode
 " in case you forgot to sudo
 cnoremap w!! %!sudo tee > /dev/null %
 " select last pasted text
