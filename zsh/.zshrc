@@ -138,6 +138,12 @@ dir_info_wrapper() {
 PROMPT='$(venv_info_wrapper)%F{6}$(dir_info_wrapper)%f %F{9}❯%F{3}❯%F{2}❯%f '
 RPROMPT=$'$(vcs_info_wrapper)'
 
+# Label machines that need to look different, e.g. PROMPT_TAG=work in
+# ~/.localrc on the work laptop.
+if [[ -n "$PROMPT_TAG" ]]; then
+  PROMPT="%K{1}%F{15}%B $PROMPT_TAG %b%f%k $PROMPT"
+fi
+
 function colours() {
   for i in {0..255} ; do
       printf "\x1b[38;5;${i}mcolour${i}\n"
