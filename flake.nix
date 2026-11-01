@@ -7,6 +7,11 @@
     llm-agents.url = "github:numtide/llm-agents.nix";
     ledecky.url = "github:chrisseto/ledecky";
 
+    microvm = {
+      url = "github:microvm-nix/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     agenix = {
       url = "github:ryantm/agenix";
       inputs.darwin.follows = "darwin";
@@ -74,6 +79,11 @@
           asahi-mini.userHomeModules = {
             chrisseto = "asahi-mini";
           };
+
+          agent-sandbox.userHomeModules = {
+            chrisseto = "asahi-mini";
+          };
+
           redpanda-devbox.userHomeModules = {
             chrisseto = "redpanda-devbox";
           };

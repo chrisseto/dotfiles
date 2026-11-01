@@ -9,6 +9,7 @@
   imports = [
     ezModules.nas
     ezModules.hermes
+    inputs.microvm.nixosModules.host
     inputs.quadlet-nix.nixosModules.default
     inputs.nixos-apple-silicon.nixosModules.apple-silicon-support
     (modulesPath + "/installer/scan/not-detected.nix")
@@ -47,8 +48,46 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.end0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp1s0f0.useDHCP = lib.mkDefault true;
+
+  networking.useNetworkd = true;
+
+  networking.nftables.enable = true;
+  # NB: stateVersion 23.05 defaults this to true, which would wipe
+  # tailscale/netavark tables on reload.
+  networking.nftables.flushRuleset = false;
+
+  systemd.network.netdevs."20-microbr".netdevConfig = {
+    Kind = "bridge";
+    Name = "microbr";
+  };
+  systemd.network.networks."20-microbr" = {
+    matchConfig.Name = "microbr";
+    addresses = [{ Address = "10.100.0.1/24"; }];
+    networkConfig.ConfigureWithoutCarrier = true;
+  };
+  systemd.network.networks."21-microvm-tap" = {
+    matchConfig.Name = "vm-*";
+    networkConfig.Bridge = "microbr";
+  };
+
+  networking.nat = {
+    enable = true;
+    internalInterfaces = [ "microbr" ];
+    externalInterface = "end0";
+  };
+
+  # MicroVMs get internet only: no LAN, no tailnet via host routing.
+  networking.nftables.tables.microvm = {
+    family = "inet";
+    content = ''
+      chain forward {
+        type filter hook forward priority filter; policy accept;
+        iifname "microbr" ip daddr { 192.168.0.0/16, 100.64.0.0/10 } drop
+        iifname "microbr" ip6 daddr { fd00::/8, fd7a:115c:a1e0::/48 } drop
+      }
+    '';
+  };
+
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
@@ -99,6 +138,14 @@
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
   # system.copySystemConfiguration = true;
+
+  microvm.vms = {
+    agent-sandbox = {
+      flake = inputs.self;
+      restartIfChanged = true;
+      # updateFlake = "git+file:///home/chrisseto/.nixpkgs";
+    };
+  };
 
   services.hermes = {
     enable = true;
