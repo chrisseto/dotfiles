@@ -490,12 +490,16 @@ locals {
       Host ${join(".", compact(["devbox", m.region, m.suffix]))}
       	User ${var.ssh_user}
       	HostName ${aws_instance.devbox[k].id}
-      	ProxyCommand aws ssm start-session --profile ${var.aws_profile} --region ${m.region} --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p
+      	ProxyCommand /Users/chrisseto/.nix-profile/bin/fish -lc 'devbox-ssh-proxy ${var.aws_profile} ${m.region} %h %p'
+      	# NB: SSM's idle timeout counts traffic through the tunnel, so keepalives
+      	# hold it open. They can't extend a max session duration, if one is set.
+      	ServerAliveInterval 30
+      	ServerAliveCountMax 4
     EOT
   ])
 }
 
-# Requires `Include ~/.ssh/config_devbox` at the top of ~/.ssh/config.
+# Requires `Include config_devbox` at the top of ~/.ssh/config.
 resource "terraform_data" "ssh_config" {
   triggers_replace = local.ssh_config
 
