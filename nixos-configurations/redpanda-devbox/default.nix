@@ -12,6 +12,9 @@ in
 
   networking.hostName = lib.mkForce "redpanda-devbox";
 
+  # Prevent virtual networks from breaking IMDS calls.
+  networking.dhcpcd.denyInterfaces = [ "veth*" "docker*" "br-*" ];
+
   imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
 
   # Disables cloud init, which indicates that bootstrapping succeeded.

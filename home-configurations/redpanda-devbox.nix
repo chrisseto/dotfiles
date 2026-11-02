@@ -17,6 +17,8 @@ in
   programs.man.generateCaches = false;
 
   home.packages = [
+    pkgs.asciinema
+    pkgs.k3d
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.kustomize
