@@ -26,8 +26,8 @@ in
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
-    (import ../overlays/janet)
-    (import ../overlays/local)
+    (import ../../overlays/janet)
+    (import ../../overlays/local)
   ];
 
   home.packages = [
@@ -72,6 +72,9 @@ in
     #     spork
     #   ])) # A pretty neat lisp implementation
   ];
+
+  # Only used by `apropos`; rebuilt on every change to home.packages.
+  programs.man.generateCaches = false;
 
   # Zoxide provides the "z" command for faster cd'ing around.
   programs.zoxide = {
@@ -227,9 +230,11 @@ in
   # exists as a git repository (not changing it if it already exists!!) which
   # would allow this type of symlinking to be acceptable..
   # See https://www.foodogsquared.one/posts/2023-03-24-managing-mutable-files-in-nixos/
+  # TODO switch to xdg.file
   home.file.".bin".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/bin);
   home.file.".config/helix".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/helix);
   home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/wezterm);
+  home.file.".config/jj/config.toml".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/jj/config.toml);
 
   # Maps a path within the flake's store copy to its location in the ~/.nixpkgs
   # checkout, for live editable files.

@@ -1,0 +1,52 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[user]
+name = "Chris Seto"
+email = "chriskseto@gmail.com"
+
+[ui]
+pager = "delta"
+diff-formatter = ":git"
+# conflict-marker-style = "git"
+
+[git]
+colocate = true
+
+[aliases]
+df = ['diff']
+pr-msg = ["log", "--reversed", "--no-graph", "-T", "pr_msg"]
+glog = ["log", "--no-graph", "-r", "trunk()..@ | @::", "-T", "git_log"]
+
+[fileset-aliases]
+GO = 'glob:**/*.go'
+
+[revset-aliases]
+"immutable_heads()" = "builtin_immutable_heads() ~ bookmarks(glob:'chris/*')"
+
+[template-aliases]
+'format_short_signature(signature)' = 'signature'
+"pr_msg" = '''
+"**" ++ description.first_line() ++ "** (" ++ commit_id ++ ")\n"
+++ description.lines().skip(1).join("\n") ++ "\n\n"
+'''
+git_log = '''
+"commit " ++ commit_id
+  ++ if(bookmarks || tags, " (" ++ separate(", ", bookmarks, tags) ++ ")")
+  ++ "\n"
+++ "Change: " ++ change_id ++ "\n"
+++ "Author: " ++ author.name() ++ " <" ++ author.email() ++ ">\n"
+++ "Date:   " ++ author.timestamp().format("%a %b %e %H:%M:%S %Y %z") ++ "\n\n"
+++ indent("    ", if(description, description, "(no description set)\n"))
+++ "\n"
+'''
+
+[merge-tools.diffview]
+program = "nvim"
+edit-args = [
+  "-c", "DiffviewDiffDirs $left $right $output",
+]
+merge-args = [
+  "-c", "DiffviewMergeFiles $output $base $left $right",
+]
+merge-tool-edits-conflict-markers = true
+conflict-marker-style = "git"
