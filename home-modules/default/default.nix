@@ -1,6 +1,9 @@
 { config
+, lib
 , pkgs
 , inputs
+, flakeRoot
+, symlinkable
 , ...
 }:
 let
@@ -145,6 +148,11 @@ in
   programs.fish = {
     enable = true;
 
+    shellInit = lib.mkBefore ''
+      set -p fish_function_path ${symlinkable ./fish/functions}
+      set -p fish_complete_path ${symlinkable ./fish/completions}
+    '';
+
     interactiveShellInit = ''
       # No Greeting when opening fish.
       set fish_greeting
@@ -205,9 +213,9 @@ in
 
   # The previous iteration of this repo was managed by stow. To ease
   # the transition, just symlink the old configurations.
-  home.file.".config/tmux".source = ../assets/tmux;
-  home.file.".gitconfig".source = ../assets/git/.gitconfig;
-  home.file.".gitignore_global".source = ../assets/git/.gitignore_global;
+  home.file.".config/tmux".source = ../../assets/tmux;
+  home.file.".gitconfig".source = ../../assets/git/.gitconfig;
+  home.file.".gitignore_global".source = ../../assets/git/.gitignore_global;
 
   # Use (abuse?) a helper in home manager to symlink directly to the config
   # file within the repository. This allows programs to modify ~/.config
@@ -219,9 +227,16 @@ in
   # exists as a git repository (not changing it if it already exists!!) which
   # would allow this type of symlinking to be acceptable..
   # See https://www.foodogsquared.one/posts/2023-03-24-managing-mutable-files-in-nixos/
-  home.file.".bin".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/bin";
-  home.file.".config/helix".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/helix";
-  home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/wezterm";
-  home.file.".config/fish/functions".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/fish-functions";
-  home.file.".config/fish/completions".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nixpkgs/assets/fish-completions";
+  home.file.".bin".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/bin);
+  home.file.".config/helix".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/helix);
+  home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/wezterm);
+
+  # Maps a path within the flake's store copy to its location in the ~/.nixpkgs
+  # checkout, for live editable files.
+  _module.args.symlinkable = path:
+    let
+      rel = lib.removePrefix "${flakeRoot}/" (toString path);
+    in
+    assert rel != toString path;
+    "${config.home.homeDirectory}/.nixpkgs/${rel}";
 }

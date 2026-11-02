@@ -58,7 +58,11 @@
     , nixpkgs-unstable
     , ...
     }:
-    flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, ... }: {
+    flake-parts.lib.mkFlake { inherit inputs; } ({ withSystem, ... }:
+    let
+      flakeRoot = builtins.path { path = ./.; name = "source"; };
+    in
+    {
       systems = [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" ];
 
       imports = [
@@ -66,9 +70,9 @@
       ];
 
       ezConfigs = {
-        root = builtins.path { path = ./.; name = "source"; };
+        root = flakeRoot;
 
-        globalArgs = { inherit inputs; };
+        globalArgs = { inherit inputs flakeRoot; };
 
         darwin.hosts = {
           personal-air.userHomeModules = {

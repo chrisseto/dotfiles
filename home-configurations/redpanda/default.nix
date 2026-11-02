@@ -1,6 +1,8 @@
 { pkgs
+, lib
 , inputs
 , ezModules
+, symlinkable
 , ...
 }:
 let
@@ -10,7 +12,12 @@ in
   imports = [
     ezModules.nvim
     ezModules.claude
+    ezModules.redpanda
   ];
+
+  programs.fish.shellInit = lib.mkAfter ''
+    set -p fish_function_path ${symlinkable ./fish/functions}
+  '';
 
   home.packages = [
     pkgs.awscli2

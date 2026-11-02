@@ -8,6 +8,7 @@ in
   imports = [
     ezModules.nvim
     ezModules.claude
+    ezModules.redpanda
     inputs.ledecky.homeManagerModules.default
   ];
 
