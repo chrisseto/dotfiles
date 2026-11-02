@@ -1,0 +1,147 @@
+{
+  "components": {
+    "editor": {
+      "enabled": true,
+      "style": "minimalist",
+      "codexQuota": false,
+      "colorSource": "terminal",
+      "borderColorMode": "static",
+      "modelLabel": "id",
+      "viewportIndicators": true,
+      "styles": {
+        "opencode": {
+          "metadataFormat": "$model  $provider(  $thinking)(  $fast_mode)(  $codex_quota)",
+          "completionMenu": "palette"
+        },
+        "opencode-copy-friendly": {
+          "metadataFormat": "$model  $provider(  $thinking)(  $fast_mode)(  $codex_quota)",
+          "completionMenu": "palette"
+        },
+        "accent-rail": {
+          "rail": "▎",
+          "asciiRail": "|",
+          "transparent": false
+        },
+        "minimalist": {
+          "formats": {
+            "bottomLeft": "$session_name$join_sep($git_branch)"
+          },
+          "pathDisplay": "compact",
+          "contextFormat": "percent-total",
+          "contextGauge": false,
+          "showSessionName": false,
+          "showTimer": false,
+          "showCost": true,
+          "showCacheHit": false,
+          "showGit": true,
+          "contextThresholds": {
+            "warning": 70,
+            "error": 90
+          },
+          "separator": "dash"
+        }
+      }
+    },
+    "footer": {
+      "style": "hidden"
+    },
+    "userMessages": {
+      "enabled": false,
+      "style": "compact",
+      "colorSource": "terminal",
+      "styles": {
+        "framed": {},
+        "framed-copy-friendly": {},
+        "compact": {},
+        "labeled": {}
+      }
+    },
+    "selectorBorders": {
+      "enabled": true,
+      "style": "zentui",
+      "colorSource": "terminal"
+    },
+    "extensionStatuses": {
+      "defaultVisibility": "show",
+      "hidden": {
+        "defaultPlacement": "middle"
+      }
+    },
+    "thinkingSteps": {
+      "enabled": true,
+      "mode": "tree"
+    },
+    "workingLine": {
+      "enabled": true,
+      "turnSummary": true,
+      "turnSummaryFormat": "Turn took $turn_duration$join_sep(thought for $thought_duration)$join_sep(↑$input_tokens ↓$output_tokens)$join_sep$token_rate",
+      "spinner": "star-bloom",
+      "spinnerIntervalMs": 100,
+      "animateSpinnerColor": false,
+      "textIntervalMs": 60,
+      "textAnimation": "classic",
+      "placement": "border",
+      "colorSource": "terminal",
+      "messages": {
+        "custom": true,
+        "values": [
+          "Sautéing…",
+          "Cooking…",
+          "Ionizing…",
+          "Zigzagging…",
+          "Razzle-dazzling…",
+          "Photosynthesizing…",
+          "Nucleating…",
+          "Brewing…",
+          "Combobulating…",
+          "Boogieing…",
+          "Befuddling…",
+          "Alchemizing…",
+          "Conjuring…",
+          "Baking…",
+          "Simmering…",
+          "Blanching…"
+        ]
+      },
+      "segments": {
+        "tokenRate": true,
+        "tool": true,
+        "elapsed": true,
+        "thought": true,
+        "tokens": true
+      }
+    },
+    "toolDisplay": {
+      "enabled": true,
+      "style": "native",
+      "registerToolOverrides": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "grep": true,
+        "find": true,
+        "ls": true
+      },
+      "builtinRendererOverrides": {},
+      "customToolOverrides": {},
+      "readOutputMode": "preview",
+      "searchOutputMode": "preview",
+      "mcpOutputMode": "preview",
+      "bashOutputMode": "preview",
+      "bashSyntax": "semantic",
+      "previewLines": 12,
+      "expandedPreviewMaxLines": 4000,
+      "bashCollapsedLines": 20,
+      "diffViewMode": "auto",
+      "diffIndicatorMode": "bars",
+      "diffSplitMinWidth": 120,
+      "diffCollapsedLines": 24,
+      "diffWordWrap": true,
+      "showTruncationHints": false
+    }
+  },
+  "icons": {
+    "mode": "auto"
+  }
+}

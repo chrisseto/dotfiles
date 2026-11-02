@@ -1,0 +1,21 @@
+{
+  "binaries": {
+    "aarch64-darwin": {
+      "asset": "plannotator-darwin-arm64",
+      "hash": "sha256-I6YP3T2YYRTTxN+Z3LNzSWG66e95F9+dG0l3rPAcWXo="
+    },
+    "aarch64-linux": {
+      "asset": "plannotator-linux-arm64",
+      "hash": "sha256-gTosgjPH3+HdaIANdttrPzm4Q8crsj2JR0tQcKMf1YA="
+    },
+    "x86_64-darwin": {
+      "asset": "plannotator-darwin-x64",
+      "hash": "sha256-webyNY1hrLVHQfUSW7+xrbCsBw/Fj8RidEAwSoBC75Q="
+    },
+    "x86_64-linux": {
+      "asset": "plannotator-linux-x64",
+      "hash": "sha256-QND3Rpkqv3aIUTCc8nKH1zZz1dERBBwzm6L58ZWap+k="
+    }
+  },
+  "version": "0.28.43"
+}

@@ -1,0 +1,17 @@
+{
+  "lastChangelogVersion": "1.4.0",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-opus-4-8",
+  "packages": [
+    "https://github.com/earendil-works/pi-claude-code",
+    "npm:pi-zentui",
+    "npm:pi-hermes-memory",
+    "npm:pi-compact-tools",
+    "npm:@plannotator/pi-extension"
+  ],
+  "enableInstallTelemetry": false,
+  "tuiMode": "fullscreen",
+  "warnings": {
+    "anthropicExtraUsage": false
+  }
+}

@@ -39,6 +39,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
     };
+
+    pi = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:earendil-works/pi/stable";
+    };
   };
 
   # https://nixos.wiki/wiki/Flakes
@@ -94,9 +99,12 @@
         formatter = pkgs.nixpkgs-fmt;
 
         packages =
-          {
-            # Packages to be available (via nix run .#<name>) on all OSes.
-          } // (lib.optionalAttrs pkgs.stdenv.isLinux {
+          let
+            local = import ./overlays/local pkgs pkgs;
+          in
+          # Packages to be available (via nix run .#<name>) on every OS they support.
+          (lib.filterAttrs (_: lib.meta.availableOn pkgs.stdenv.hostPlatform) local)
+          // (lib.optionalAttrs pkgs.stdenv.isLinux {
             # Linux will either be nixOS or home-manager only.
             home-manager = inputs'.home-manager.packages.default;
           }) // (lib.optionalAttrs pkgs.stdenv.isDarwin {

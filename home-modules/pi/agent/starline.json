@@ -1,0 +1,20 @@
+{
+  "features": {
+    "copyFriendly": true
+  },
+  "contextStyle": "text",
+  "pill": {
+    "segments": [
+      "model",
+      "thinking",
+      "queue",
+      "subagents",
+      "cwd",
+      "git",
+      "context",
+      "tps",
+      "cost",
+      "extensionStatus"
+    ]
+  }
+}

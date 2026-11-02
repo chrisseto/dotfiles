@@ -1,0 +1,7 @@
+{
+  "llmModelOverride": "claude-code/claude-sonnet-5",
+  "llmThinkingOverride": "minimal",
+  "childExtensionPaths": [
+    "~/.pi/agent/git/github.com/earendil-works/pi-claude-code/src/index.ts"
+  ]
+}

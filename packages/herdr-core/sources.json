@@ -1,0 +1,21 @@
+{
+  "targets": {
+    "aarch64-darwin": {
+      "hash": "sha256-ztvU1Nm6E4VYgZjdTTxn0mVEePM63VtkRdTQ652l/PM=",
+      "url": "https://releases.herdr.dev/core/0.1.17/herdr-core-macos-aarch64.tar.gz"
+    },
+    "aarch64-linux": {
+      "hash": "sha256-OjekVOxjSUz0MG2yZIH+nblmc9iIcjcB0k+KmSroq4w=",
+      "url": "https://releases.herdr.dev/core/0.1.17/herdr-core-linux-aarch64.tar.gz"
+    },
+    "x86_64-darwin": {
+      "hash": "sha256-4twyEe2x8cd9DnPddsFCZjbXEFDzSlMDkWpW02PXBis=",
+      "url": "https://releases.herdr.dev/core/0.1.17/herdr-core-macos-x86_64.tar.gz"
+    },
+    "x86_64-linux": {
+      "hash": "sha256-guxEBD9olL/bcWuXm4fNpD/X+kawEE57e9k+ZNGpuHc=",
+      "url": "https://releases.herdr.dev/core/0.1.17/herdr-core-linux-x86_64.tar.gz"
+    }
+  },
+  "version": "0.1.17"
+}

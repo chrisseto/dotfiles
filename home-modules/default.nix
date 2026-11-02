@@ -24,6 +24,7 @@ in
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
     (import ../overlays/janet)
+    (import ../overlays/local)
   ];
 
   home.packages = [
@@ -135,10 +136,6 @@ in
 
       nix_shell = {
         symbol = " ";
-      };
-
-      username = {
-        detect_env_vars = [ "WEZTERM_UNIX_SOCKET" ];
       };
     };
   };
