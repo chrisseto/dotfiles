@@ -6,27 +6,27 @@ in
 {
 
   imports = [
-    ezModules.nvim
     ezModules.claude
+    ezModules.nvim
+    ezModules.pi
     ezModules.redpanda
     inputs.ledecky.homeManagerModules.default
   ];
 
   services.ledecky.enable = true;
 
-  # Only used by `apropos`; rebuilt on every change to home.packages.
-  programs.man.generateCaches = false;
-
   home.packages = [
+    llm-agents.claude-code
     pkgs.asciinema
+    pkgs.herdr-core
     pkgs.k3d
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.kustomize
     pkgs.nodejs
+    pkgs.plannotator
     pkgs.pnpm
     pkgs.tmux
     unstable.cloc # LoC counting and delta computation
-    llm-agents.claude-code
   ];
 }
