@@ -46,6 +46,18 @@ on-window-detected = [
         if = 'test %{app-bundle-id} = com.github.wez.wezterm',
         run = 'move-node-to-workspace 1'
     },
+   {
+        if = 'test %{app-bundle-id} = com.brave.Browser',
+        run = 'move-node-to-workspace 2'
+    },
+   {
+        if = 'test %{app-bundle-id} = com.tinyspeck.slackmacgap',
+        run = 'move-node-to-workspace 2'
+    },
+   {
+        if = 'test %{app-bundle-id} = com.spotify.client',
+        run = 'move-node-to-workspace 2'
+    },
 ]
 
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
