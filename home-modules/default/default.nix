@@ -40,13 +40,12 @@ in
     pkgs.fd # Better `find`. Broken on asahi due to jemalloc.
     pkgs.fzf # Pluggable fuzzy finder
     pkgs.gdu # Ncurses interactive du client (Much faster than ncdu)
-    pkgs.gh # GitHub CLI, slightly better than hub
+    pkgs.gh # GitHub CLI
     pkgs.git
     pkgs.git-absorb
     pkgs.git-dive
     pkgs.git-revise
     pkgs.htop
-    pkgs.hub # Old (?) GitHub CLI
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
@@ -54,18 +53,15 @@ in
     pkgs.ncurses # Install a recent version of ncurses to get an updated terminfo db
     pkgs.rclone
     pkgs.ripgrep # `rg`, better grep/ag/ack
-    pkgs.skim # `sk`, Competitor of fzf
     pkgs.tree # Prints a "tree" of a directory.
     pkgs.unixtools.watch
     pkgs.xz # LZMA compression successor, used by container tooling.
     unstable.delve # golang debugger
     unstable.go
     unstable.gotools # Provides A LOT of packages. Added because I want godoc.
-    unstable.gum # Make shellscripts cutsie.
     unstable.helix # A post-modern modal text editor
     unstable.jujutsu # git branchless like DVCS
-    unstable.stgit # stacked-git, my preferred alternative to branches.
-    unstable.yazi # Yet another file manager.
+    # unstable.yazi # Yet another file manager.
     # (pkgs.janet.withPackages (ps:
     #   with ps; [
     #     sh

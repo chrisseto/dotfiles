@@ -10,8 +10,9 @@ let
 in
 {
   imports = [
-    ezModules.nvim
     ezModules.claude
+    ezModules.nvim
+    ezModules.pi
     ezModules.redpanda
   ];
 
@@ -24,20 +25,23 @@ in
     pkgs.docker
     pkgs.dyff
     pkgs.go-task
-    pkgs.google-cloud-sdk
     pkgs.graphviz # Provides `dot` for go tool pprof
+    pkgs.herdr-core
     pkgs.k3d
     pkgs.kind
     pkgs.kubectl
     pkgs.kubernetes-helm
     pkgs.kustomize
+    pkgs.plannotator
     pkgs.terraform
     unstable.cloc # LoC counting and delta computation
     unstable.grpcurl
-    unstable.jira-cli-go # Jira CLI...
     unstable.ssm-session-manager-plugin
     unstable.stern # Kubernetes log tailer
     unstable.teleport # tsh and friends
     unstable.yq-go
   ];
+
+  home.file.".local/bin/herdr-core".source = "${pkgs.herdr-core}/bin/herdr-core";
+  home.file.".local/bin/hc".source = "${pkgs.herdr-core}/bin/hc";
 }
