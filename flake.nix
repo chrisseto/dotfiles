@@ -4,8 +4,15 @@
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     ez-configs.url = "github:ehllie/ez-configs";
+    ez-configs.inputs.flake-parts.follows = "flake-parts";
+    ez-configs.inputs.nixpkgs.follows = "nixpkgs";
     llm-agents.url = "github:numtide/llm-agents.nix";
+    llm-agents.inputs.flake-parts.follows = "flake-parts";
+    llm-agents.inputs.nixpkgs.follows = "nixpkgs";
+    llm-agents.inputs.systems.follows = "systems";
     ledecky.url = "github:chrisseto/ledecky";
+    ledecky.inputs.nixpkgs.follows = "nixpkgs";
+    ledecky.inputs.flake-utils.follows = "flake-utils";
 
     microvm = {
       url = "github:microvm-nix/microvm.nix";
@@ -17,6 +24,7 @@
       inputs.darwin.follows = "darwin";
       inputs.home-manager.follows = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
     };
 
     nixos-apple-silicon = {
@@ -41,8 +49,41 @@
     };
 
     pi = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:earendil-works/pi/stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    weave = {
+      url = "github:Ataraxy-Labs/weave";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
+
+    inspect = {
+      url = "github:Ataraxy-Labs/inspect";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
+
+    sem = {
+      url = "github:Ataraxy-Labs/sem";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+    };
+    systems = {
+      url = "github:nix-systems/default";
     };
   };
 

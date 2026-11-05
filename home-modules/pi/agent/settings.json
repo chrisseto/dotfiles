@@ -7,7 +7,9 @@
     "npm:pi-zentui",
     "npm:pi-hermes-memory",
     "npm:pi-compact-tools",
-    "npm:@plannotator/pi-extension"
+    "npm:@plannotator/pi-extension",
+    "npm:pi-web-access",
+    "npm:pi-subagents"
   ],
   "enableInstallTelemetry": false,
   "tuiMode": "fullscreen",

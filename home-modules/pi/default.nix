@@ -24,7 +24,10 @@ let
 in
 {
   home.packages = [
+    inputs.inspect.packages.${pkgs.system}.default
     inputs.pi.packages.${pkgs.system}.default
+    inputs.sem.packages.${pkgs.system}.default
+    inputs.weave.packages.${pkgs.system}.default
     # pi shells out to npm to install packages declared in settings.json.
     pkgs.nodejs
 
@@ -33,9 +36,6 @@ in
     # binary are versioned independently and can drift apart. Pin the
     # extension to packages/plannotator's version, ideally from its update.sh.
     pkgs.plannotator
-  ] ++ lib.optionals (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.sem) [
-    # plannotator's semantic diff sidecar; found on PATH.
-    pkgs.sem
   ];
 
   home.sessionVariables = {

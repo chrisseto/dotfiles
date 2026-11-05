@@ -12,6 +12,9 @@ diff-formatter = ":git"
 [git]
 colocate = true
 
+[templates]
+git_push_bookmark = '"chris/jj-push-" ++ change_id.short()'
+
 [aliases]
 df = ['diff']
 pr-msg = ["log", "--reversed", "--no-graph", "-T", "pr_msg"]

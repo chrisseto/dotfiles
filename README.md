@@ -25,13 +25,25 @@ I'm a fan of FiraCode's [NerdFont](https://www.nerdfonts.com/font-downloads)
 ## TODO
 - [ ] Fix Application linking on macOS
 - [ ] Fix tabs vs spaces on various file types
-- [ ] Configure spell check on treesitter comments
-- [ ] Consider configuring BTT with nix as it seems to be the consistent answer for many tweaks and bindings.
-- [ ] Add a darwin configuration for work MBP
-- [ ] Make darwin configs load via `nix run`
 
 ## Layout
 
 * `configuration` - Nix{OS,-Darwin} Configurations
 * `homes` - Home-Manager Configurations
 * `packages` - Custom Nix packages
+
+## Useful tools / scripts
+
+### Debugging Closure Sizes
+
+```bash
+nix-shell -p nix-tree
+nix-tree .#darwinConfigurations.<name>.system
+```
+
+### Flake Auto Following
+
+```bash
+nix-shell -p flake-edit
+flake-edit --diff follow --transitive 2
+```
