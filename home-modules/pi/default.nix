@@ -28,8 +28,9 @@ in
     inputs.pi.packages.${pkgs.system}.default
     inputs.sem.packages.${pkgs.system}.default
     inputs.weave.packages.${pkgs.system}.default
-    # pi shells out to npm to install packages declared in settings.json.
-    pkgs.nodejs
+    pkgs.nodejs # pi shells out to npm to install packages declared in settings.json.
+    pkgs.python3 # required for plannotator.
+    pkgs.gnumake # required for node-pty
 
     # Binaries for the npm:@plannotator/pi-extension pi package.
     # TODO: the extension (installed by pi from agent/settings.json) and this

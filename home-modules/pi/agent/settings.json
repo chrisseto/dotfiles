@@ -12,7 +12,7 @@
     "npm:pi-subagents"
   ],
   "enableInstallTelemetry": false,
-  "tuiMode": "fullscreen",
+  "tuiMode": "regular",
   "warnings": {
     "anthropicExtraUsage": false
   }
