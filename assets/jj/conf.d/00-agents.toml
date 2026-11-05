@@ -1,0 +1,57 @@
+# Copyright (C) 2026 Aleksei Zakhlestin
+# Licensed under the EUPL
+
+# Installed by the jj-vcs skill (https://codeberg.org/thisalex/jj-skill).
+#
+# DO NOT EDIT: this file belongs to the skill. Installed as a symlink into
+# the skill directory, it changes whenever the skill is updated, and edits
+# made through the link land in the skill's checkout.
+#
+# To override a key, put your own file with the same --when line later in
+# conf.d (the "00-" prefix makes this one load first), e.g. 50-my-claude.toml.
+
+# The whole file is one conditional layer: jj loads it only when one of the
+# variables below is set. Each is what a coding agent puts into the shells it
+# spawns, and nothing else sets it, so your own terminal never sees these
+# settings. Zed is missing on purpose: its ZED_TERM is set in every terminal
+# Zed opens, yours included.
+--when.environments = [
+  "CLAUDECODE",       # Claude Code
+  "CODEX_THREAD_ID",  # OpenAI Codex CLI
+  "PI_CODING_AGENT",  # Pi
+  "CURSOR_AGENT",     # Cursor, IDE agent and CLI
+  "GEMINI_CLI",       # Gemini CLI
+  "OPENCODE",         # OpenCode
+  "COPILOT_CLI",      # GitHub Copilot CLI
+  "CLINE_ACTIVE",     # Cline
+  "HERMES_AGENT",     # Hermes
+  "GOOSE_TERMINAL",   # Goose
+  "CRUSH",            # Crush
+  "AUGMENT_AGENT",    # Augment
+  "AI_AGENT",         # generic marker several agents set
+]
+
+[ui]
+
+# Agents read stdout; a pager or ANSI escapes only get in the way.
+paginate = "never"
+color = "never"
+
+# Fail instead of hanging when a command wants an editor (squash of two
+# described commits without -u, split without -m).
+editor = "false"
+
+# Color alone carries the default formatter's word-level highlighting, so
+# without color it degrades below a unified diff. git style keeps hunk
+# headers, renames and modes.
+diff-formatter = ":git"
+
+# Full content of each side plus the base, with each side's role in the
+# header. The default "diff" style shows patches to apply instead.
+conflict-marker-style = "snapshot"
+
+[template-aliases]
+
+# Without color the agent can't see the highlighted unique prefix, so print
+# the prefix alone instead of the padded 8 characters.
+"format_short_change_id(id)" = "id.shortest()"

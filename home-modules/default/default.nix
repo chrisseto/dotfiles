@@ -230,6 +230,7 @@ in
   home.file.".bin".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/bin);
   home.file.".config/helix".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/helix);
   home.file.".config/wezterm".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/wezterm);
+  home.file.".config/jj/conf.d".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/jj/conf.d);
   home.file.".config/jj/config.toml".source = config.lib.file.mkOutOfStoreSymlink (symlinkable ../../assets/jj/config.toml);
 
   # Maps a path within the flake's store copy to its location in the ~/.nixpkgs
