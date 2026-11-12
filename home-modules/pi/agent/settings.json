@@ -20,5 +20,6 @@
   "subagents": {
     "agentOverrides": {
       "worker": { "thinking": "medium" }
+    }
   }
 }
