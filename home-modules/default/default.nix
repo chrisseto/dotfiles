@@ -27,7 +27,7 @@ in
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
     (import ../../overlays/janet)
-    (import ../../overlays/local)
+    (import ../../overlays/local inputs)
   ];
 
   home.packages = [
@@ -47,6 +47,7 @@ in
     pkgs.git-revise
     pkgs.htop
     pkgs.ijq # Interactive version of jq for when you don't know what you're looking for
+    pkgs.jip # Stacked pull requests for jj
     pkgs.jq
     pkgs.k9s # Kubernetes ncurses interface
     pkgs.less # Ensure the latest version of less is available

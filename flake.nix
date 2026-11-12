@@ -8,7 +8,7 @@
     ez-configs.inputs.nixpkgs.follows = "nixpkgs";
     llm-agents.url = "github:numtide/llm-agents.nix";
     llm-agents.inputs.flake-parts.follows = "flake-parts";
-    llm-agents.inputs.nixpkgs.follows = "nixpkgs";
+    llm-agents.inputs.nixpkgs.follows = "nixpkgs-unstable";
     llm-agents.inputs.systems.follows = "systems";
     ledecky.url = "github:chrisseto/ledecky";
     ledecky.inputs.nixpkgs.follows = "nixpkgs";
@@ -140,12 +140,12 @@
         };
       };
 
-      perSystem = { pkgs, lib, system, inputs, inputs', ... }: {
+      perSystem = { pkgs, lib, system, inputs', ... }: {
         formatter = pkgs.nixpkgs-fmt;
 
         packages =
           let
-            local = import ./overlays/local pkgs pkgs;
+            local = import ./overlays/local inputs pkgs pkgs;
           in
           # Packages to be available (via nix run .#<name>) on every OS they support.
           (lib.filterAttrs (_: lib.meta.availableOn pkgs.stdenv.hostPlatform) local)

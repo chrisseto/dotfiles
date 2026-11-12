@@ -1,6 +1,6 @@
 # Prebuilt plannotator release binary (https://plannotator.ai/install.sh).
 # Versions and hashes live in sources.json; bump with ./update.sh [version].
-# The semantic-diff sidecar it uses is packaged separately as `sem`.
+# The semantic-diff sidecar it uses comes from the `sem` flake input.
 { lib
 , stdenv
 , stdenvNoCC

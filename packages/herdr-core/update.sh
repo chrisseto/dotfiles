@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash curl jq nix
+#!nix-shell -i bash -p bash curl jq nix git
 # Bump herdr-core to the latest release, or to the version given as $1:
 #
 #   ./update.sh            # latest release
@@ -8,7 +8,14 @@
 # Reads the same release manifest install.sh does and writes sources.json.
 set -euo pipefail
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+# Run from this package's directory in the git checkout. `nix-update -u`
+# executes a read-only /nix/store copy of the flake, so map a store path
+# back to the same relative path in the checkout of the current directory.
+here=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
+if [[ "$here" == /nix/store/* ]]; then
+    here="$(git rev-parse --show-toplevel)/${here#/nix/store/*/}"
+fi
+cd "$here"
 
 releases="${HERDR_RELEASES_URL:-https://releases.herdr.dev}"
 

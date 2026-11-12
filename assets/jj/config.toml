@@ -23,6 +23,9 @@ glog = ["log", "--no-graph", "-r", "trunk()..@ | @::", "-T", "git_log"]
 [fileset-aliases]
 GO = 'glob:**/*.go'
 
+[revsets]
+"bookmark-advance-to" = 'heads(::@ ~ empty() ~ description(exact:""))'
+
 [revset-aliases]
 "immutable_heads()" = "builtin_immutable_heads() ~ bookmarks(glob:'chris/*')"
 
