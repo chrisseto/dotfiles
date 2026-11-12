@@ -1,0 +1,12 @@
+{
+  "name": "pi-extensions",
+  "private": true,
+  "dependencies": {
+    "@plannotator/pi-extension": "^0.28.45",
+    "pi-compact-tools": "^0.16.7",
+    "pi-hermes-memory": "^0.9.11",
+    "pi-subagents": "^0.84.0",
+    "pi-web-access": "^0.47.0",
+    "pi-zentui": "^0.33.0"
+  }
+}

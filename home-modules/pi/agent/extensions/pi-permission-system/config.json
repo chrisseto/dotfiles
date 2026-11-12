@@ -1,0 +1,64 @@
+{
+	"debugLog": false,
+	"permissionReviewLog": true,
+	"yoloMode": false,
+	"piInfrastructureReadPaths": [
+		"$HOME/.pi",
+		"$HOME/.nixpkgs/home-modules/pi"
+	],
+	"commandEffects": {
+		"bazel": {
+			"unlessOption": [
+				"--disk_cache", "--repository_cache", "--override_repository",
+				"--execution_log_json_file", "--execution_log_binary_file",
+				"--build_event_json_file", "--build_event_text_file", "--build_event_binary_file",
+				"--profile", "--experimental_execution_log_file"
+			],
+			"subcommands": {
+				"build": { "effects": [] },
+				"test": { "effects": [] },
+				"query": { "effects": [] },
+				"cquery": { "effects": [] },
+				"aquery": { "effects": [] },
+				"run": { "unlessOption": ["--run_under", "--script_path"], "effects": [] }
+			}
+		}
+	},
+	"permission": {
+		"read": "allow",
+		"write": "allow",
+		"edit": "allow",
+		"skill": "allow",
+		"codemode": "allow",
+		"subagent": "allow",
+		"subagent_launch": "allow",
+		"get_search_content": "allow",
+		"contact_supervisor": "allow",
+		"fetch_content": "allow",
+		"grep": "allow",
+		"find": "allow",
+		"ls": "allow",
+		"web_search": "allow",
+		"source_check": "allow",
+		"plannotator": "allow",
+		"memory_add": "allow",
+		"bash": {
+			"*": "allow",
+			"bazel *": "allow",
+			"git *": {"action": "deny", "reason": "use jj for vcs operations"},
+			"jj bookmark *": "ask",
+			"jj git *": "ask",
+			"jj workspace *": "ask"
+		},
+		"external_directory": {
+		  "*": "ask",
+		  "/tmp/*": "allow"
+		},
+		"external_directory_read": {
+		  "$HOME/go/pkg/mod": "allow",
+		  "$HOME/go/pkg/mod/*": "allow",
+		  "$HOME/.bazel/cache": "allow",
+		  "$HOME/.bazel/cache/*": "allow"
+		}
+	}
+}

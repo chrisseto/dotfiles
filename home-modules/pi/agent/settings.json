@@ -9,11 +9,16 @@
     "npm:pi-compact-tools",
     "npm:@plannotator/pi-extension",
     "npm:pi-web-access",
-    "npm:pi-subagents"
+    "npm:pi-subagents",
+    "npm:@gotgenes/pi-permission-system"
   ],
   "enableInstallTelemetry": false,
   "tuiMode": "regular",
   "warnings": {
     "anthropicExtraUsage": false
+  },
+  "subagents": {
+    "agentOverrides": {
+      "worker": { "thinking": "medium" }
   }
 }
