@@ -495,6 +495,10 @@ locals {
       	# hold it open. They can't extend a max session duration, if one is set.
       	ServerAliveInterval 30
       	ServerAliveCountMax 4
+      	# Multiplex connections to avoid recreating SSM tunnels over and over.
+      	ControlMaster auto
+      	ControlPath ~/.ssh/cm-%C
+      	ControlPersist 10m
     EOT
   ])
 }
