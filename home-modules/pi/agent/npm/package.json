@@ -2,6 +2,7 @@
   "name": "pi-extensions",
   "private": true,
   "dependencies": {
+    "@gotgenes/pi-permission-system": "^42.0.0",
     "@plannotator/pi-extension": "^0.28.45",
     "pi-compact-tools": "^0.16.7",
     "pi-hermes-memory": "^0.9.11",

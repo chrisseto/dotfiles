@@ -10,10 +10,7 @@ in
     ezModules.nvim
     ezModules.pi
     ezModules.redpanda
-    inputs.ledecky.homeManagerModules.default
   ];
-
-  services.ledecky.enable = true;
 
   home.packages = [
     llm-agents.claude-code
@@ -26,7 +23,6 @@ in
     pkgs.nodejs
     pkgs.plannotator
     pkgs.pnpm
-    pkgs.tmux
     unstable.cloc # LoC counting and delta computation
   ];
 }

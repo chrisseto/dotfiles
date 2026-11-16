@@ -27,7 +27,7 @@ GO = 'glob:**/*.go'
 "bookmark-advance-to" = 'heads(::@ ~ empty() ~ description(exact:""))'
 
 [revset-aliases]
-"immutable_heads()" = "builtin_immutable_heads() ~ bookmarks(glob:'chris/*')"
+"immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())"
 
 [template-aliases]
 'format_short_signature(signature)' = 'signature'
@@ -54,5 +54,12 @@ edit-args = [
 merge-args = [
   "-c", "DiffviewMergeFiles $output $base $left $right",
 ]
+merge-tool-edits-conflict-markers = true
+conflict-marker-style = "git"
+
+[merge-tools.weave]
+program = "weave-driver"
+merge-args = ["$base", "$left", "$right", "-o", "$output", "-l", "$marker_length", "-p", "$path"]
+merge-conflict-exit-codes = [1]
 merge-tool-edits-conflict-markers = true
 conflict-marker-style = "git"
