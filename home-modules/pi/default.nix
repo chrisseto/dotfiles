@@ -23,6 +23,10 @@ let
     else link name;
 in
 {
+  # Headless machines hand Plannotator reviews to the Herdr app, which forwards
+  # the port over ssh and opens them locally.
+  imports = [ ./herdr-plannotator.nix ];
+
   home.packages = [
     inputs.inspect.packages.${pkgs.system}.default
     inputs.pi.packages.${pkgs.system}.default
