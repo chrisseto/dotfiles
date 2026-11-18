@@ -10,13 +10,13 @@ in
 
   imports = [
     ezModules.nvim
+    ezModules.pi
   ];
 
   home.packages = [
     pkgs.ffmpeg
     pkgs.mp4v2
     pkgs.poetry
-    pkgs.python310
     pkgs.rclone
     # unstable.llama-cpp
     # unstable.openai-whisper-cpp
